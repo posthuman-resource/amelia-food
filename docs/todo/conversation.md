@@ -6,14 +6,14 @@ The scrolling emoji exchange between Amelia and Claude. Messages appear with gen
 
 ## Requirements
 
-- [ ] Displays message history: user messages and assistant messages
-- [ ] User messages aligned to one side, assistant to the other
-- [ ] Layout is conversational but organic — not a strict chat bubble grid
-- [ ] New messages appear with a gentle fade/pop animation (like placing a tile)
-- [ ] Auto-scrolls to latest message
-- [ ] Emoji are displayed at a comfortable reading size (larger than standard text)
-- [ ] Streaming: assistant messages build up as tokens arrive
-- [ ] Visual distinction between user and assistant messages (subtle, not heavy)
+- [x] Displays message history: user messages and assistant messages
+- [x] User messages aligned to one side, assistant to the other
+- [x] Layout is conversational but organic — not a strict chat bubble grid
+- [x] New messages appear with a gentle fade/pop animation (like placing a tile)
+- [x] Auto-scrolls to latest message
+- [x] Emoji are displayed at a comfortable reading size (larger than standard text)
+- [x] Streaming: assistant messages build up as tokens arrive
+- [x] Visual distinction between user and assistant messages (subtle, not heavy)
 
 ## Technical Approach
 
@@ -43,8 +43,8 @@ interface ConversationProps {
 
 ## Acceptance Criteria
 
-- [ ] Messages display correctly with user/assistant distinction
-- [ ] New messages animate in gently
-- [ ] Auto-scroll to latest message works
-- [ ] Emoji are large and readable
-- [ ] Streaming messages update in real-time
+- [x] Messages display correctly with user/assistant distinction
+- [x] New messages animate in gently
+- [x] Auto-scroll to latest message works
+- [x] Emoji are large and readable
+- [x] Streaming messages update in real-time

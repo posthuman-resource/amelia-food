@@ -1,0 +1,137 @@
+/* Conversation — Emoji tiles placed back and forth on a surface */
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-sm);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+
+  /* Subtle inset to feel like looking down at a surface */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(44, 40, 37, 0.15) transparent;
+}
+
+.conversation::-webkit-scrollbar {
+  width: 4px;
+}
+
+.conversation::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.conversation::-webkit-scrollbar-thumb {
+  background: rgba(44, 40, 37, 0.15);
+  border-radius: 2px;
+}
+
+/* Empty state — gentle invitation */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: var(--space-sm);
+  opacity: 0.5;
+}
+
+.emptyEmoji {
+  font-size: 2.5rem;
+}
+
+.emptyText {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Message row — controls alignment */
+.message {
+  display: flex;
+  animation: tileIn 300ms ease-out both;
+}
+
+.user {
+  justify-content: flex-end;
+}
+
+.assistant {
+  justify-content: flex-start;
+}
+
+/* Tile — the emoji sits on a soft surface, not in a hard bubble */
+.tile {
+  font-size: 1.75rem;
+  line-height: 1.4;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  max-width: 80%;
+  word-break: break-word;
+
+  /* Very subtle shadow — like a tile resting on paper */
+  box-shadow: 0 1px 4px rgba(44, 40, 37, 0.06);
+}
+
+/* User tile — slightly warmer */
+.user .tile {
+  background: #EDE5D8;
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+/* Assistant tile — slightly cooler (still warm) */
+.assistant .tile {
+  background: var(--color-surface-light);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+/* When assistant sends words (explain mode), use readable text size */
+.assistant .tile span {
+  /* If the text contains regular characters (not just emoji),
+     the browser will use the inherited font at this size.
+     Pure emoji will display at the parent 1.75rem. */
+}
+
+/* Stagger animation for sequential messages */
+.message:nth-child(1) { animation-delay: 0ms; }
+.message:nth-child(2) { animation-delay: 40ms; }
+.message:nth-child(3) { animation-delay: 80ms; }
+
+/* Entry animation — like placing a tile gently */
+@keyframes tileIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .conversation {
+    padding: var(--space-md) var(--space-xs);
+    gap: var(--space-md);
+  }
+
+  .tile {
+    font-size: 1.5rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .emptyEmoji {
+    font-size: 2rem;
+  }
+
+  .emptyText {
+    font-size: 1rem;
+  }
+}

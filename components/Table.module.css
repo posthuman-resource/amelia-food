@@ -58,12 +58,14 @@
 }
 
 /* ========================================
-   Modal content (placeholder for future objects)
+   Emoji Game modal layout
    ======================================== */
 
-.modalBody {
-  text-align: center;
-  padding: var(--space-lg) 0;
+.emojiGameModal {
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  max-height: 500px;
 }
 
 .modalTitle {
@@ -71,12 +73,82 @@
   font-size: 1.75rem;
   color: var(--color-text-dark);
   margin-bottom: var(--space-md);
+  text-align: center;
+  flex-shrink: 0;
 }
 
-.modalText {
+/* Temporary input — will be replaced by EmojiComposer */
+.emojiInput {
+  display: flex;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(44, 40, 37, 0.08);
+  flex-shrink: 0;
+}
+
+.emojiField {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(44, 40, 37, 0.12);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: 1.25rem;
+  font-family: inherit;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.emojiField::placeholder {
   color: var(--color-text-muted);
-  font-size: 0.95rem;
-  margin: 0;
+  opacity: 0.6;
+}
+
+.emojiField:focus {
+  border-color: var(--color-plum);
+}
+
+.emojiSend {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-plum);
+  color: var(--color-surface-light);
+  border-radius: var(--radius-md);
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  transition:
+    background var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.emojiSend:hover {
+  background: var(--color-plum-light);
+}
+
+.emojiSend:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Mobile adjustments for emoji game */
+@media (max-width: 768px) {
+  .emojiGameModal {
+    height: calc(85vh - var(--space-xl) * 2 - 32px);
+    max-height: none;
+  }
+
+  .emojiInput {
+    gap: var(--space-xs);
+  }
+
+  .emojiField {
+    min-width: 0;
+    font-size: 1.1rem;
+  }
+
+  .emojiSend {
+    padding: var(--space-sm) var(--space-md);
+    flex-shrink: 0;
+  }
 }
 
 /* Mobile: stack objects vertically */

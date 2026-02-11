@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useChat } from '@ai-sdk/react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
+import Conversation from './Conversation';
 import { ValentineEnvelope, ValentineLetter } from './Valentine';
 
 interface TableObjectData {
@@ -38,14 +40,32 @@ function ObjectContent({ id }: { id: string }) {
   return null;
 }
 
+function EmojiGameModal() {
+  const { messages, input, setInput, handleSubmit } = useChat();
+
+  return (
+    <div className={styles.emojiGameModal}>
+      <h2 className={styles.modalTitle}>Emoji Game</h2>
+      <Conversation messages={messages} />
+      <form className={styles.emojiInput} onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Send an emoji..."
+          className={styles.emojiField}
+        />
+        <button type="submit" className={styles.emojiSend} disabled={!input.trim()}>
+          Send
+        </button>
+      </form>
+    </div>
+  );
+}
+
 function ModalContent({ id }: { id: string }) {
   if (id === 'emoji-game') {
-    return (
-      <div className={styles.modalBody}>
-        <h2 className={styles.modalTitle}>Emoji Game</h2>
-        <p className={styles.modalText}>Coming soon...</p>
-      </div>
-    );
+    return <EmojiGameModal />;
   }
   if (id === 'valentine') {
     return <ValentineLetter />;
