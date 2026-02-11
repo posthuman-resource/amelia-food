@@ -1,5 +1,9 @@
+'use client';
+
+import { useState } from 'react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
+import Modal from './Modal';
 
 interface TableObjectData {
   id: string;
@@ -39,7 +43,30 @@ function ObjectContent({ id }: { id: string }) {
   return null;
 }
 
+function ModalContent({ id }: { id: string }) {
+  if (id === 'emoji-game') {
+    return (
+      <div className={styles.modalBody}>
+        <h2 className={styles.modalTitle}>Emoji Game</h2>
+        <p className={styles.modalText}>Coming soon...</p>
+      </div>
+    );
+  }
+  if (id === 'valentine') {
+    return (
+      <div className={styles.modalBody}>
+        <h2 className={styles.modalTitle}>A Letter</h2>
+        <p className={styles.modalText}>Coming soon...</p>
+      </div>
+    );
+  }
+  return null;
+}
+
 export default function Table() {
+  const [activeObject, setActiveObject] = useState<string | null>(null);
+  const activeData = objects.find((o) => o.id === activeObject);
+
   return (
     <div className={`${styles.table} texture-wood texture-noise`}>
       {/* Subtle "Amelia" inscription */}
@@ -54,11 +81,21 @@ export default function Table() {
             x={obj.x}
             y={obj.y}
             rotation={obj.rotation}
+            onClick={() => setActiveObject(obj.id)}
           >
             <ObjectContent id={obj.id} />
           </TableObject>
         ))}
       </div>
+
+      {/* Modal overlay */}
+      <Modal
+        open={activeObject !== null}
+        onClose={() => setActiveObject(null)}
+        ariaLabel={activeData?.label}
+      >
+        {activeObject && <ModalContent id={activeObject} />}
+      </Modal>
     </div>
   );
 }

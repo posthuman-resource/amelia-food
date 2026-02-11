@@ -6,15 +6,15 @@ A shared modal/overlay that opens when table objects are clicked. It should feel
 
 ## Requirements
 
-- [ ] Overlay dims the table surface behind it (warm-tinted, not cold gray)
-- [ ] Content area uses paper texture, centered, with generous padding
-- [ ] Smooth open animation: fade in + gentle scale from 0.95 to 1
-- [ ] Smooth close animation: reverse of open
-- [ ] Close on clicking the overlay background (outside content)
-- [ ] Close on pressing Escape
-- [ ] Close button: subtle, positioned top-right, feels like part of the design (not a generic X)
-- [ ] Prevents body scroll when open
-- [ ] Accessible: focus trap, aria attributes
+- [x] Overlay dims the table surface behind it (warm-tinted, not cold gray)
+- [x] Content area uses paper texture, centered, with generous padding
+- [x] Smooth open animation: fade in + gentle scale from 0.95 to 1
+- [x] Smooth close animation: reverse of open
+- [x] Close on clicking the overlay background (outside content)
+- [x] Close on pressing Escape
+- [x] Close button: subtle, positioned top-right, feels like part of the design (not a generic X)
+- [x] Prevents body scroll when open
+- [x] Accessible: focus trap, aria attributes
 
 ## Technical Approach
 
@@ -44,8 +44,8 @@ A shared modal/overlay that opens when table objects are clicked. It should feel
 
 ## Acceptance Criteria
 
-- [ ] Opens with smooth animation when triggered
-- [ ] Closes on overlay click, Escape key, and close button
-- [ ] Body scroll prevented while open
-- [ ] Warm-tinted overlay, paper-textured content area
-- [ ] Works on both mobile and desktop viewports
+- [x] Opens with smooth animation when triggered
+- [x] Closes on overlay click, Escape key, and close button
+- [x] Body scroll prevented while open
+- [x] Warm-tinted overlay, paper-textured content area
+- [x] Works on both mobile and desktop viewports

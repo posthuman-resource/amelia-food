@@ -1,0 +1,126 @@
+/* Modal — Overlay that feels like picking up an object from the table */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+
+  /* Warm-tinted dim — brown, not cold gray */
+  background: rgba(58, 50, 48, 0.4);
+
+  /* Entry animation */
+  animation: overlayIn 300ms ease-out;
+}
+
+.overlayClosing {
+  animation: overlayOut 200ms ease-in forwards;
+}
+
+/* Content panel — paper card brought closer */
+.content {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - var(--space-3xl));
+  overflow-y: auto;
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+
+  /* Subtle worn-paper edge — no hard border */
+  box-shadow:
+    0 8px 32px rgba(44, 40, 37, 0.15),
+    0 2px 8px rgba(44, 40, 37, 0.08);
+
+  animation: contentIn 300ms ease-out;
+}
+
+.contentClosing {
+  animation: contentOut 200ms ease-in forwards;
+}
+
+/* Close button — a subtle mark in the corner */
+.close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--color-text);
+  background: rgba(44, 40, 37, 0.06);
+}
+
+.close:active {
+  background: rgba(44, 40, 37, 0.10);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes contentOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+}
+
+/* ========================================
+   Mobile — modal takes most of viewport
+   ======================================== */
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: var(--space-md);
+    align-items: flex-end;
+  }
+
+  .content {
+    max-width: 100%;
+    max-height: 85vh;
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}

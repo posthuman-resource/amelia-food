@@ -87,6 +87,28 @@
   box-shadow: 0 1px 3px rgba(107, 45, 91, 0.25);
 }
 
+/* ========================================
+   Modal content (placeholder)
+   ======================================== */
+
+.modalBody {
+  text-align: center;
+  padding: var(--space-lg) 0;
+}
+
+.modalTitle {
+  font-family: var(--font-hand);
+  font-size: 1.75rem;
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-md);
+}
+
+.modalText {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
 /* Mobile: stack objects vertically */
 @media (max-width: 768px) {
   .table {
