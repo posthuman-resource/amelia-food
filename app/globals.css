@@ -136,3 +136,62 @@ img {
   background: var(--color-plum-light);
   color: var(--color-surface-light);
 }
+
+/* ========================================
+   Textures — Warm, Tactile Surface
+   ======================================== */
+
+/* Wood grain texture for table surface */
+.texture-wood {
+  background-color: #8B7355;
+  background-image:
+    /* Subtle grain lines */
+    linear-gradient(90deg,
+      transparent 0%,
+      rgba(107, 91, 69, 0.3) 20%,
+      transparent 40%,
+      rgba(107, 91, 69, 0.2) 60%,
+      transparent 80%
+    ),
+    /* Wider grain bands */
+    linear-gradient(90deg,
+      rgba(168, 144, 112, 0.15) 0%,
+      transparent 10%,
+      transparent 30%,
+      rgba(168, 144, 112, 0.1) 50%,
+      transparent 70%,
+      rgba(107, 91, 69, 0.2) 85%,
+      transparent 100%
+    ),
+    /* Micro-texture noise */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 600px 100%, 400px 100%, 200px 200px;
+  background-blend-mode: multiply, multiply, overlay;
+}
+
+/* Paper/parchment texture for cards and overlays */
+.texture-paper {
+  background-color: var(--color-surface-light);
+  background-image:
+    /* Subtle paper fibers */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+/* Subtle noise overlay for added warmth */
+.texture-noise {
+  position: relative;
+}
+
+.texture-noise::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise-overlay'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise-overlay)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
