@@ -1,7 +1,5 @@
 # amelia.food — Todo
 
-- [Strip Tailwind & set up project foundation](todo/foundation.md)
-- [Generate table surface textures](todo/textures.md)
 - [Build the Table homepage component](todo/table.md)
 - [Build the TableObject component](todo/table-object.md)
 - [Build the Modal overlay component](todo/modal.md)

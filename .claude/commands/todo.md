@@ -125,11 +125,17 @@ When asked to check/update item status:
 
 When implementing an item:
 
-1. Use TaskCreate to break down the work into trackable sub-items
-2. Use TaskUpdate to mark sub-items as in_progress when starting, completed when done
-3. Implement each requirement
-4. **If fully done:** Prompt user to run `/todo done`
-5. **If partially done:** Update the spec file (or item description) with remaining work
+1. Read the spec file if it exists — the Requirements and Acceptance Criteria are your checklist
+2. Use TaskCreate to break down the work into trackable sub-items
+3. Use TaskUpdate to mark sub-items as in_progress when starting, completed when done
+4. Implement each requirement
+5. **Check off spec checkboxes as you go** — after completing each requirement or acceptance criterion, update the spec file to mark it `- [x]`. This is how progress is tracked in the spec.
+6. **Verify acceptance criteria** — after implementation, go through each acceptance criterion in the spec:
+   - If the criterion involves visual output, use Chrome MCP tools (take a screenshot) to verify
+   - If the criterion involves build/runtime behavior, test it (e.g., `npm run build`)
+   - Mark each criterion `- [x]` in the spec file as it passes
+7. **If fully done:** All checkboxes checked, build passes — prompt user to run `/todo done`
+8. **If partially done:** Update the spec file with remaining unchecked items and a note on what's left
 
 **Design reminders while implementing:**
 - CSS modules or global CSS with CSS variables — no Tailwind
