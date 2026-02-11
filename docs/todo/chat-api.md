@@ -6,13 +6,13 @@ Create the server-side API route that powers the emoji game. Uses Vercel AI SDK 
 
 ## Requirements
 
-- [ ] API route at `app/api/chat/route.ts`
-- [ ] Uses Vercel AI SDK v6: `streamText`, `convertToModelMessages`, `UIMessage`
-- [ ] Uses `@ai-sdk/anthropic` provider with `claude-haiku-4-5-20251001`
-- [ ] System prompt for emoji-only communication (from primer)
-- [ ] Streams responses back to client via `toUIMessageStreamResponse()`
-- [ ] `maxDuration` set appropriately for streaming
-- [ ] API key read from `ANTHROPIC_API_KEY` env var (handled automatically by @ai-sdk/anthropic)
+- [x] API route at `app/api/chat/route.ts`
+- [x] Uses Vercel AI SDK v6: `streamText`, `convertToCoreMessages`, `UIMessage`
+- [x] Uses `@ai-sdk/anthropic` provider with `claude-haiku-4-5-20251001`
+- [x] System prompt for emoji-only communication (from primer)
+- [x] Streams responses back to client via `toDataStreamResponse()`
+- [x] `maxDuration` set appropriately for streaming
+- [x] API key read from `ANTHROPIC_API_KEY` env var (handled automatically by @ai-sdk/anthropic)
 
 ## Technical Approach
 
@@ -54,8 +54,8 @@ export async function POST(req: Request) {
 
 ## Acceptance Criteria
 
-- [ ] POST to `/api/chat` with messages returns a streaming response
-- [ ] Claude responds with emoji only (no words) for emoji-only input
-- [ ] Claude explains in words when asked "what happened?"
-- [ ] Streaming works correctly (progressive token delivery)
-- [ ] No API key exposure on client side
+- [x] POST to `/api/chat` with messages returns a streaming response
+- [x] Claude responds with emoji only (no words) for emoji-only input
+- [x] Claude explains in words when asked "what happened?"
+- [x] Streaming works correctly (progressive token delivery)
+- [x] No API key exposure on client side
