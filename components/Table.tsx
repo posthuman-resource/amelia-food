@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
+import { ValentineEnvelope, ValentineLetter } from './Valentine';
 
 interface TableObjectData {
   id: string;
@@ -32,13 +33,7 @@ function ObjectContent({ id }: { id: string }) {
     );
   }
   if (id === 'valentine') {
-    return (
-      <div className={styles.envelopeCard}>
-        <div className={styles.envelopeFlap} />
-        <div className={styles.envelopeSeal} />
-        <p className={styles.cardLabel}>a letter</p>
-      </div>
-    );
+    return <ValentineEnvelope />;
   }
   return null;
 }
@@ -53,12 +48,7 @@ function ModalContent({ id }: { id: string }) {
     );
   }
   if (id === 'valentine') {
-    return (
-      <div className={styles.modalBody}>
-        <h2 className={styles.modalTitle}>A Letter</h2>
-        <p className={styles.modalText}>Coming soon...</p>
-      </div>
-    );
+    return <ValentineLetter />;
   }
   return null;
 }

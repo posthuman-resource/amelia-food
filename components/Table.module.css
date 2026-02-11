@@ -57,38 +57,8 @@
   margin: 0;
 }
 
-/* Valentine envelope card face */
-.envelopeCard {
-  position: relative;
-  text-align: center;
-  padding-top: var(--space-lg);
-}
-
-.envelopeFlap {
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
-  border-top: 28px solid var(--color-surface-warm);
-  filter: drop-shadow(0 1px 1px rgba(44, 40, 37, 0.06));
-}
-
-.envelopeSeal {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--color-plum);
-  margin: 0 auto var(--space-sm);
-  opacity: 0.85;
-  box-shadow: 0 1px 3px rgba(107, 45, 91, 0.25);
-}
-
 /* ========================================
-   Modal content (placeholder)
+   Modal content (placeholder for future objects)
    ======================================== */
 
 .modalBody {

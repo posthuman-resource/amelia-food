@@ -6,12 +6,12 @@ A Valentine's Day letter/card from Mike. On the table, it appears as a sealed en
 
 ## Requirements
 
-- [ ] Table appearance: an envelope or folded letter sitting on the table
-- [ ] The envelope has a slight "sealed" quality — maybe a small wax-seal-style circle or a fold
-- [ ] When opened (modal), shows a letter/card with handwritten-style text
-- [ ] Text rendered in Caveat font (handwriting feel)
-- [ ] Placeholder text that feels appropriate (warm, short, personal-placeholder)
-- [ ] The letter has paper texture and soft edges
+- [x] Table appearance: an envelope or folded letter sitting on the table
+- [x] The envelope has a slight "sealed" quality — maybe a small wax-seal-style circle or a fold
+- [x] When opened (modal), shows a letter/card with handwritten-style text
+- [x] Text rendered in Caveat font (handwriting feel)
+- [x] Placeholder text that feels appropriate (warm, short, personal-placeholder)
+- [x] The letter has paper texture and soft edges
 - [ ] Optional: a subtle "opening" animation when the modal appears (envelope flap lifting)
 
 ## Technical Approach
@@ -42,8 +42,8 @@ Amelia,
 
 ## Acceptance Criteria
 
-- [ ] Envelope visible on the table with realistic shadow
-- [ ] Clicking opens modal with the letter
-- [ ] Letter text in Caveat (handwriting) font
-- [ ] Paper texture and warm styling on the letter
-- [ ] Placeholder text present and easily replaceable
+- [x] Envelope visible on the table with realistic shadow
+- [x] Clicking opens modal with the letter
+- [x] Letter text in Caveat (handwriting) font
+- [x] Paper texture and warm styling on the letter
+- [x] Placeholder text present and easily replaceable

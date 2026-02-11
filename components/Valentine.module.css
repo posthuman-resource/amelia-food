@@ -1,0 +1,164 @@
+/* Valentine — Envelope on table + handwritten letter in modal */
+
+/* ========================================
+   Envelope (table card face)
+   ======================================== */
+
+.envelope {
+  text-align: center;
+  position: relative;
+}
+
+.envelopeBody {
+  position: relative;
+  width: 110px;
+  height: 76px;
+  background: var(--color-surface-warm);
+  border-radius: 3px;
+  margin: 0 auto;
+  box-shadow: inset 0 0 0 1px rgba(44, 40, 37, 0.06);
+}
+
+/* Triangular flap — the sealed top */
+.envelopeFlap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-left: 55px solid transparent;
+  border-right: 55px solid transparent;
+  border-top: 36px solid var(--color-surface);
+  filter: drop-shadow(0 1px 0 rgba(44, 40, 37, 0.05));
+}
+
+/* Diagonal fold lines from bottom corners to center */
+.envelopeFold {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top right,
+      transparent 49.5%,
+      rgba(44, 40, 37, 0.04) 49.5%,
+      rgba(44, 40, 37, 0.04) 50.5%,
+      transparent 50.5%
+    ),
+    linear-gradient(
+      to top left,
+      transparent 49.5%,
+      rgba(44, 40, 37, 0.04) 49.5%,
+      rgba(44, 40, 37, 0.04) 50.5%,
+      transparent 50.5%
+    );
+}
+
+/* Wax seal */
+.seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 35%,
+    var(--color-plum-light) 0%,
+    var(--color-plum) 60%,
+    #5A2550 100%
+  );
+  box-shadow:
+    0 1px 3px rgba(107, 45, 91, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.envelopeLabel {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: var(--space-sm) 0 0;
+}
+
+/* ========================================
+   Letter (modal content)
+   ======================================== */
+
+.letter {
+  padding: var(--space-md) 0;
+}
+
+.letterPaper {
+  padding: var(--space-2xl) var(--space-xl);
+  border-radius: var(--radius-md);
+  position: relative;
+  /* Cream notecard — slightly warmer than the modal background */
+  background-color: #FAF6EE;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  box-shadow: 0 1px 4px rgba(44, 40, 37, 0.06);
+}
+
+.greeting {
+  font-family: var(--font-hand);
+  font-size: 2rem;
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-lg);
+}
+
+.body {
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.body p {
+  margin-bottom: var(--space-lg);
+}
+
+.body p:last-child {
+  margin-bottom: 0;
+}
+
+.signature {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  color: var(--color-text-dark);
+  margin-top: var(--space-2xl);
+  margin-bottom: 0;
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .envelopeBody {
+    width: 100px;
+    height: 70px;
+  }
+
+  .envelopeFlap {
+    border-left-width: 50px;
+    border-right-width: 50px;
+    border-top-width: 33px;
+  }
+
+  .letterPaper {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .greeting {
+    font-size: 1.75rem;
+  }
+
+  .body {
+    font-size: 1.35rem;
+  }
+
+  .signature {
+    font-size: 1.45rem;
+  }
+}
