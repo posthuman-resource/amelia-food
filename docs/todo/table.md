@@ -6,13 +6,13 @@ The homepage IS the table. A full-viewport top-down view of a textured surface w
 
 ## Requirements
 
-- [ ] Full-viewport table surface using wood grain texture
-- [ ] "Amelia" rendered in Caveat font, positioned subtly (like scratched into the table or written on a small tag)
-- [ ] Object placement system — positions objects naturally (not in a grid) with breathing room
-- [ ] Desktop: objects spread spatially across the surface
-- [ ] Mobile: objects stack vertically but still feel like they're on the table surface
-- [ ] Two objects placed: the emoji game card and the valentine envelope
-- [ ] Noise overlay applied to the full surface for warmth
+- [x] Full-viewport table surface using wood grain texture
+- [x] "Amelia" rendered in Caveat font, positioned subtly (like scratched into the table or written on a small tag)
+- [x] Object placement system — positions objects naturally (not in a grid) with breathing room
+- [x] Desktop: objects spread spatially across the surface
+- [x] Mobile: objects stack vertically but still feel like they're on the table surface
+- [x] Two objects placed: the emoji game card and the valentine envelope
+- [x] Noise overlay applied to the full surface for warmth
 
 ## Technical Approach
 
@@ -40,8 +40,8 @@ const objects = [
 
 ## Acceptance Criteria
 
-- [ ] Full-viewport table surface with wood grain texture and noise overlay
-- [ ] "Amelia" visible in handwritten style, subtle and integrated
-- [ ] Two objects visible on the table (emoji game card, valentine envelope)
-- [ ] Objects positioned naturally with slight rotations
-- [ ] Responsive: spatial layout on desktop, vertical stack on mobile
+- [x] Full-viewport table surface with wood grain texture and noise overlay
+- [x] "Amelia" visible in handwritten style, subtle and integrated
+- [x] Two objects visible on the table (emoji game card, valentine envelope)
+- [x] Objects positioned naturally with slight rotations
+- [x] Responsive: spatial layout on desktop, vertical stack on mobile
