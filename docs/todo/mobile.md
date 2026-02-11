@@ -6,15 +6,15 @@ The primer says "the intimacy should increase on mobile." This isn't just about 
 
 ## Requirements
 
-- [ ] Table objects stack vertically on mobile but still feel like they're on the table surface
-- [ ] Touch interactions: gentle press feedback instead of hover (scale on :active)
-- [ ] Emoji game layout fits comfortably in mobile viewport
-- [ ] Emoji picker grid cells large enough for thumb tapping (min 44px)
-- [ ] Emoji composer comfortable to use with one hand
-- [ ] Modal takes full viewport on mobile (edge to edge, top to bottom)
-- [ ] Text sizes comfortable on mobile (no squinting)
-- [ ] No horizontal scroll anywhere
-- [ ] Viewport meta tag set correctly in layout
+- [x] Table objects stack vertically on mobile but still feel like they're on the table surface
+- [x] Touch interactions: gentle press feedback instead of hover (scale on :active)
+- [x] Emoji game layout fits comfortably in mobile viewport
+- [x] Emoji picker grid cells large enough for thumb tapping (min 44px)
+- [x] Emoji composer comfortable to use with one hand
+- [x] Modal takes full viewport on mobile (edge to edge, top to bottom)
+- [x] Text sizes comfortable on mobile (no squinting)
+- [x] No horizontal scroll anywhere
+- [x] Viewport meta tag set correctly in layout
 
 ## Technical Approach
 
@@ -50,8 +50,8 @@ The primer says "the intimacy should increase on mobile." This isn't just about 
 
 ## Acceptance Criteria
 
-- [ ] Table layout responsive: spatial on desktop, vertical on mobile
-- [ ] Touch interactions work naturally on mobile
-- [ ] Emoji game fully usable on 390px wide viewport
-- [ ] No horizontal scrolling on any viewport size
-- [ ] Modal full-screen on mobile, centered card on desktop
+- [x] Table layout responsive: spatial on desktop, vertical on mobile
+- [x] Touch interactions work naturally on mobile
+- [x] Emoji game fully usable on 390px wide viewport
+- [x] No horizontal scrolling on any viewport size
+- [x] Modal full-screen on mobile, centered card on desktop

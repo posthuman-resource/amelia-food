@@ -47,6 +47,7 @@
   height: 2.25rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
   transition:
@@ -58,9 +59,11 @@
   animation: tilePlaced 250ms ease-out;
 }
 
-.tile:hover {
-  background: rgba(184, 92, 56, 0.1);
-  transform: scale(1.1);
+@media (hover: hover) {
+  .tile:hover {
+    background: rgba(184, 92, 56, 0.1);
+    transform: scale(1.1);
+  }
 }
 
 .tile:active {
@@ -101,15 +104,22 @@
   color: var(--color-text-muted);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
   transition:
     color var(--transition-fast),
     background var(--transition-fast),
     opacity var(--transition-fast);
 }
 
-.clearBtn:hover:not(:disabled) {
-  color: var(--color-text);
-  background: rgba(44, 40, 37, 0.06);
+@media (hover: hover) {
+  .clearBtn:hover:not(:disabled) {
+    color: var(--color-text);
+    background: rgba(44, 40, 37, 0.06);
+  }
+}
+
+.clearBtn:active:not(:disabled) {
+  background: rgba(44, 40, 37, 0.10);
 }
 
 .clearBtn:disabled {
@@ -125,19 +135,22 @@
   background: var(--color-plum);
   padding: var(--space-xs) var(--space-lg);
   border-radius: var(--radius-md);
+  -webkit-tap-highlight-color: transparent;
   transition:
     background var(--transition-fast),
     opacity var(--transition-fast),
     transform var(--transition-fast);
 }
 
-.sendBtn:hover:not(:disabled) {
-  background: var(--color-plum-light);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .sendBtn:hover:not(:disabled) {
+    background: var(--color-plum-light);
+    transform: translateY(-1px);
+  }
 }
 
 .sendBtn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 .sendBtn:disabled {
@@ -146,31 +159,40 @@
 }
 
 /* ========================================
-   Mobile
+   Mobile — thumb-friendly, one-hand use
    ======================================== */
 
 @media (max-width: 768px) {
   .composer {
-    padding: var(--space-xs) var(--space-sm);
-    gap: var(--space-xs);
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .tray {
+    min-height: 2.75rem;
   }
 
   .tile {
-    font-size: 1.35rem;
-    width: 2rem;
-    height: 2rem;
+    font-size: 1.4rem;
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   .hint {
     font-size: 1rem;
   }
 
+  /* Larger send button for easy thumb tapping */
   .sendBtn {
-    padding: var(--space-xs) var(--space-md);
-    font-size: 1.05rem;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 1.1rem;
+    min-height: 44px;
+    min-width: 64px;
   }
 
   .clearBtn {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    min-height: 44px;
+    padding: var(--space-sm);
   }
 }

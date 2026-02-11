@@ -13,6 +13,7 @@
 
 .searchWrap {
   position: relative;
+  flex-shrink: 0;
 }
 
 .search {
@@ -20,12 +21,13 @@
   padding: var(--space-sm) var(--space-md);
   padding-right: 2.5rem;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-text);
   background: var(--color-surface);
   border: 1.5px solid rgba(44, 40, 37, 0.12);
   border-radius: var(--radius-md);
   outline: none;
+  -webkit-appearance: none;
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
@@ -48,8 +50,8 @@
   right: var(--space-sm);
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,12 +59,20 @@
   color: var(--color-text-muted);
   font-size: 1.1rem;
   line-height: 1;
+  -webkit-tap-highlight-color: transparent;
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
-.clearBtn:hover {
+@media (hover: hover) {
+  .clearBtn:hover {
+    color: var(--color-text);
+    background: rgba(44, 40, 37, 0.06);
+  }
+}
+
+.clearBtn:active {
   color: var(--color-text);
-  background: rgba(44, 40, 37, 0.06);
+  background: rgba(44, 40, 37, 0.10);
 }
 
 /* ========================================
@@ -75,6 +85,7 @@
   min-height: 0;
   flex: 1;
   padding: var(--space-xs);
+  -webkit-overflow-scrolling: touch;
 
   scrollbar-width: thin;
   scrollbar-color: rgba(44, 40, 37, 0.15) transparent;
@@ -129,21 +140,27 @@
   justify-content: center;
   font-size: 1.5rem;
   border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
   transition:
     background var(--transition-fast),
     transform var(--transition-fast);
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
-.cell:hover {
-  background: rgba(107, 45, 91, 0.06);
-  transform: scale(1.15);
+/* Desktop: hover scale */
+@media (hover: hover) {
+  .cell:hover {
+    background: rgba(107, 45, 91, 0.06);
+    transform: scale(1.15);
+  }
 }
 
+/* Touch and click: press feedback */
 .cell:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
+  background: rgba(107, 45, 91, 0.10);
 }
 
 /* Selection flash — brief warm glow */
@@ -188,23 +205,37 @@
 }
 
 /* ========================================
-   Mobile
+   Mobile — thumb-friendly tiles
    ======================================== */
 
 @media (max-width: 768px) {
   .grid {
-    max-height: 260px;
+    max-height: none;
+    flex: 1;
   }
 
+  /* Ensure min 44px for thumb tapping on mobile */
   .tiles {
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    gap: 2px;
   }
 
   .cell {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
+    /* Min touch target size */
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .search {
     font-size: 1rem;
+    padding: var(--space-sm) var(--space-md);
+    /* Prevent iOS zoom on focus */
+    font-size: 16px;
+  }
+
+  .clearBtn {
+    width: 36px;
+    height: 36px;
   }
 }

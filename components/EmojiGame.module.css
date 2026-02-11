@@ -47,14 +47,21 @@
   color: var(--color-plum);
   font-family: var(--font-hand);
   font-size: 1rem;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
     opacity var(--transition-fast);
 }
 
-.explainBtn:hover:not(:disabled) {
-  background: rgba(107, 45, 91, 0.08);
+@media (hover: hover) {
+  .explainBtn:hover:not(:disabled) {
+    background: rgba(107, 45, 91, 0.08);
+  }
+}
+
+.explainBtn:active:not(:disabled) {
+  background: rgba(107, 45, 91, 0.12);
 }
 
 .explainBtn:disabled {
@@ -88,15 +95,22 @@
   color: var(--color-text-muted);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
   transition:
     color var(--transition-fast),
     background var(--transition-fast),
     opacity var(--transition-fast);
 }
 
-.newBtn:hover:not(:disabled) {
-  color: var(--color-text);
-  background: rgba(44, 40, 37, 0.06);
+@media (hover: hover) {
+  .newBtn:hover:not(:disabled) {
+    color: var(--color-text);
+    background: rgba(44, 40, 37, 0.06);
+  }
+}
+
+.newBtn:active:not(:disabled) {
+  background: rgba(44, 40, 37, 0.10);
 }
 
 .newBtn:disabled {
@@ -105,29 +119,37 @@
 }
 
 /* ========================================
-   Mobile
+   Mobile — fill the full-screen modal
    ======================================== */
 
 @media (max-width: 768px) {
   .game {
-    height: calc(85vh - var(--space-xl) * 2 - 32px);
+    /* Fill the full-screen modal minus the close button and padding */
+    height: calc(100vh - var(--space-lg) * 2 - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(100dvh - var(--space-lg) * 2 - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     max-height: none;
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: var(--space-sm);
   }
 
-  .explainLabel {
-    /* Show shorter text via CSS or keep as is */
-  }
-
+  /* Make action buttons thumb-friendly */
   .explainBtn {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: var(--space-sm) var(--space-sm);
+    min-height: 44px;
   }
 
   .newBtn {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: var(--space-sm) var(--space-sm);
+    min-height: 44px;
+  }
+
+  .pickerWrap {
+    flex: 1 1 40%;
+    min-height: 100px;
   }
 }

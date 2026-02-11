@@ -47,8 +47,8 @@
   position: absolute;
   top: var(--space-md);
   right: var(--space-md);
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,15 +56,18 @@
   color: var(--color-text-muted);
   font-size: 1.25rem;
   line-height: 1;
+  -webkit-tap-highlight-color: transparent;
   transition:
     color var(--transition-fast),
     background var(--transition-fast);
   cursor: pointer;
 }
 
-.close:hover {
-  color: var(--color-text);
-  background: rgba(44, 40, 37, 0.06);
+@media (hover: hover) {
+  .close:hover {
+    color: var(--color-text);
+    background: rgba(44, 40, 37, 0.06);
+  }
 }
 
 .close:active {
@@ -108,19 +111,59 @@
 }
 
 /* ========================================
-   Mobile — modal takes most of viewport
+   Mobile — modal takes full viewport (edge to edge, top to bottom)
    ======================================== */
 
 @media (max-width: 768px) {
   .overlay {
-    padding: var(--space-md);
-    align-items: flex-end;
+    padding: 0;
+    align-items: stretch;
   }
 
   .content {
     max-width: 100%;
-    max-height: 85vh;
-    padding: var(--space-xl) var(--space-lg);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 100%;
+    height: 100%;
+    padding: var(--space-lg);
+    padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
+    border-radius: 0;
+    box-shadow: none;
+    animation: contentInMobile 300ms ease-out;
+  }
+
+  .contentClosing {
+    animation: contentOutMobile 200ms ease-in forwards;
+  }
+
+  .close {
+    top: calc(var(--space-sm) + env(safe-area-inset-top));
+    right: var(--space-sm);
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    z-index: 1;
+  }
+}
+
+@keyframes contentInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contentOutMobile {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px);
   }
 }

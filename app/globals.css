@@ -71,6 +71,7 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 body {
@@ -80,6 +81,10 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
+  /* Safe area insets for notched phones */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Typography */
@@ -145,28 +150,40 @@ img {
 .texture-wood {
   background-color: #8B7355;
   background-image:
-    /* Subtle grain lines (horizontal — like looking down at a table) */
-    linear-gradient(180deg,
-      transparent 0%,
-      rgba(107, 91, 69, 0.3) 20%,
-      transparent 40%,
-      rgba(107, 91, 69, 0.2) 60%,
-      transparent 80%
+    /* Fine grain lines — subtle, closely spaced */
+    repeating-linear-gradient(180deg,
+      transparent 0px,
+      rgba(107, 91, 69, 0.06) 2px,
+      transparent 4px,
+      transparent 12px
     ),
-    /* Wider grain bands */
+    /* Medium grain variation — gentle color shifts */
     linear-gradient(180deg,
-      rgba(168, 144, 112, 0.15) 0%,
-      transparent 10%,
-      transparent 30%,
-      rgba(168, 144, 112, 0.1) 50%,
-      transparent 70%,
-      rgba(107, 91, 69, 0.2) 85%,
+      rgba(107, 91, 69, 0.08) 0%,
+      transparent 8%,
+      rgba(156, 136, 108, 0.06) 18%,
+      transparent 28%,
+      rgba(107, 91, 69, 0.07) 42%,
+      transparent 55%,
+      rgba(156, 136, 108, 0.05) 68%,
+      transparent 78%,
+      rgba(107, 91, 69, 0.06) 90%,
+      transparent 100%
+    ),
+    /* Wider tonal bands — very subtle warmth variation */
+    linear-gradient(180deg,
+      rgba(168, 144, 112, 0.06) 0%,
+      transparent 15%,
+      transparent 35%,
+      rgba(168, 144, 112, 0.04) 50%,
+      transparent 65%,
+      rgba(107, 91, 69, 0.05) 85%,
       transparent 100%
     ),
     /* Micro-texture noise */
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-  background-size: 100% 600px, 100% 400px, 200px 200px;
-  background-blend-mode: multiply, multiply, overlay;
+  background-size: 100% 100%, 100% 800px, 100% 1200px, 200px 200px;
+  background-blend-mode: multiply, multiply, multiply, overlay;
 }
 
 /* Paper/parchment texture for cards and overlays */

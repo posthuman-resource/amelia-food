@@ -18,6 +18,7 @@
   font-family: inherit;
   color: var(--color-text);
   min-width: 140px;
+  -webkit-tap-highlight-color: transparent;
 
   /* Rest state transform + shadow */
   transform: rotate(var(--rotation));
@@ -31,15 +32,7 @@
     box-shadow 200ms ease-out;
 }
 
-/* Desktop hover: lift, slight extra rotation, deeper shadow */
-.card:hover {
-  transform: rotate(calc(var(--rotation) + 1.5deg)) translateY(-4px);
-  box-shadow:
-    0 6px 16px rgba(44, 40, 37, 0.12),
-    0 16px 32px rgba(44, 40, 37, 0.08);
-}
-
-/* Active/press: subtle settle */
+/* Active/press: subtle settle (both desktop and mobile) */
 .card:active {
   transform: rotate(var(--rotation)) translateY(-1px) scale(0.98);
   box-shadow:
@@ -50,7 +43,36 @@
 
 /* Focus-visible inherits global outline style */
 
-/* Mobile: flex-column layout, no absolute positioning */
+/* Desktop hover: lift, slight extra rotation, deeper shadow */
+@media (hover: hover) {
+  .card:hover {
+    transform: rotate(calc(var(--rotation) + 1.5deg)) translateY(-4px);
+    box-shadow:
+      0 6px 16px rgba(44, 40, 37, 0.12),
+      0 16px 32px rgba(44, 40, 37, 0.08);
+  }
+
+  .card:active {
+    transform: rotate(var(--rotation)) translateY(-1px) scale(0.98);
+    box-shadow:
+      0 1px 4px rgba(44, 40, 37, 0.12),
+      0 4px 12px rgba(44, 40, 37, 0.06);
+    transition-duration: 100ms;
+  }
+}
+
+/* Touch devices: press feedback, no hover */
+@media (hover: none) {
+  .card:active {
+    transform: rotate(var(--rotation)) scale(0.97);
+    box-shadow:
+      0 1px 3px rgba(44, 40, 37, 0.14),
+      0 3px 10px rgba(44, 40, 37, 0.08);
+    transition-duration: 100ms;
+  }
+}
+
+/* Mobile: flex-column layout, no absolute positioning, enhanced shadow */
 @media (max-width: 768px) {
   .object {
     position: static;
@@ -61,21 +83,9 @@
     min-width: 260px;
     width: 100%;
     max-width: 340px;
-  }
-
-  /* On mobile, hover is replaced by active/touch feedback */
-  .card:hover {
-    transform: rotate(var(--rotation));
+    /* Slightly more shadow on mobile to enhance "looking down at table" feel */
     box-shadow:
-      0 2px 6px rgba(44, 40, 37, 0.10),
-      0 6px 20px rgba(44, 40, 37, 0.06);
-  }
-
-  .card:active {
-    transform: rotate(var(--rotation)) scale(0.97);
-    box-shadow:
-      0 1px 3px rgba(44, 40, 37, 0.12),
-      0 3px 8px rgba(44, 40, 37, 0.06);
-    transition-duration: 100ms;
+      0 3px 8px rgba(44, 40, 37, 0.12),
+      0 8px 24px rgba(44, 40, 37, 0.08);
   }
 }
