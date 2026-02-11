@@ -1,5 +1,5 @@
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, convertToCoreMessages, type UIMessage } from 'ai';
+import { streamText, convertToCoreMessages, type Message } from 'ai';
 
 export const maxDuration = 30;
 
@@ -14,7 +14,7 @@ const EMOJI_SYSTEM_PROMPT = `You are playing an emoji conversation game. Rules:
 - The tone should feel like a patient, witty friend teaching a new language through immersion.`;
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages }: { messages: Message[] } = await req.json();
 
   const result = streamText({
     model: anthropic('claude-haiku-4-5-20251001'),

@@ -57,34 +57,6 @@
   margin: 0;
 }
 
-/* ========================================
-   Emoji Game modal layout
-   ======================================== */
-
-.emojiGameModal {
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-  max-height: 500px;
-}
-
-.modalTitle {
-  font-family: var(--font-hand);
-  font-size: 1.75rem;
-  color: var(--color-text-dark);
-  margin-bottom: var(--space-md);
-  text-align: center;
-  flex-shrink: 0;
-}
-
-/* Mobile adjustments for emoji game */
-@media (max-width: 768px) {
-  .emojiGameModal {
-    height: calc(85vh - var(--space-xl) * 2 - 32px);
-    max-height: none;
-  }
-}
-
 /* Mobile: stack objects vertically */
 @media (max-width: 768px) {
   .table {

@@ -1,14 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useChat } from '@ai-sdk/react';
+import { useState } from 'react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
-import Conversation from './Conversation';
-import EmojiComposer from './EmojiComposer';
+import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter } from './Valentine';
-import EmojiPicker from './EmojiPicker';
 
 interface TableObjectData {
   id: string;
@@ -42,52 +39,9 @@ function ObjectContent({ id }: { id: string }) {
   return null;
 }
 
-function EmojiGameModal() {
-  const { messages, setInput, handleSubmit } = useChat();
-  const [selectedEmoji, setSelectedEmoji] = useState<string[]>([]);
-
-  const handleEmojiSelect = useCallback((emoji: string) => {
-    setSelectedEmoji((prev) => [...prev, emoji]);
-  }, []);
-
-  const handleRemove = useCallback((index: number) => {
-    setSelectedEmoji((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  const handleClear = useCallback(() => {
-    setSelectedEmoji([]);
-  }, []);
-
-  const handleSend = useCallback(() => {
-    if (selectedEmoji.length === 0) return;
-    const message = selectedEmoji.join('');
-    setInput(message);
-    // Submit via a synthetic form event after setting input
-    // Use requestAnimationFrame to let the state update flush
-    requestAnimationFrame(() => {
-      handleSubmit();
-    });
-    setSelectedEmoji([]);
-  }, [selectedEmoji, setInput, handleSubmit]);
-
-  return (
-    <div className={styles.emojiGameModal}>
-      <h2 className={styles.modalTitle}>Emoji Game</h2>
-      <Conversation messages={messages} />
-      <EmojiComposer
-        selectedEmoji={selectedEmoji}
-        onRemove={handleRemove}
-        onSend={handleSend}
-        onClear={handleClear}
-      />
-      <EmojiPicker onSelect={handleEmojiSelect} />
-    </div>
-  );
-}
-
 function ModalContent({ id }: { id: string }) {
   if (id === 'emoji-game') {
-    return <EmojiGameModal />;
+    return <EmojiGame />;
   }
   if (id === 'valentine') {
     return <ValentineLetter />;

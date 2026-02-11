@@ -1,0 +1,133 @@
+/* EmojiGame — Full game layout inside the modal */
+
+.game {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  max-height: 640px;
+}
+
+/* Constrain the picker within the game layout — let conversation breathe */
+.pickerWrap {
+  flex: 0 1 220px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.title {
+  font-family: var(--font-hand);
+  font-size: 1.75rem;
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-md);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Action bar — explain + new conversation
+   ======================================== */
+
+.actionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  flex-shrink: 0;
+}
+
+/* "What just happened?" — curious, small, inviting */
+.explainBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  color: var(--color-plum);
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.explainBtn:hover:not(:disabled) {
+  background: rgba(107, 45, 91, 0.08);
+}
+
+.explainBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.explainIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--color-plum);
+  color: var(--color-surface-light);
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.explainLabel {
+  /* Hidden on very small screens */
+}
+
+/* "Start over" — subtle, secondary */
+.newBtn {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.newBtn:hover:not(:disabled) {
+  color: var(--color-text);
+  background: rgba(44, 40, 37, 0.06);
+}
+
+.newBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .game {
+    height: calc(85vh - var(--space-xl) * 2 - 32px);
+    max-height: none;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .explainLabel {
+    /* Show shorter text via CSS or keep as is */
+  }
+
+  .explainBtn {
+    font-size: 0.9rem;
+  }
+
+  .newBtn {
+    font-size: 0.9rem;
+  }
+}

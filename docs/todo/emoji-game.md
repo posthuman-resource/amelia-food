@@ -6,16 +6,16 @@ Wire together the Conversation, EmojiPicker, EmojiComposer, and chat API into th
 
 ## Requirements
 
-- [ ] Uses `useChat` from `@ai-sdk/react` with `DefaultChatTransport` pointing to `/api/chat`
-- [ ] Game flow: Claude sends opening emoji → Amelia responds → Claude reacts → repeat
-- [ ] On mount, automatically send an initial system-triggered message to get Claude's opening emoji
-- [ ] Conversation display shows the full exchange
-- [ ] EmojiPicker for selecting emoji
-- [ ] EmojiComposer for building up a response before sending
-- [ ] "What just happened?" button always visible — sends a text message asking Claude to explain
-- [ ] "New conversation" button to clear and start fresh
-- [ ] Layout: conversation on top, composer in middle, picker on bottom
-- [ ] The game opens in the Modal when the emoji game table object is clicked
+- [x] Uses `useChat` from `@ai-sdk/react` with `append` for programmatic message sending to `/api/chat`
+- [x] Game flow: Claude sends opening emoji → Amelia responds → Claude reacts → repeat
+- [x] On mount, automatically send an initial system-triggered message to get Claude's opening emoji
+- [x] Conversation display shows the full exchange
+- [x] EmojiPicker for selecting emoji
+- [x] EmojiComposer for building up a response before sending
+- [x] "What just happened?" button always visible — sends a text message asking Claude to explain
+- [x] "New conversation" button to clear and start fresh
+- [x] Layout: conversation on top, composer in middle, picker on bottom
+- [x] The game opens in the Modal when the emoji game table object is clicked
 
 ## Technical Approach
 
@@ -70,10 +70,10 @@ function handleExplain() {
 
 ## Acceptance Criteria
 
-- [ ] Game opens in modal when emoji game card is clicked on table
-- [ ] Claude sends opening emoji automatically
-- [ ] User can select emoji, compose, and send
-- [ ] Claude responds with emoji in real-time (streaming)
-- [ ] "What just happened?" triggers a natural language explanation
-- [ ] "New conversation" clears and restarts
-- [ ] Full flow works end-to-end on both mobile and desktop
+- [x] Game opens in modal when emoji game card is clicked on table
+- [x] Claude sends opening emoji automatically
+- [x] User can select emoji, compose, and send
+- [x] Claude responds with emoji in real-time (streaming)
+- [x] "What just happened?" triggers a natural language explanation
+- [x] "New conversation" clears and restarts
+- [x] Full flow works end-to-end on both mobile and desktop
