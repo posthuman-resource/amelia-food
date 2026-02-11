@@ -6,13 +6,13 @@ Build a comprehensive, client-side searchable emoji dataset. The primer emphasiz
 
 ## Requirements
 
-- [ ] Use `emojibase` package to source comprehensive emoji data
-- [ ] Process into a flat, searchable structure at build time
-- [ ] Each emoji entry includes: emoji character, name, keywords/tags, group/category
-- [ ] Search covers: official name, keywords, AND common associations
-- [ ] Add custom associations for richer search (e.g., "sad" matches 😢💔🥀🌧️, "food" matches 🍕🍰🍫)
-- [ ] Dataset loads client-side as a static JS module (no runtime fetching)
-- [ ] Reasonable size — include common emoji, exclude obscure flags/symbols if needed to keep bundle small
+- [x] Use `emojibase` package to source comprehensive emoji data
+- [x] Process into a flat, searchable structure at build time
+- [x] Each emoji entry includes: emoji character, name, keywords/tags, group/category
+- [x] Search covers: official name, keywords, AND common associations
+- [x] Add custom associations for richer search (e.g., "sad" matches 😢💔🥀🌧️, "food" matches 🍕🍰🍫)
+- [x] Dataset loads client-side as a static JS module (no runtime fetching)
+- [x] Reasonable size — include common emoji, exclude obscure flags/symbols if needed to keep bundle small
 
 ## Technical Approach
 
@@ -45,9 +45,9 @@ Particularly relevant for the emoji game's poetic/playful nature:
 
 ## Acceptance Criteria
 
-- [ ] Dataset includes 1000+ common emoji with rich keyword data
-- [ ] Searching "happy" returns relevant smileys, hearts, sunshine, etc.
-- [ ] Searching "cat" returns all cat emoji plus related (yarn, paw, etc.)
-- [ ] Searching "moon" returns moon phases AND the crescent moon
-- [ ] Module is importable client-side with no async loading needed
-- [ ] TypeScript types exported for use in picker components
+- [x] Dataset includes 1000+ common emoji with rich keyword data
+- [x] Searching "happy" returns relevant smileys, hearts, sunshine, etc.
+- [x] Searching "cat" returns all cat emoji plus related (yarn, paw, etc.)
+- [x] Searching "moon" returns moon phases AND the crescent moon
+- [x] Module is importable client-side with no async loading needed
+- [x] TypeScript types exported for use in picker components
