@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useChat } from '@ai-sdk/react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
 import Conversation from './Conversation';
+import EmojiComposer from './EmojiComposer';
 import { ValentineEnvelope, ValentineLetter } from './Valentine';
 import EmojiPicker from './EmojiPicker';
 
@@ -42,28 +43,43 @@ function ObjectContent({ id }: { id: string }) {
 }
 
 function EmojiGameModal() {
-  const { messages, input, setInput, handleSubmit } = useChat();
+  const { messages, setInput, handleSubmit } = useChat();
+  const [selectedEmoji, setSelectedEmoji] = useState<string[]>([]);
 
-  function handleEmojiSelect(emoji: string) {
-    setInput((prev) => prev + emoji);
-  }
+  const handleEmojiSelect = useCallback((emoji: string) => {
+    setSelectedEmoji((prev) => [...prev, emoji]);
+  }, []);
+
+  const handleRemove = useCallback((index: number) => {
+    setSelectedEmoji((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const handleClear = useCallback(() => {
+    setSelectedEmoji([]);
+  }, []);
+
+  const handleSend = useCallback(() => {
+    if (selectedEmoji.length === 0) return;
+    const message = selectedEmoji.join('');
+    setInput(message);
+    // Submit via a synthetic form event after setting input
+    // Use requestAnimationFrame to let the state update flush
+    requestAnimationFrame(() => {
+      handleSubmit();
+    });
+    setSelectedEmoji([]);
+  }, [selectedEmoji, setInput, handleSubmit]);
 
   return (
     <div className={styles.emojiGameModal}>
       <h2 className={styles.modalTitle}>Emoji Game</h2>
       <Conversation messages={messages} />
-      <form className={styles.emojiInput} onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Send an emoji..."
-          className={styles.emojiField}
-        />
-        <button type="submit" className={styles.emojiSend} disabled={!input.trim()}>
-          Send
-        </button>
-      </form>
+      <EmojiComposer
+        selectedEmoji={selectedEmoji}
+        onRemove={handleRemove}
+        onSend={handleSend}
+        onClear={handleClear}
+      />
       <EmojiPicker onSelect={handleEmojiSelect} />
     </div>
   );

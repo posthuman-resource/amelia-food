@@ -6,13 +6,13 @@ The composition area where selected emoji build up before sending. Like arrangin
 
 ## Requirements
 
-- [ ] Displays selected emoji in a horizontal row that wraps if needed
-- [ ] Emoji appear with a gentle "placed" animation when added
-- [ ] Individual emoji can be removed by tapping/clicking them (with a subtle remove animation)
-- [ ] Send button to submit the composed message
-- [ ] Clear/reset button to start over
-- [ ] Send button disabled when no emoji selected
-- [ ] The area should feel like a composition tray or workspace
+- [x] Displays selected emoji in a horizontal row that wraps if needed
+- [x] Emoji appear with a gentle "placed" animation when added
+- [x] Individual emoji can be removed by tapping/clicking them (with a subtle remove animation)
+- [x] Send button to submit the composed message
+- [x] Clear/reset button to start over
+- [x] Send button disabled when no emoji selected
+- [x] The area should feel like a composition tray or workspace
 
 ## Technical Approach
 
@@ -43,9 +43,9 @@ Each emoji in the tray has a subtle entry animation (scale from 0.8 to 1, slight
 
 ## Acceptance Criteria
 
-- [ ] Selected emoji display in a horizontal row
-- [ ] Adding emoji shows entry animation
-- [ ] Tapping an emoji in the tray removes it
-- [ ] Send button works and is disabled when empty
-- [ ] Clear button resets the selection
-- [ ] Looks and feels like a physical composition workspace
+- [x] Selected emoji display in a horizontal row
+- [x] Adding emoji shows entry animation
+- [x] Tapping an emoji in the tray removes it
+- [x] Send button works and is disabled when empty
+- [x] Clear button resets the selection
+- [x] Looks and feels like a physical composition workspace

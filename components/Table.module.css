@@ -77,77 +77,11 @@
   flex-shrink: 0;
 }
 
-/* Temporary input — will be replaced by EmojiComposer */
-.emojiInput {
-  display: flex;
-  gap: var(--space-sm);
-  padding-top: var(--space-md);
-  border-top: 1px solid rgba(44, 40, 37, 0.08);
-  flex-shrink: 0;
-}
-
-.emojiField {
-  flex: 1;
-  padding: var(--space-sm) var(--space-md);
-  border: 1px solid rgba(44, 40, 37, 0.12);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  font-size: 1.25rem;
-  font-family: inherit;
-  color: var(--color-text);
-  outline: none;
-  transition: border-color var(--transition-fast);
-}
-
-.emojiField::placeholder {
-  color: var(--color-text-muted);
-  opacity: 0.6;
-}
-
-.emojiField:focus {
-  border-color: var(--color-plum);
-}
-
-.emojiSend {
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--color-plum);
-  color: var(--color-surface-light);
-  border-radius: var(--radius-md);
-  font-family: var(--font-hand);
-  font-size: 1.1rem;
-  transition:
-    background var(--transition-fast),
-    opacity var(--transition-fast);
-}
-
-.emojiSend:hover {
-  background: var(--color-plum-light);
-}
-
-.emojiSend:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
 /* Mobile adjustments for emoji game */
 @media (max-width: 768px) {
   .emojiGameModal {
     height: calc(85vh - var(--space-xl) * 2 - 32px);
     max-height: none;
-  }
-
-  .emojiInput {
-    gap: var(--space-xs);
-  }
-
-  .emojiField {
-    min-width: 0;
-    font-size: 1.1rem;
-  }
-
-  .emojiSend {
-    padding: var(--space-sm) var(--space-md);
-    flex-shrink: 0;
   }
 }
 
