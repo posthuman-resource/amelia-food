@@ -1,0 +1,207 @@
+/* EmojiPicker — A tray of emoji tiles, like fridge magnets */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ========================================
+   Search input — paper-textured field
+   ======================================== */
+
+.searchWrap {
+  position: relative;
+}
+
+.search {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  padding-right: 2.5rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1.5px solid rgba(44, 40, 37, 0.12);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.search::placeholder {
+  color: var(--color-text-muted);
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  opacity: 0.65;
+}
+
+.search:focus {
+  border-color: var(--color-plum);
+  box-shadow: 0 0 0 3px rgba(107, 45, 91, 0.08);
+}
+
+.clearBtn {
+  position: absolute;
+  right: var(--space-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.clearBtn:hover {
+  color: var(--color-text);
+  background: rgba(44, 40, 37, 0.06);
+}
+
+/* ========================================
+   Grid area — scrollable tray of tiles
+   ======================================== */
+
+.grid {
+  overflow-y: auto;
+  max-height: 320px;
+  padding: var(--space-xs);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(44, 40, 37, 0.15) transparent;
+}
+
+.grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.grid::-webkit-scrollbar-thumb {
+  background: rgba(44, 40, 37, 0.15);
+  border-radius: 2px;
+}
+
+/* Category section */
+.section {
+  margin-bottom: var(--space-md);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+/* Category header — serif, subtle */
+.categoryHeader {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-xs);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid rgba(44, 40, 37, 0.06);
+}
+
+/* Tile grid — like a tray of letter tiles */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 2px;
+}
+
+/* Individual emoji cell — a tappable tile */
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border-radius: var(--radius-sm);
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cell:hover {
+  background: rgba(107, 45, 91, 0.06);
+  transform: scale(1.15);
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+/* Selection flash — brief warm glow */
+.pop {
+  animation: popFlash 300ms ease-out;
+}
+
+@keyframes popFlash {
+  0% {
+    background: rgba(196, 114, 58, 0.25);
+    transform: scale(1.2);
+  }
+  100% {
+    background: transparent;
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   No results
+   ======================================== */
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) 0;
+  gap: var(--space-sm);
+  opacity: 0.5;
+}
+
+.noResultsEmoji {
+  font-size: 2rem;
+}
+
+.noResultsText {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .grid {
+    max-height: 260px;
+  }
+
+  .tiles {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  }
+
+  .cell {
+    font-size: 1.35rem;
+  }
+
+  .search {
+    font-size: 1rem;
+  }
+}

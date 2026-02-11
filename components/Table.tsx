@@ -7,6 +7,7 @@ import TableObject from './TableObject';
 import Modal from './Modal';
 import Conversation from './Conversation';
 import { ValentineEnvelope, ValentineLetter } from './Valentine';
+import EmojiPicker from './EmojiPicker';
 
 interface TableObjectData {
   id: string;
@@ -43,6 +44,10 @@ function ObjectContent({ id }: { id: string }) {
 function EmojiGameModal() {
   const { messages, input, setInput, handleSubmit } = useChat();
 
+  function handleEmojiSelect(emoji: string) {
+    setInput((prev) => prev + emoji);
+  }
+
   return (
     <div className={styles.emojiGameModal}>
       <h2 className={styles.modalTitle}>Emoji Game</h2>
@@ -59,6 +64,7 @@ function EmojiGameModal() {
           Send
         </button>
       </form>
+      <EmojiPicker onSelect={handleEmojiSelect} />
     </div>
   );
 }

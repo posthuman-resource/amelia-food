@@ -6,15 +6,15 @@ A large, visible, delightful emoji palette. The primer calls this "critical" —
 
 ## Requirements
 
-- [ ] Grid of emoji, large enough to tap on mobile
-- [ ] Type-to-filter search input at the top
-- [ ] Search matches emoji names AND keyword associations (from emoji dataset)
-- [ ] Instant filtering — no debounce lag, feels immediate
-- [ ] Shows category groupings when not searching (Smileys, Animals, Food, etc.)
-- [ ] Clicking/tapping an emoji adds it to the composer (calls onSelect callback)
-- [ ] Visual feedback on selection (brief highlight/pop)
-- [ ] Scrollable grid area with smooth scrolling
-- [ ] Search input placeholder that's warm/inviting ("type a feeling...")
+- [x] Grid of emoji, large enough to tap on mobile
+- [x] Type-to-filter search input at the top
+- [x] Search matches emoji names AND keyword associations (from emoji dataset)
+- [x] Instant filtering — no debounce lag, feels immediate
+- [x] Shows category groupings when not searching (Smileys, Animals, Food, etc.)
+- [x] Clicking/tapping an emoji adds it to the composer (calls onSelect callback)
+- [x] Visual feedback on selection (brief highlight/pop)
+- [x] Scrollable grid area with smooth scrolling
+- [x] Search input placeholder that's warm/inviting ("type a feeling...")
 
 ## Technical Approach
 
@@ -47,9 +47,9 @@ CSS Grid with `auto-fill` and `minmax(44px, 1fr)` for responsive emoji cells. Ea
 
 ## Acceptance Criteria
 
-- [ ] Emoji grid renders with all common emoji
-- [ ] Typing in search instantly filters emoji
-- [ ] Search finds emoji by name ("grinning") and by association ("happy")
-- [ ] Tapping an emoji fires onSelect with the emoji character
-- [ ] Grid is scrollable and responsive
-- [ ] Feels fast and tactile, not laggy
+- [x] Emoji grid renders with all common emoji
+- [x] Typing in search instantly filters emoji
+- [x] Search finds emoji by name ("grinning") and by association ("happy")
+- [x] Tapping an emoji fires onSelect with the emoji character
+- [x] Grid is scrollable and responsive
+- [x] Feels fast and tactile, not laggy
