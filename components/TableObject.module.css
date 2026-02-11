@@ -1,37 +1,81 @@
-/* TableObject — Positioned items on the table surface */
+/* TableObject — Physical card/artifact on the table surface */
 
 .object {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  transform: translate(-50%, -50%) rotate(var(--rotation));
-  transition: transform var(--transition-base);
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
-.object:hover {
-  transform: translate(-50%, -50%) rotate(var(--rotation)) translateY(-4px);
-}
-
-/* Placeholder styling (will be replaced with actual components) */
-.placeholder {
-  padding: var(--space-lg);
-  background: var(--color-surface-light);
+/* The interactive card surface */
+.card {
+  display: block;
+  padding: var(--space-xl);
+  border: none;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft);
-  font-family: var(--font-serif);
-  color: var(--color-text-muted);
-  min-width: 120px;
-  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--color-text);
+  min-width: 140px;
+
+  /* Rest state transform + shadow */
+  transform: rotate(var(--rotation));
+  box-shadow:
+    0 2px 6px rgba(44, 40, 37, 0.10),
+    0 6px 20px rgba(44, 40, 37, 0.06);
+
+  /* Gentle transitions for all interactive properties */
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
 }
 
-/* Mobile: objects are in a flex column, so override absolute positioning */
+/* Desktop hover: lift, slight extra rotation, deeper shadow */
+.card:hover {
+  transform: rotate(calc(var(--rotation) + 1.5deg)) translateY(-4px);
+  box-shadow:
+    0 6px 16px rgba(44, 40, 37, 0.12),
+    0 16px 32px rgba(44, 40, 37, 0.08);
+}
+
+/* Active/press: subtle settle */
+.card:active {
+  transform: rotate(var(--rotation)) translateY(-1px) scale(0.98);
+  box-shadow:
+    0 1px 4px rgba(44, 40, 37, 0.12),
+    0 4px 12px rgba(44, 40, 37, 0.06);
+  transition-duration: 100ms;
+}
+
+/* Focus-visible inherits global outline style */
+
+/* Mobile: flex-column layout, no absolute positioning */
 @media (max-width: 768px) {
   .object {
     position: static;
-    transform: rotate(var(--rotation));
+    transform: none;
   }
 
-  .object:hover {
-    transform: rotate(var(--rotation)) translateY(-2px);
+  .card {
+    min-width: 260px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  /* On mobile, hover is replaced by active/touch feedback */
+  .card:hover {
+    transform: rotate(var(--rotation));
+    box-shadow:
+      0 2px 6px rgba(44, 40, 37, 0.10),
+      0 6px 20px rgba(44, 40, 37, 0.06);
+  }
+
+  .card:active {
+    transform: rotate(var(--rotation)) scale(0.97);
+    box-shadow:
+      0 1px 3px rgba(44, 40, 37, 0.12),
+      0 3px 8px rgba(44, 40, 37, 0.06);
+    transition-duration: 100ms;
   }
 }

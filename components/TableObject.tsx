@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './TableObject.module.css';
 
 interface TableObjectProps {
@@ -5,9 +7,11 @@ interface TableObjectProps {
   x: number;
   y: number;
   rotation: number;
+  children: React.ReactNode;
+  onClick?: () => void;
 }
 
-export default function TableObject({ id, x, y, rotation }: TableObjectProps) {
+export default function TableObject({ id, x, y, rotation, children, onClick }: TableObjectProps) {
   return (
     <div
       className={styles.object}
@@ -18,9 +22,14 @@ export default function TableObject({ id, x, y, rotation }: TableObjectProps) {
         '--rotation': `${rotation}deg`,
       } as React.CSSProperties}
     >
-      <div className={styles.placeholder}>
-        {id}
-      </div>
+      <button
+        className={`${styles.card} texture-paper`}
+        onClick={onClick}
+        type="button"
+        aria-label={id}
+      >
+        {children}
+      </button>
     </div>
   );
 }

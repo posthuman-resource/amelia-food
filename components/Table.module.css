@@ -20,14 +20,71 @@
   pointer-events: none;
   user-select: none;
   letter-spacing: 0.02em;
+  z-index: 0;
 }
 
 /* Objects container — handles positioning */
 .objectsContainer {
   position: relative;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   height: 100%;
   min-height: 100vh;
+}
+
+/* ========================================
+   Object face content
+   ======================================== */
+
+/* Emoji game card face */
+.emojiCard {
+  text-align: center;
+}
+
+.emojiTiles {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  font-size: 1.75rem;
+  margin-bottom: var(--space-sm);
+}
+
+.cardLabel {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Valentine envelope card face */
+.envelopeCard {
+  position: relative;
+  text-align: center;
+  padding-top: var(--space-lg);
+}
+
+.envelopeFlap {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-top: 28px solid var(--color-surface-warm);
+  filter: drop-shadow(0 1px 1px rgba(44, 40, 37, 0.06));
+}
+
+.envelopeSeal {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-plum);
+  margin: 0 auto var(--space-sm);
+  opacity: 0.85;
+  box-shadow: 0 1px 3px rgba(107, 45, 91, 0.25);
 }
 
 /* Mobile: stack objects vertically */
@@ -43,6 +100,7 @@
     margin: var(--space-2xl) auto var(--space-lg);
     font-size: 2rem;
     text-align: center;
+    transform: rotate(-3deg);
   }
 
   .objectsContainer {
