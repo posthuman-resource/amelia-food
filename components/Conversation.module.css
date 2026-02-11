@@ -53,7 +53,7 @@
 /* Message row — controls alignment */
 .message {
   display: flex;
-  animation: tileIn 300ms ease-out both;
+  animation: tileIn 300ms var(--bezier-gentle) both;
 }
 
 .user {
@@ -114,8 +114,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-text-muted);
-  opacity: 0.4;
+  background: var(--color-plum);
+  opacity: 0.3;
   animation: pulse 1.4s ease-in-out infinite;
 }
 
@@ -129,11 +129,11 @@
 
 @keyframes pulse {
   0%, 100% {
-    opacity: 0.25;
+    opacity: 0.2;
     transform: scale(0.85);
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.55;
     transform: scale(1);
   }
 }
@@ -147,11 +147,11 @@
 @keyframes tileIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(6px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 

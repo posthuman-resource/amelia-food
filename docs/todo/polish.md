@@ -6,16 +6,16 @@ The final layer that makes this feel handmade and alive. Subtle animations, refi
 
 ## Requirements
 
-- [ ] Table objects: subtle float on hover, shadow transition, 1-2 degree rotation shift
-- [ ] Modal: smooth open/close with fade + scale
-- [ ] Emoji messages: gentle pop/fade entry animation, staggered if multiple
-- [ ] Emoji picker: individual emoji have micro hover/focus feedback
-- [ ] Emoji composer: tiles enter with gentle scale animation, exit with fade
-- [ ] Loading state for AI response: quiet pulse animation (not a spinner)
-- [ ] Page load: objects on the table fade in with a slight stagger
-- [ ] "Amelia" text: very subtle breathing animation (opacity pulse) or static with glow
-- [ ] Smooth scroll behavior throughout
-- [ ] All transitions use ease-out or custom bezier, ~200-300ms
+- [x] Table objects: subtle float on hover, shadow transition, 1-2 degree rotation shift
+- [x] Modal: smooth open/close with fade + scale
+- [x] Emoji messages: gentle pop/fade entry animation, staggered if multiple
+- [x] Emoji picker: individual emoji have micro hover/focus feedback
+- [x] Emoji composer: tiles enter with gentle scale animation, exit with fade
+- [x] Loading state for AI response: quiet pulse animation (not a spinner)
+- [x] Page load: objects on the table fade in with a slight stagger
+- [x] "Amelia" text: very subtle breathing animation (opacity pulse) or static with glow
+- [x] Smooth scroll behavior throughout
+- [x] All transitions use ease-out or custom bezier, ~200-300ms
 
 ## Technical Approach
 
@@ -50,10 +50,10 @@ The final layer that makes this feel handmade and alive. Subtle animations, refi
 
 ## Acceptance Criteria
 
-- [ ] All hover/touch interactions have smooth, gentle transitions
-- [ ] Modal open/close animation is polished
-- [ ] Emoji entry animations feel like placing tiles
-- [ ] AI loading state is a quiet pulse, not a spinner
-- [ ] Table objects stagger in on page load
-- [ ] `prefers-reduced-motion` respected
-- [ ] Nothing feels janky, sudden, or mechanical
+- [x] All hover/touch interactions have smooth, gentle transitions
+- [x] Modal open/close animation is polished
+- [x] Emoji entry animations feel like placing tiles
+- [x] AI loading state is a quiet pulse, not a spinner
+- [x] Table objects stagger in on page load
+- [x] `prefers-reduced-motion` respected
+- [x] Nothing feels janky, sudden, or mechanical

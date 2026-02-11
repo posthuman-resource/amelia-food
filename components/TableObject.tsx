@@ -7,11 +7,12 @@ interface TableObjectProps {
   x: number;
   y: number;
   rotation: number;
+  index?: number;
   children: React.ReactNode;
   onClick?: () => void;
 }
 
-export default function TableObject({ id, x, y, rotation, children, onClick }: TableObjectProps) {
+export default function TableObject({ id, x, y, rotation, index = 0, children, onClick }: TableObjectProps) {
   return (
     <div
       className={styles.object}
@@ -20,6 +21,7 @@ export default function TableObject({ id, x, y, rotation, children, onClick }: T
         '--x': `${x}%`,
         '--y': `${y}%`,
         '--rotation': `${rotation}deg`,
+        '--stagger': `${index * 100}ms`,
       } as React.CSSProperties}
     >
       <button

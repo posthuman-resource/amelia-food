@@ -21,6 +21,14 @@
   user-select: none;
   letter-spacing: 0.02em;
   z-index: 0;
+
+  /* Subtle breathing — opacity gently pulses */
+  animation: inscriptionBreath 6s ease-in-out infinite;
+}
+
+@keyframes inscriptionBreath {
+  0%, 100% { opacity: 0.22; }
+  50% { opacity: 0.35; }
 }
 
 /* Objects container — handles positioning */

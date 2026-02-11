@@ -146,7 +146,16 @@
   cursor: pointer;
   transition:
     background var(--transition-fast),
-    transform var(--transition-fast);
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+/* Focus-visible: subtle warm ring for keyboard navigation */
+.cell:focus-visible {
+  background: rgba(107, 45, 91, 0.06);
+  box-shadow: 0 0 0 2px rgba(107, 45, 91, 0.25);
+  outline: none;
+  transform: scale(1.1);
 }
 
 /* Desktop: hover scale */

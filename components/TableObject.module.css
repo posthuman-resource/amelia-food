@@ -6,6 +6,21 @@
   top: var(--y);
   transform: translate(-50%, -50%);
   z-index: 1;
+
+  /* Staggered page load animation */
+  animation: objectIn 500ms var(--bezier-gentle) both;
+  animation-delay: var(--stagger, 0ms);
+}
+
+@keyframes objectIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
 }
 
 /* The interactive card surface */
@@ -77,6 +92,7 @@
   .object {
     position: static;
     transform: none;
+    animation-name: objectInMobile;
   }
 
   .card {
@@ -87,5 +103,16 @@
     box-shadow:
       0 3px 8px rgba(44, 40, 37, 0.12),
       0 8px 24px rgba(44, 40, 37, 0.08);
+  }
+}
+
+@keyframes objectInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

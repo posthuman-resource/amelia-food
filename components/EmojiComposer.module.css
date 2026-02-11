@@ -56,7 +56,20 @@
     opacity var(--transition-fast);
 
   /* Entry animation — like placing a tile gently */
-  animation: tilePlaced 250ms ease-out;
+  animation: tilePlaced 250ms var(--bezier-gentle);
+}
+
+/* Exit animation — gentle fade out */
+.tileRemoving {
+  animation: tileRemoved 150ms ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes tileRemoved {
+  to {
+    opacity: 0;
+    transform: scale(0.7);
+  }
 }
 
 @media (hover: hover) {

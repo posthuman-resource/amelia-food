@@ -60,13 +60,14 @@ export default function Table() {
 
       {/* Table objects */}
       <div className={styles.objectsContainer}>
-        {objects.map((obj) => (
+        {objects.map((obj, index) => (
           <TableObject
             key={obj.id}
             id={obj.id}
             x={obj.x}
             y={obj.y}
             rotation={obj.rotation}
+            index={index}
             onClick={() => setActiveObject(obj.id)}
           >
             <ObjectContent id={obj.id} />

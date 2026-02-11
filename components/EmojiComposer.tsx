@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import styles from './EmojiComposer.module.css';
 
 interface EmojiComposerProps {
@@ -18,6 +18,7 @@ export default function EmojiComposer({
 }: EmojiComposerProps) {
   const trayRef = useRef<HTMLDivElement>(null);
   const prevLengthRef = useRef(selectedEmoji.length);
+  const [removing, setRemoving] = useState<number | null>(null);
 
   // Scroll tray to end when new emoji are added
   useEffect(() => {
@@ -26,6 +27,14 @@ export default function EmojiComposer({
     }
     prevLengthRef.current = selectedEmoji.length;
   }, [selectedEmoji.length]);
+
+  const handleRemove = useCallback((index: number) => {
+    setRemoving(index);
+    setTimeout(() => {
+      setRemoving(null);
+      onRemove(index);
+    }, 150);
+  }, [onRemove]);
 
   const isEmpty = selectedEmoji.length === 0;
 
@@ -38,8 +47,8 @@ export default function EmojiComposer({
           selectedEmoji.map((emoji, index) => (
             <button
               key={`${emoji}-${index}`}
-              className={styles.tile}
-              onClick={() => onRemove(index)}
+              className={`${styles.tile} ${removing === index ? styles.tileRemoving : ''}`}
+              onClick={() => handleRemove(index)}
               title="Remove"
               type="button"
             >
