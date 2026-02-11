@@ -1,26 +1,138 @@
-@import "tailwindcss";
+/* amelia.food — Global Styles */
 
+/* CSS Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surface colors — warm cream/parchment */
+  --color-surface: #F5F0E8;
+  --color-surface-warm: #EDE8DF;
+  --color-surface-light: #FAF7F2;
+
+  /* Accent colors — deep plum/burgundy */
+  --color-plum: #6B2D5B;
+  --color-plum-light: #8B3A62;
+  --color-burgundy: #722F37;
+
+  /* Secondary accents — forest green/deep teal */
+  --color-green: #2D5B4B;
+  --color-green-light: #3A6B5B;
+
+  /* Warm highlights — burnt orange/terracotta */
+  --color-terracotta: #C4723A;
+  --color-terracotta-dark: #B85C38;
+
+  /* Subtle gold */
+  --color-gold: #C4A265;
+  --color-gold-muted: #B8956A;
+
+  /* Text — deep warm brown, NOT pure black */
+  --color-text: #3A3230;
+  --color-text-dark: #2C2825;
+  --color-text-muted: #6B5E58;
+
+  /* Typography */
+  --font-serif: 'Lora', Georgia, serif;
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'Lora', Georgia, serif;
+
+  /* Shadows — soft and subtle */
+  --shadow-soft: 0 2px 8px rgba(44, 40, 37, 0.08);
+  --shadow-lifted: 0 8px 24px rgba(44, 40, 37, 0.12);
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Transitions — gentle, never aggressive */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Reset & Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  line-height: 1.2;
+  color: var(--color-text-dark);
+}
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+/* Links */
+a {
+  color: var(--color-plum);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-plum-light);
+}
+
+/* Buttons */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* Lists */
+ul, ol {
+  list-style: none;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Focus states — subtle warm outline */
+:focus-visible {
+  outline: 2px solid var(--color-plum);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-plum-light);
+  color: var(--color-surface-light);
 }
