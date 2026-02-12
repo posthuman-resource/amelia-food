@@ -210,8 +210,18 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
                     type="button"
                   >
                     <p className={styles.optionWord}>{word.word}</p>
-                    <p className={styles.optionLiteral}>&ldquo;{word.literal}&rdquo;</p>
+                    <p className={styles.optionPronunciation}>{word.pronunciation}</p>
+                    <p className={styles.optionPos}>{word.partOfSpeech}</p>
                     <p className={styles.optionDescription}>{word.description}</p>
+                    <div className={styles.optionParts}>
+                      {word.parts.map((part) => (
+                        <span key={part.german} className={styles.optionPart}>
+                          <span className={styles.partGerman}>{part.german}</span>
+                          <span className={styles.partEnglish}>{part.english}</span>
+                        </span>
+                      ))}
+                    </div>
+                    <p className={styles.optionLiteral}>&ldquo;{word.literal}&rdquo;</p>
                   </button>
                 ))}
               </div>

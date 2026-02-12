@@ -163,7 +163,7 @@
    ======================================== */
 
 .pickStep {
-  max-width: 520px;
+  max-width: 800px;
   max-height: 100vh;
   max-height: 100dvh;
   overflow-y: auto;
@@ -188,13 +188,13 @@
 }
 
 .wordOptions {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
 }
 
 .wordOption {
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-md);
   border-radius: var(--radius-lg);
   background-color: #FAF6EE;
   background-image:
@@ -207,6 +207,8 @@
     transform 200ms ease-out,
     box-shadow 200ms ease-out;
   text-align: left;
+  display: flex;
+  flex-direction: column;
   animation: cardSlideIn 300ms ease-out both;
 }
 
@@ -252,6 +254,21 @@
   font-family: var(--font-hand);
   font-size: 1.2rem;
   color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+.optionPronunciation {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.optionPos {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
   margin-bottom: var(--space-sm);
 }
 
@@ -261,6 +278,38 @@
   line-height: 1.6;
   color: var(--color-text);
   margin: 0;
+  flex: 1;
+}
+
+.optionParts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.optionPart {
+  display: flex;
+  flex-direction: column;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: rgba(107, 94, 88, 0.06);
+}
+
+.partGerman {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  line-height: 1.4;
+}
+
+.partEnglish {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  line-height: 1.3;
 }
 
 /* Pick step actions */
@@ -381,6 +430,10 @@
   .pickStep {
     padding-top: calc(var(--space-2xl) + env(safe-area-inset-top));
     padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom));
+  }
+
+  .wordOptions {
+    grid-template-columns: 1fr;
   }
 
   .wordOption {
