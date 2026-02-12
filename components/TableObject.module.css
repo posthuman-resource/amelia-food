@@ -35,6 +35,9 @@
   min-width: 140px;
   -webkit-tap-highlight-color: transparent;
 
+  /* Slightly transparent so the table peeks through — content stays fully opaque */
+  background-color: rgba(237, 232, 223, 0.82);
+
   /* Rest state transform + shadow */
   transform: rotate(var(--rotation));
   box-shadow:

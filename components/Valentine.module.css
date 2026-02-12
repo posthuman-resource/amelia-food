@@ -75,7 +75,7 @@
 
 .envelopeLabel {
   font-family: var(--font-hand);
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   color: var(--color-text-muted);
   margin: var(--space-sm) 0 0;
 }
