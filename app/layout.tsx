@@ -23,7 +23,9 @@ const courierPrime = Courier_Prime({
   display: "swap",
 });
 
-export const metadata: Metadata = {};
+export const metadata: Metadata = {
+  description: "Sustenance for a singular person.",
+};
 
 export const viewport: Viewport = {
   width: "device-width",

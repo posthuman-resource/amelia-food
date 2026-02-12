@@ -106,7 +106,6 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
   return createPortal(
     <div
       className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`}
-      onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
@@ -114,7 +113,6 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
       <div
         ref={contentRef}
         className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ''}`}
-        onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
       >
         <button

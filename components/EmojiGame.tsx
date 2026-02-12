@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useChat } from '@ai-sdk/react';
+import type { Message } from 'ai';
 import { Streamdown } from 'streamdown';
 import Conversation from './Conversation';
 import EmojiComposer from './EmojiComposer';
@@ -9,10 +10,29 @@ import EmojiPicker from './EmojiPicker';
 import Modal from './Modal';
 import styles from './EmojiGame.module.css';
 
+const STORAGE_KEY = 'emoji-game-messages';
+
+function loadMessages(): Message[] | undefined {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return undefined;
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch { /* corrupted data, start fresh */ }
+  return undefined;
+}
+
+function saveMessages(messages: Message[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  } catch { /* storage full, silently fail */ }
+}
+
 export default function EmojiGame() {
   const { messages, append, setMessages, isLoading } = useChat();
   const [selectedEmoji, setSelectedEmoji] = useState<string[]>([]);
   const hasSentOpener = useRef(false);
+  const hasRestored = useRef(false);
 
   // Explain modal state
   const [explainOpen, setExplainOpen] = useState(false);
@@ -20,15 +40,29 @@ export default function EmojiGame() {
   const [explainLoading, setExplainLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
-  // On mount, send an initial message to get Claude's opening emoji
+  // On mount, restore saved conversation or start a new one
   useEffect(() => {
     if (hasSentOpener.current) return;
     hasSentOpener.current = true;
-    append({
-      role: 'user',
-      content: 'Start a new emoji conversation. Send your opening emoji.',
-    });
-  }, [append]);
+
+    const saved = loadMessages();
+    if (saved) {
+      hasRestored.current = true;
+      setMessages(saved);
+    } else {
+      append({
+        role: 'user',
+        content: 'Start a new emoji conversation. Send your opening emoji.',
+      });
+    }
+  }, [append, setMessages]);
+
+  // Persist messages to localStorage whenever they change
+  useEffect(() => {
+    // Don't save empty state (would wipe storage during initialization)
+    if (messages.length === 0) return;
+    saveMessages(messages);
+  }, [messages]);
 
   const handleEmojiSelect = useCallback((emoji: string) => {
     setSelectedEmoji((prev) => [...prev, emoji]);
@@ -128,6 +162,8 @@ export default function EmojiGame() {
   const handleNewConversation = useCallback(() => {
     setMessages([]);
     setSelectedEmoji([]);
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+    hasRestored.current = false;
     hasSentOpener.current = false;
     // Re-trigger the opening message
     setTimeout(() => {
