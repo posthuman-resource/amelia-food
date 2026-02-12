@@ -148,44 +148,92 @@ img {
    Textures — Warm, Tactile Surface
    ======================================== */
 
-/* Wood grain texture for table surface */
+/* Acacia wood surface — silvery-gray bark with warm heartwood showing through */
 .texture-wood {
-  background-color: #8B7355;
+  background-color: #87817a;
   background-image:
-    /* Fine grain lines — subtle, closely spaced */
-    repeating-linear-gradient(180deg,
+    /* Heartwood exposed patches — warm reddish-orange where bark has stripped */
+    radial-gradient(ellipse 18% 7% at 12% 25%,
+      rgba(180, 92, 52, 0.38) 0%, rgba(180, 92, 52, 0.12) 55%, transparent 100%),
+    radial-gradient(ellipse 10% 24% at 72% 14%,
+      rgba(168, 78, 44, 0.32) 0%, rgba(168, 78, 44, 0.08) 60%, transparent 100%),
+    radial-gradient(ellipse 28% 5% at 45% 58%,
+      rgba(192, 100, 58, 0.30) 0%, rgba(192, 100, 58, 0.10) 50%, transparent 100%),
+    radial-gradient(ellipse 8% 16% at 86% 72%,
+      rgba(175, 85, 48, 0.34) 0%, rgba(175, 85, 48, 0.10) 55%, transparent 100%),
+    radial-gradient(ellipse 20% 4% at 30% 84%,
+      rgba(188, 95, 55, 0.26) 0%, rgba(188, 95, 55, 0.08) 60%, transparent 100%),
+    radial-gradient(ellipse 6% 20% at 56% 38%,
+      rgba(170, 82, 46, 0.24) 0%, rgba(170, 82, 46, 0.06) 55%, transparent 100%),
+    /* Small heartwood flecks — tiny exposed spots scattered more randomly */
+    radial-gradient(ellipse 4% 3% at 22% 48%,
+      rgba(185, 90, 50, 0.30) 0%, transparent 100%),
+    radial-gradient(ellipse 3% 5% at 64% 78%,
+      rgba(172, 80, 45, 0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 5% 2% at 78% 42%,
+      rgba(195, 105, 60, 0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 3% 4% at 40% 18%,
+      rgba(178, 88, 50, 0.25) 0%, transparent 100%),
+    /* Bark grain — rough vertical lines at slightly varying angles */
+    repeating-linear-gradient(176deg,
       transparent 0px,
-      rgba(107, 91, 69, 0.06) 2px,
-      transparent 4px,
-      transparent 12px
+      rgba(60, 56, 50, 0.09) 1px,
+      transparent 2px,
+      transparent 6px,
+      rgba(72, 67, 60, 0.05) 7px,
+      transparent 8px,
+      transparent 17px
     ),
-    /* Medium grain variation — gentle color shifts */
-    linear-gradient(180deg,
-      rgba(107, 91, 69, 0.08) 0%,
-      transparent 8%,
-      rgba(156, 136, 108, 0.06) 18%,
-      transparent 28%,
-      rgba(107, 91, 69, 0.07) 42%,
-      transparent 55%,
-      rgba(156, 136, 108, 0.05) 68%,
-      transparent 78%,
-      rgba(107, 91, 69, 0.06) 90%,
-      transparent 100%
+    /* Second grain layer — offset angle for irregularity */
+    repeating-linear-gradient(182deg,
+      transparent 0px,
+      rgba(55, 50, 44, 0.07) 1px,
+      transparent 3px,
+      transparent 11px,
+      rgba(65, 60, 53, 0.04) 12px,
+      transparent 13px,
+      transparent 23px
     ),
-    /* Wider tonal bands — very subtle warmth variation */
-    linear-gradient(180deg,
-      rgba(168, 144, 112, 0.06) 0%,
-      transparent 15%,
-      transparent 35%,
-      rgba(168, 144, 112, 0.04) 50%,
-      transparent 65%,
-      rgba(107, 91, 69, 0.05) 85%,
-      transparent 100%
+    /* Bark fissure lines — deeper cracks */
+    repeating-linear-gradient(178deg,
+      transparent 0px,
+      rgba(48, 44, 40, 0.13) 1px,
+      transparent 3px,
+      transparent 32px,
+      rgba(52, 48, 43, 0.07) 33px,
+      transparent 35px,
+      transparent 58px
     ),
-    /* Micro-texture noise */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-  background-size: 100% 100%, 100% 100%, 100% 100%, 200px 200px;
-  background-blend-mode: multiply, multiply, multiply, overlay;
+    /* Weathered lighter patches — silvery bleached areas */
+    radial-gradient(ellipse 22% 14% at 18% 55%,
+      rgba(160, 155, 148, 0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 16% 20% at 68% 30%,
+      rgba(155, 150, 142, 0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 30% 10% at 50% 90%,
+      rgba(162, 157, 150, 0.10) 0%, transparent 100%),
+    /* Coarse noise — bark roughness, large scale (prime tile: 347px) */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 347 347' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='b1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b1)' opacity='0.09'/%3E%3C/svg%3E"),
+    /* Fine noise — micro detail, different scale (prime tile: 211px) */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 211 211' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='b2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='3' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.08'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b2)' opacity='0.07'/%3E%3C/svg%3E"),
+    /* Medium noise — fills the gap between coarse and fine (prime tile: 503px) */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 503 503' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='b3'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='5' seed='31' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b3)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size:
+    /* heartwood patches — full viewport, no repeat */
+    100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
+    /* small flecks — full viewport */
+    100% 100%, 100% 100%, 100% 100%, 100% 100%,
+    /* grain layers — full viewport */
+    100% 100%, 100% 100%, 100% 100%,
+    /* weathered patches — full viewport */
+    100% 100%, 100% 100%, 100% 100%,
+    /* noise tiles — prime sizes so they never sync */
+    347px 347px, 211px 211px, 503px 503px;
+  background-blend-mode:
+    screen, screen, screen, screen, screen, screen,
+    screen, screen, screen, screen,
+    multiply, multiply, multiply,
+    screen, screen, screen,
+    overlay, overlay, overlay;
 }
 
 /* Paper/parchment texture for cards and overlays */
