@@ -89,7 +89,7 @@ Important:
 
   # --verbose --output-format stream-json: stream all events (tool calls, results, text)
   #   as JSON so progress is visible in real time.
-  if claude -p --verbose --output-format stream-json "$IMPLEMENT_PROMPT" 2>&1 | tee "$LOG_FILE"; then
+  if claude -p --model claude-opus-4-6 --verbose --output-format stream-json "$IMPLEMENT_PROMPT" 2>&1 | tee "$LOG_FILE"; then
     echo ""
     echo -e "${GREEN}  ✓ Implementation completed${NC}"
   else
@@ -120,7 +120,7 @@ This should:
   echo -e "${BLUE}Phase 2: Marking done...${NC}"
   echo ""
 
-  if claude -p --verbose --output-format stream-json "$DONE_PROMPT" 2>&1 | tee "$DONE_LOG_FILE"; then
+  if claude -p --model claude-opus-4-6 --verbose --output-format stream-json "$DONE_PROMPT" 2>&1 | tee "$DONE_LOG_FILE"; then
     echo ""
     echo -e "${GREEN}  ✓ Item ${ITEM_NUM} done and removed${NC}"
   else

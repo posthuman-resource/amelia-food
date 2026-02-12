@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.8",
+    "@ai-sdk/openai": "^1.3.24",
     "@ai-sdk/react": "^1.0.23",
     "ai": "^4.0.31",
     "emojibase": "^17.0.0",
     "emojibase-data": "^17.0.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "streamdown": "^2.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",

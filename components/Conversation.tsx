@@ -9,15 +9,6 @@ interface ConversationProps {
   isLoading?: boolean;
 }
 
-/** Check if text is primarily emoji (not an explanation in prose) */
-function isEmojiOnly(text: string): boolean {
-  const stripped = text.replace(/\s/g, '');
-  if (stripped.length === 0) return false;
-  const emojiPattern =
-    /^[\p{Emoji_Presentation}\p{Extended_Pictographic}\u200d\ufe0f\u20e3\u{1f3fb}-\u{1f3ff}]+$/u;
-  return emojiPattern.test(stripped);
-}
-
 export default function Conversation({ messages, isLoading }: ConversationProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -52,23 +43,18 @@ export default function Conversation({ messages, isLoading }: ConversationProps)
 
   return (
     <div className={styles.conversation} ref={scrollRef}>
-      {visibleMessages.map((message) => {
-        const text = message.content;
-        const isExplain = message.role === 'assistant' && !isEmojiOnly(text);
-
-        return (
-          <div
-            key={message.id}
-            className={`${styles.message} ${
-              message.role === 'user' ? styles.user : styles.assistant
-            }`}
-          >
-            <div className={`${styles.tile} ${isExplain ? styles.explain : ''}`}>
-              {text}
-            </div>
+      {visibleMessages.map((message) => (
+        <div
+          key={message.id}
+          className={`${styles.message} ${
+            message.role === 'user' ? styles.user : styles.assistant
+          }`}
+        >
+          <div className={styles.tile}>
+            {message.content}
           </div>
-        );
-      })}
+        </div>
+      ))}
 
       {isLoading && (
         <div className={`${styles.message} ${styles.assistant}`}>

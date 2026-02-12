@@ -5,7 +5,7 @@ import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
-import { ValentineEnvelope, ValentineLetter } from './Valentine';
+import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
 
 interface TableObjectData {
   id: string;
@@ -17,7 +17,9 @@ interface TableObjectData {
 
 const objects: TableObjectData[] = [
   { id: 'emoji-game', x: 35, y: 30, rotation: -2, label: 'Emoji Game' },
-  { id: 'valentine', x: 60, y: 55, rotation: 3, label: 'Valentine' },
+  { id: 'welcome', x: 60, y: 55, rotation: 3, label: 'Welcome' },
+  { id: 'poem', x: 20, y: 65, rotation: -1.5, label: 'Dendrites' },
+  { id: 'valentine', x: 72, y: 30, rotation: 2, label: 'Valentine' },
 ];
 
 function ObjectContent({ id }: { id: string }) {
@@ -33,8 +35,19 @@ function ObjectContent({ id }: { id: string }) {
       </div>
     );
   }
-  if (id === 'valentine') {
+  if (id === 'welcome') {
     return <ValentineEnvelope />;
+  }
+  if (id === 'poem') {
+    return (
+      <div className={styles.poemCard}>
+        <span className={styles.poemIcon}>📜</span>
+        <p className={styles.cardLabel}>dendrites</p>
+      </div>
+    );
+  }
+  if (id === 'valentine') {
+    return <ValentineCard />;
   }
   return null;
 }
@@ -43,8 +56,33 @@ function ModalContent({ id }: { id: string }) {
   if (id === 'emoji-game') {
     return <EmojiGame />;
   }
-  if (id === 'valentine') {
+  if (id === 'welcome') {
     return <ValentineLetter />;
+  }
+  if (id === 'valentine') {
+    return <ValentineCardContent />;
+  }
+  if (id === 'poem') {
+    return (
+      <div className={styles.poem}>
+        <div className={`${styles.poemPaper} texture-paper`}>
+          <div className={styles.stanza}>
+            <p className={styles.poemLine}>two monsters walk</p>
+            <p className={styles.poemLine}>into frog heaven</p>
+            <p className={styles.poemLine}>this isn&apos;t a joke</p>
+          </div>
+          <div className={styles.stanza}>
+            <p className={styles.poemLine}>they keep lying</p>
+            <p className={styles.poemLine}>goodnight they say</p>
+          </div>
+          <div className={styles.stanza}>
+            <p className={styles.poemLine}>she&apos;ll haunt him she says</p>
+            <p className={styles.poemLine}>he says yes</p>
+            <p className={styles.poemLine}>before she can finish</p>
+          </div>
+        </div>
+      </div>
+    );
   }
   return null;
 }

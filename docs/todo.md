@@ -1,14 +1,5 @@
 # amelia.food — Todo
 
-- [Build the Table homepage component](todo/table.md)
-- [Build the TableObject component](todo/table-object.md)
-- [Build the Modal overlay component](todo/modal.md)
-- [Build the Valentine card component](todo/valentine.md)
-- [Create the emoji dataset with search metadata](todo/emoji-data.md)
-- [Set up the chat API route with Vercel AI SDK](todo/chat-api.md)
-- [Build the Conversation display component](todo/conversation.md)
-- [Build the EmojiPicker component](todo/emoji-picker.md)
-- [Build the EmojiComposer component](todo/emoji-composer.md)
-- [Build the EmojiGame full integration](todo/emoji-game.md)
-- [Mobile responsiveness & touch interactions](todo/mobile.md)
 - [Animation & polish pass](todo/polish.md)
+- ~[Semantic emoji search](todo/semantic-emoji-search.md)~ — done
+- [Explain mode → modal with streaming markdown](todo/explain-modal.md)

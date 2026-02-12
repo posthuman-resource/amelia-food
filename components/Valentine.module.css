@@ -81,6 +81,21 @@
 }
 
 /* ========================================
+   Valentine card (table card face)
+   ======================================== */
+
+.card {
+  text-align: center;
+  position: relative;
+}
+
+.cardHeart {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+}
+
+/* ========================================
    Letter (modal content)
    ======================================== */
 
@@ -108,9 +123,9 @@
 }
 
 .body {
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  line-height: 1.6;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.7;
   color: var(--color-text);
 }
 
@@ -120,6 +135,23 @@
 
 .body p:last-child {
   margin-bottom: 0;
+}
+
+.valentinePaper {
+  text-align: center;
+}
+
+.valentineHeart {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: var(--space-lg);
+}
+
+.valentineText {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--color-text-dark);
+  line-height: 1.5;
 }
 
 .signature {
@@ -155,7 +187,7 @@
   }
 
   .body {
-    font-size: 1.35rem;
+    font-size: 0.95rem;
   }
 
   .signature {

@@ -89,16 +89,6 @@
   border-bottom-left-radius: var(--radius-sm);
 }
 
-/* Explain mode — when Claude breaks character to explain in prose */
-.explain {
-  font-family: var(--font-serif);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--color-text);
-  max-width: 90%;
-  white-space: pre-wrap;
-}
-
 /* ========================================
    Thinking indicator — gentle pulse
    ======================================== */
@@ -168,11 +158,6 @@
   .tile {
     font-size: 1.5rem;
     padding: var(--space-sm) var(--space-sm);
-  }
-
-  .explain {
-    font-size: 0.9rem;
-    max-width: 95%;
   }
 
   .emptyEmoji {

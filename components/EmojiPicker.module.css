@@ -189,6 +189,44 @@
 }
 
 /* ========================================
+   Semantic search — loading shimmer
+   ======================================== */
+
+.searchLoading {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    rgba(107, 45, 91, 0.04) 40%,
+    rgba(107, 45, 91, 0.06) 50%,
+    rgba(107, 45, 91, 0.04) 60%,
+    var(--color-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: searchShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes searchShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Semantic results fade in gently */
+.semanticTiles {
+  animation: semanticFadeIn 400ms ease-out;
+}
+
+@keyframes semanticFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
    No results
    ======================================== */
 

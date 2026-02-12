@@ -8,7 +8,32 @@ export function ValentineEnvelope() {
         <div className={styles.envelopeFold} />
         <div className={styles.seal} />
       </div>
-      <p className={styles.envelopeLabel}>a letter</p>
+      <p className={styles.envelopeLabel}>welcome</p>
+    </div>
+  );
+}
+
+export function ValentineCard() {
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHeart}>&#x2764;&#xFE0F;</div>
+      <p className={styles.envelopeLabel}>valentine</p>
+    </div>
+  );
+}
+
+export function ValentineCardContent() {
+  return (
+    <div className={styles.letter}>
+      <div className={`${styles.letterPaper} ${styles.valentinePaper} texture-paper`}>
+        <p className={styles.valentineHeart}>&#x2764;&#xFE0F;</p>
+        <div className={styles.body}>
+          <p className={styles.valentineText}>
+            Happy Valentine&apos;s Day, Amy.
+          </p>
+        </div>
+        <p className={styles.signature}>~mike</p>
+      </div>
     </div>
   );
 }
@@ -20,18 +45,22 @@ export function ValentineLetter() {
         <p className={styles.greeting}>Amelia,</p>
         <div className={styles.body}>
           <p>
-            I made this little corner of the internet just for you.
+            This table is here for you to eat from whenever
+            you like.
           </p>
           <p>
-            There are things here to find — some now, some later.
-            A few surprises tucked away for whenever you feel
-            like looking.
+            Think of it as a buffet-style scrapbook. I&apos;ll try
+            to encode memories into the menu for you, as things
+            that seem important come to pass.
           </p>
           <p>
-            No rush. It&apos;ll be here.
+            You can mention to me if there is something you
+            would like captured here, and please do if something
+            comes to mind. Asking me for small favors is the best
+            way to brighten my day.
           </p>
         </div>
-        <p className={styles.signature}>— Mike</p>
+        <p className={styles.signature}>~mike</p>
       </div>
     </div>
   );
