@@ -1,4 +1,4 @@
-import { db } from '@/db/client';
+import { getDb } from '@/db/client';
 import { words } from '@/db/schema';
 
 export async function POST(req: Request) {
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Invalid word data' }, { status: 400 });
   }
 
-  db.insert(words)
+  getDb().insert(words)
     .values({
       id: word.id,
       word: word.word,

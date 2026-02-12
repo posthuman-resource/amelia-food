@@ -1,7 +1,9 @@
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import { db } from './client';
+import { getDb } from './client';
 import { words as wordsTable } from './schema';
 import { words as wordData } from '../data/words';
+
+const db = getDb();
 
 // Apply pending migrations (creates tables if needed)
 migrate(db, { migrationsFolder: './db/migrations' });
