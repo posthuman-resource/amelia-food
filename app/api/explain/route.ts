@@ -1,11 +1,11 @@
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, type CoreMessage } from 'ai';
+import { streamText, type ModelMessage } from 'ai';
 import { EXPLAIN_SYSTEM_PROMPT } from '@/lib/prompts';
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const { messages }: { messages: CoreMessage[] } = await req.json();
+  const { messages }: { messages: ModelMessage[] } = await req.json();
 
   const result = streamText({
     model: anthropic('claude-haiku-4-5-20251001'),
@@ -13,5 +13,5 @@ export async function POST(req: Request) {
     messages,
   });
 
-  return result.toDataStreamResponse();
+  return result.toTextStreamResponse();
 }

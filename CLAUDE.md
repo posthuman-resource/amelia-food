@@ -66,7 +66,7 @@ The only user is Amelia. She already knows what this site is. Never explain the 
 ```typescript
 // API route (app/api/chat/route.ts)
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, convertToModelMessages, UIMessage } from 'ai';
+import { streamText, convertToModelMessages, type UIMessage } from 'ai';
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();

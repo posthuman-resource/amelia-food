@@ -55,8 +55,9 @@ async function main() {
     console.log(`  Batch ${batchNum}/${totalBatches} (${batch.length} items)...`);
 
     const { embeddings } = await embedMany({
-      model: openai.embedding(MODEL_ID, { dimensions: DIMENSIONS }),
+      model: openai.embedding(MODEL_ID),
       values: batch,
+      providerOptions: { openai: { dimensions: DIMENSIONS } },
     });
 
     allEmbeddings.push(...embeddings);

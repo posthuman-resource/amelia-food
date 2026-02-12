@@ -1,11 +1,11 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import type { Message } from 'ai';
+import type { UIMessage } from '@ai-sdk/react';
 import styles from './Conversation.module.css';
 
 interface ConversationProps {
-  messages: Message[];
+  messages: UIMessage[];
   isLoading?: boolean;
 }
 
@@ -22,9 +22,15 @@ export default function Conversation({ messages, isLoading }: ConversationProps)
     });
   }, [messages, isLoading]);
 
+  const getText = (m: UIMessage) =>
+    m.parts
+      ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+      .map((p) => p.text)
+      .join('') ?? '';
+
   // Filter out the initial system-trigger message from the user
   const visibleMessages = messages.filter((m) => {
-    if (m.role === 'user' && m.content.includes('Start a new emoji conversation')) {
+    if (m.role === 'user' && getText(m).includes('Start a new emoji conversation')) {
       return false;
     }
     return true;
@@ -51,7 +57,7 @@ export default function Conversation({ messages, isLoading }: ConversationProps)
           }`}
         >
           <div className={styles.tile}>
-            {message.content}
+            {getText(message)}
           </div>
         </div>
       ))}

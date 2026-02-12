@@ -26,8 +26,9 @@ export async function POST(req: Request) {
 
   // Embed the user's query with the same model + dimensions
   const { embedding: queryEmbedding } = await embed({
-    model: openai.embedding(MODEL_ID, { dimensions: DIMENSIONS }),
+    model: openai.embedding(MODEL_ID),
     value: query,
+    providerOptions: { openai: { dimensions: DIMENSIONS } },
   });
 
   // Compute cosine similarity against all emoji

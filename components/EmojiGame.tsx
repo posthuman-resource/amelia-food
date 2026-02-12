@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useChat } from '@ai-sdk/react';
-import type { Message } from 'ai';
+import { useChat, type UIMessage } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { Streamdown } from 'streamdown';
 import Conversation from './Conversation';
 import EmojiComposer from './EmojiComposer';
@@ -12,7 +12,9 @@ import styles from './EmojiGame.module.css';
 
 const STORAGE_KEY = 'emoji-game-messages';
 
-function loadMessages(): Message[] | undefined {
+const chatTransport = new DefaultChatTransport({ api: '/api/chat' });
+
+function loadMessages(): UIMessage[] | undefined {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return undefined;
@@ -22,14 +24,17 @@ function loadMessages(): Message[] | undefined {
   return undefined;
 }
 
-function saveMessages(messages: Message[]) {
+function saveMessages(messages: UIMessage[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
   } catch { /* storage full, silently fail */ }
 }
 
 export default function EmojiGame() {
-  const { messages, append, setMessages, isLoading } = useChat();
+  const { messages, sendMessage, setMessages, status } = useChat({
+    transport: chatTransport,
+  });
+  const isLoading = status === 'streaming' || status === 'submitted';
   const [selectedEmoji, setSelectedEmoji] = useState<string[]>([]);
   const hasSentOpener = useRef(false);
   const hasRestored = useRef(false);
@@ -50,12 +55,11 @@ export default function EmojiGame() {
       hasRestored.current = true;
       setMessages(saved);
     } else {
-      append({
-        role: 'user',
-        content: 'Start a new emoji conversation. Send your opening emoji.',
+      sendMessage({
+        text: 'Start a new emoji conversation. Send your opening emoji.',
       });
     }
-  }, [append, setMessages]);
+  }, [sendMessage, setMessages]);
 
   // Persist messages to localStorage whenever they change
   useEffect(() => {
@@ -79,15 +83,20 @@ export default function EmojiGame() {
   const handleSend = useCallback(() => {
     if (selectedEmoji.length === 0) return;
     const message = selectedEmoji.join('');
-    append({ role: 'user', content: message });
+    sendMessage({ text: message });
     setSelectedEmoji([]);
-  }, [selectedEmoji, append]);
+  }, [selectedEmoji, sendMessage]);
 
   const handleExplain = useCallback(async () => {
     // Build a labeled transcript (skip system triggers)
+    const getText = (m: UIMessage) =>
+      m.parts
+        ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+        .map((p) => p.text)
+        .join('') ?? '';
     const transcript = messages
-      .filter((m) => !m.content.includes('Start a new emoji conversation'))
-      .map((m) => `${m.role === 'assistant' ? 'You (the bot)' : 'Amy'}: ${m.content}`)
+      .filter((m) => !getText(m).includes('Start a new emoji conversation'))
+      .map((m) => `${m.role === 'assistant' ? 'You (the bot)' : 'Amy'}: ${getText(m)}`)
       .join('\n');
 
     const explainMessages = [
@@ -126,20 +135,8 @@ export default function EmojiGame() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        // Parse AI SDK data stream format: lines starting with 0:"text"
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (line.startsWith('0:')) {
-            try {
-              const text = JSON.parse(line.slice(2));
-              accumulated += text;
-              setExplainText(accumulated);
-            } catch {
-              // Skip malformed lines
-            }
-          }
-        }
+        accumulated += decoder.decode(value, { stream: true });
+        setExplainText(accumulated);
       }
     } catch (err) {
       if ((err as Error).name !== 'AbortError') {
@@ -168,12 +165,11 @@ export default function EmojiGame() {
     // Re-trigger the opening message
     setTimeout(() => {
       hasSentOpener.current = true;
-      append({
-        role: 'user',
-        content: 'Start a new emoji conversation. Send your opening emoji.',
+      sendMessage({
+        text: 'Start a new emoji conversation. Send your opening emoji.',
       });
     }, 100);
-  }, [setMessages, append]);
+  }, [setMessages, sendMessage]);
 
   return (
     <div className={styles.game}>
