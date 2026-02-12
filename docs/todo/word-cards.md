@@ -6,15 +6,15 @@ Add a new reusable component for displaying invented German compound words — b
 
 ## Requirements
 
-- [ ] Create `data/words.ts` with word definitions data structure
-- [ ] Create reusable `WordCard` component (face + modal content)
-- [ ] Add two word cards to the table surface
-- [ ] Word card face: shows the word elegantly on a small card
-- [ ] Word card modal: displays word, pronunciation, definition, parts breakdown, literal translation
-- [ ] "Use naturally" button that generates a sentence with the word via OpenAI and speaks it aloud
-- [ ] API route for sentence generation + text-to-speech
-- [ ] Audio playback on the client with loading state
-- [ ] Mobile responsive
+- [x] Create `data/words.ts` with word definitions data structure
+- [x] Create reusable `WordCard` component (face + modal content)
+- [x] Add two word cards to the table surface
+- [x] Word card face: shows the word elegantly on a small card
+- [x] Word card modal: displays word, pronunciation, definition, parts breakdown, literal translation
+- [x] "Use naturally" button that generates a sentence with the word via OpenAI and speaks it aloud
+- [x] API route for sentence generation + text-to-speech
+- [x] Audio playback on the client with loading state
+- [x] Mobile responsive
 
 ## Words
 
@@ -86,11 +86,11 @@ Following the Valentine.tsx pattern of exporting face + content components:
 
 ## Acceptance Criteria
 
-- [ ] Two word cards visible on the table surface
-- [ ] Clicking a word card opens modal with full definition
-- [ ] Phonetics render correctly (IPA characters intact)
+- [x] Two word cards visible on the table surface
+- [x] Clicking a word card opens modal with full definition
+- [x] Phonetics render correctly (IPA characters intact)
 - [ ] "Use naturally" button generates a sentence and plays audio
 - [ ] Audio plays on both desktop and mobile
-- [ ] Loading state visible while generating
-- [ ] Component is reusable (adding a new word = adding data to `words.ts`)
-- [ ] `npm run build` succeeds
+- [x] Loading state visible while generating
+- [x] Component is reusable (adding a new word = adding data to `words.ts`)
+- [x] `npm run build` succeeds

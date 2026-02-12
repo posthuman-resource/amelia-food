@@ -6,6 +6,8 @@ import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
+import { WordCardFace, WordCardContent } from './WordCard';
+import { words } from '@/data/words';
 import AuthLock from './AuthLock';
 import { useTabTitle } from '../hooks/useTabTitle';
 
@@ -22,6 +24,8 @@ const objects: TableObjectData[] = [
   { id: 'welcome', x: 60, y: 55, rotation: 3, label: 'Welcome' },
   { id: 'poem', x: 20, y: 65, rotation: -1.5, label: 'Dendrites' },
   { id: 'valentine', x: 72, y: 30, rotation: 2, label: 'Valentine' },
+  { id: 'word-bildschirmumarmungsversuch', x: 48, y: 75, rotation: 1.5, label: 'Bildschirmumarmungsversuch' },
+  { id: 'word-schonimmerteilbegegnung', x: 15, y: 40, rotation: -2.5, label: 'Schonimmerteilbegegnung' },
   { id: 'lock', x: 88, y: 85, rotation: 1, label: 'Lock' },
 ];
 
@@ -60,6 +64,10 @@ function ObjectContent({ id }: { id: string }) {
       </div>
     );
   }
+  const wordMatch = id.startsWith('word-') && words.find((w) => `word-${w.id}` === id);
+  if (wordMatch) {
+    return <WordCardFace word={wordMatch} />;
+  }
   return null;
 }
 
@@ -72,6 +80,10 @@ function ModalContent({ id }: { id: string }) {
   }
   if (id === 'valentine') {
     return <ValentineCardContent />;
+  }
+  const wordMatch = id.startsWith('word-') && words.find((w) => `word-${w.id}` === id);
+  if (wordMatch) {
+    return <WordCardContent word={wordMatch} />;
   }
   if (id === 'poem') {
     return (
