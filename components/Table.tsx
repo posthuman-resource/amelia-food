@@ -44,7 +44,7 @@ function ObjectContent({ id }: { id: string }) {
   if (id === 'poem') {
     return (
       <div className={styles.poemCard}>
-        <span className={styles.poemIcon}>📜</span>
+        <span className={styles.poemIcon}>🐸</span>
         <p className={styles.cardLabel}>dendrites</p>
       </div>
     );
@@ -117,15 +117,15 @@ export default function Table() {
   return (
     <div className={`${styles.table} texture-wood texture-noise`}>
       <title>{tabTitle}</title>
+      {/* Subtle "Amy" inscription — always visible */}
+      <div className={styles.inscription}>Amy</div>
+
       {mounted && !unlocked && (
         <AuthLock onUnlock={() => setUnlocked(true)} />
       )}
 
       {unlocked && (
         <>
-          {/* Subtle "Amelia" inscription */}
-          <div className={styles.inscription}>Amy</div>
-
           {/* Table objects */}
           <div className={styles.objectsContainer}>
             {objects.map((obj, index) => (
