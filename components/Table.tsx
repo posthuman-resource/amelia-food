@@ -5,7 +5,8 @@ import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
-import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
+import { ValentineCard, ValentineCardContent } from './Valentine';
+import { WelcomeEnvelope, WelcomeLetterContent } from './Welcome';
 import { WordCardFace, WordCardContent, CreateWordCardFace } from './WordCard';
 import type { WordDefinition } from '@/data/words';
 import { CardStackFace, CardStackOverlay } from './CardStack';
@@ -44,7 +45,7 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
     );
   }
   if (id === 'welcome') {
-    return <ValentineEnvelope />;
+    return <WelcomeEnvelope />;
   }
   if (id === 'poem') {
     return (
@@ -76,7 +77,7 @@ function ModalContent({ id, words }: { id: string; words: WordDefinition[] }) {
     return <EmojiGame />;
   }
   if (id === 'welcome') {
-    return <ValentineLetter />;
+    return <WelcomeLetterContent />;
   }
   if (id === 'valentine') {
     return <ValentineCardContent />;
