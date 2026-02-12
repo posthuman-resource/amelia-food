@@ -21,6 +21,7 @@ const objects: TableObjectData[] = [
   { id: 'welcome', x: 60, y: 55, rotation: 3, label: 'Welcome' },
   { id: 'poem', x: 20, y: 65, rotation: -1.5, label: 'Dendrites' },
   { id: 'valentine', x: 72, y: 30, rotation: 2, label: 'Valentine' },
+  { id: 'lock', x: 88, y: 85, rotation: 1, label: 'Lock' },
 ];
 
 function ObjectContent({ id }: { id: string }) {
@@ -49,6 +50,14 @@ function ObjectContent({ id }: { id: string }) {
   }
   if (id === 'valentine') {
     return <ValentineCard />;
+  }
+  if (id === 'lock') {
+    return (
+      <div className={styles.lockCard}>
+        <span className={styles.lockIcon}>🔒</span>
+        <p className={styles.cardLabel}>lock</p>
+      </div>
+    );
   }
   return null;
 }
@@ -123,7 +132,14 @@ export default function Table() {
                 y={obj.y}
                 rotation={obj.rotation}
                 index={index}
-                onClick={() => setActiveObject(obj.id)}
+                onClick={() => {
+                  if (obj.id === 'lock') {
+                    sessionStorage.removeItem('amelia-unlocked');
+                    setUnlocked(false);
+                  } else {
+                    setActiveObject(obj.id);
+                  }
+                }}
               >
                 <ObjectContent id={obj.id} />
               </TableObject>

@@ -65,6 +65,17 @@
   margin: 0;
 }
 
+/* Lock card face */
+.lockCard {
+  text-align: center;
+}
+
+.lockIcon {
+  font-size: 1.75rem;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
 /* Poem card face */
 .poemCard {
   text-align: center;
