@@ -13,6 +13,15 @@ export function WordCardFace({ word }: { word: WordDefinition }) {
   );
 }
 
+export function CreateWordCardFace() {
+  return (
+    <div className={styles.createFace}>
+      <span className={styles.createPlus}>+</span>
+      <p className={styles.createLabel}>describe a feeling</p>
+    </div>
+  );
+}
+
 function playBase64Audio(
   base64: string,
   audioRef: React.RefObject<HTMLAudioElement | null>,

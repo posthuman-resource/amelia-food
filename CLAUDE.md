@@ -86,6 +86,14 @@ const { messages, sendMessage } = useChat({
 });
 ```
 
+## Database (Drizzle + SQLite)
+- **ORM**: Drizzle ORM with `better-sqlite3`, schema in `db/schema.ts`
+- **DB file**: `./data/amelia.db` (override with `DATABASE_PATH` env var)
+- **Schema change workflow**: Edit `db/schema.ts` → `npm run db:generate` → commit the migration SQL in `db/migrations/`
+- **Apply migrations**: `npm run db:migrate` (runs `drizzle-kit migrate`) — run on every deploy
+- **Seeding**: `npm run db:seed` (runs `tsx db/seed.ts`)
+- **NEVER use `drizzle-kit push`** — it applies schema changes directly without a migration file, making them non-repeatable on production. There is no `db:push` script and one should never be added.
+
 ## Testing
 - Run `npm run dev` and verify at http://localhost:3000
 - Use Chrome MCP tools to take snapshots and screenshots for visual verification

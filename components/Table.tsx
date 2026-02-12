@@ -6,9 +6,10 @@ import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
-import { WordCardContent } from './WordCard';
+import { WordCardFace, WordCardContent, CreateWordCardFace } from './WordCard';
 import type { WordDefinition } from '@/data/words';
 import { CardStackFace, CardStackOverlay } from './CardStack';
+import WordCreator from './WordCreator';
 import AuthLock from './AuthLock';
 import { useTabTitle } from '../hooks/useTabTitle';
 
@@ -65,7 +66,7 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
     );
   }
   if (id === 'word-stack') {
-    return <CardStackFace count={words.length} />;
+    return <CardStackFace count={words.length} icon="Aa" label="wortschatz" />;
   }
   return null;
 }
@@ -114,11 +115,15 @@ interface TableProps {
   words: WordDefinition[];
 }
 
+const CREATE_SENTINEL = { id: '__create__' } as WordDefinition;
+
 export default function Table({ words }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [creatingWord, setCreatingWord] = useState(false);
+  const [localWords, setLocalWords] = useState<WordDefinition[]>(words);
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -163,7 +168,7 @@ export default function Table({ words }: TableProps) {
                   }
                 }}
               >
-                <ObjectContent id={obj.id} words={words} />
+                <ObjectContent id={obj.id} words={localWords} />
               </TableObject>
             ))}
           </div>
@@ -171,9 +176,34 @@ export default function Table({ words }: TableProps) {
           {/* Card stack fan overlay */}
           {stackFanned && (
             <CardStackOverlay
-              words={words}
-              onCardClick={(wordId) => setActiveObject(`word-${wordId}`)}
+              items={[CREATE_SENTINEL, ...localWords]}
+              renderCard={(word) =>
+                word.id === '__create__'
+                  ? <CreateWordCardFace />
+                  : <WordCardFace word={word} />
+              }
+              onCardClick={(id) => {
+                if (id === '__create__') {
+                  setStackFanned(false);
+                  setCreatingWord(true);
+                } else {
+                  setActiveObject(`word-${id}`);
+                }
+              }}
               onClose={() => setStackFanned(false)}
+              ariaLabel="Word cards"
+            />
+          )}
+
+          {/* Word creator overlay */}
+          {creatingWord && (
+            <WordCreator
+              onComplete={(word) => {
+                setLocalWords((prev) => [...prev, word]);
+                setCreatingWord(false);
+                setActiveObject(`word-${word.id}`);
+              }}
+              onClose={() => setCreatingWord(false)}
             />
           )}
 
@@ -183,7 +213,7 @@ export default function Table({ words }: TableProps) {
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
           >
-            {activeObject && <ModalContent id={activeObject} words={words} />}
+            {activeObject && <ModalContent id={activeObject} words={localWords} />}
           </Modal>
         </>
       )}

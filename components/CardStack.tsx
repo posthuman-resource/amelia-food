@@ -2,11 +2,19 @@
 
 import { useEffect, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { WordCardFace } from './WordCard';
-import type { WordDefinition } from '@/data/words';
 import styles from './CardStack.module.css';
 
-export function CardStackFace({ count }: { count: number }) {
+interface CardStackItem {
+  id: string;
+}
+
+interface CardStackFaceProps {
+  count: number;
+  icon?: React.ReactNode;
+  label?: string;
+}
+
+export function CardStackFace({ count, icon, label }: CardStackFaceProps) {
   return (
     <div className={styles.face}>
       <div className={styles.stack}>
@@ -15,21 +23,29 @@ export function CardStackFace({ count }: { count: number }) {
         {count > 0 && <div className={`${styles.shadowCard} ${styles.shadowCard1}`} />}
         {/* Top card preview */}
         <div className={styles.topCard}>
-          <span className={styles.topCardIcon}>Aa</span>
+          <span className={styles.topCardIcon}>{icon}</span>
         </div>
       </div>
-      <p className={styles.label}>wortschatz</p>
+      {label && <p className={styles.label}>{label}</p>}
     </div>
   );
 }
 
-interface CardStackOverlayProps {
-  words: WordDefinition[];
-  onCardClick: (wordId: string) => void;
+interface CardStackOverlayProps<T extends CardStackItem> {
+  items: T[];
+  renderCard: (item: T, index: number) => React.ReactNode;
+  onCardClick: (id: string) => void;
   onClose: () => void;
+  ariaLabel?: string;
 }
 
-export function CardStackOverlay({ words, onCardClick, onClose }: CardStackOverlayProps) {
+export function CardStackOverlay<T extends CardStackItem>({
+  items,
+  renderCard,
+  onCardClick,
+  onClose,
+  ariaLabel,
+}: CardStackOverlayProps<T>) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
 
@@ -77,7 +93,7 @@ export function CardStackOverlay({ words, onCardClick, onClose }: CardStackOverl
       className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`}
       role="dialog"
       aria-modal="true"
-      aria-label="Word cards"
+      aria-label={ariaLabel}
     >
       {/* Backdrop */}
       <div className={styles.backdrop} onClick={handleClose} />
@@ -94,21 +110,20 @@ export function CardStackOverlay({ words, onCardClick, onClose }: CardStackOverl
 
       {/* Fan of cards */}
       <div className={styles.fan}>
-        {words.map((word, i) => (
+        {items.map((item, i) => (
           <button
-            key={word.id}
+            key={item.id}
             className={styles.fanCard}
             style={{
               '--fan-index': i,
-              '--fan-total': words.length,
+              '--fan-total': items.length,
               '--fan-delay': `${i * 60}ms`,
             } as React.CSSProperties}
-            onClick={() => onCardClick(word.id)}
+            onClick={() => onCardClick(item.id)}
             type="button"
-            aria-label={word.word}
           >
             <div className={`${styles.fanCardInner} texture-paper`}>
-              <WordCardFace word={word} />
+              {renderCard(item, i)}
             </div>
           </button>
         ))}

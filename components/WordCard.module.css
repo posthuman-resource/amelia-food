@@ -29,6 +29,33 @@
 }
 
 /* ========================================
+   Create card face (fan card for "describe a feeling")
+   ======================================== */
+
+.createFace {
+  text-align: center;
+  padding: var(--space-sm) 0;
+}
+
+.createPlus {
+  display: block;
+  font-family: var(--font-hand);
+  font-size: 2rem;
+  color: var(--color-text-muted);
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  opacity: 0.6;
+}
+
+.createLabel {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* ========================================
    Content (modal)
    ======================================== */
 
