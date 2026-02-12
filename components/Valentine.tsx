@@ -42,7 +42,6 @@ export function ValentineLetter() {
   return (
     <div className={styles.letter}>
       <div className={`${styles.letterPaper} texture-paper`}>
-        <p className={styles.greeting}>Amelia,</p>
         <div className={styles.body}>
           <p>
             This table is here for you to eat from whenever
