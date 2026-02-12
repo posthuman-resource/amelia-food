@@ -1,0 +1,160 @@
+/* AuthLock — Playful password gate on the table surface */
+
+.lock {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  animation: lockIn 600ms var(--bezier-gentle) both;
+}
+
+.lockCard {
+  padding: var(--space-xl) var(--space-2xl);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transform: rotate(-1.5deg);
+  box-shadow:
+    0 2px 6px rgba(44, 40, 37, 0.10),
+    0 6px 20px rgba(44, 40, 37, 0.06);
+  min-width: 180px;
+}
+
+.emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+  line-height: 1;
+}
+
+.label {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-lg);
+  transition: opacity 150ms ease-out;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(44, 40, 37, 0.2);
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+  color: var(--color-text);
+  text-align: center;
+  padding: var(--space-xs) 0;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.input:focus {
+  border-bottom-color: var(--color-plum);
+}
+
+/* Shake on wrong password — desktop (has translate(-50%,-50%) base) */
+.shake {
+  animation: lockShake 500ms ease-out;
+}
+
+/* Unlock exit animation */
+.unlocking {
+  animation: lockOut 500ms var(--bezier-gentle) forwards;
+}
+
+/* Keyframes */
+@keyframes lockIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}
+
+@keyframes lockOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-24px);
+  }
+}
+
+@keyframes lockShake {
+  0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+  15% { transform: translate(-50%, -50%) translateX(-8px); }
+  30% { transform: translate(-50%, -50%) translateX(7px); }
+  45% { transform: translate(-50%, -50%) translateX(-5px); }
+  60% { transform: translate(-50%, -50%) translateX(4px); }
+  75% { transform: translate(-50%, -50%) translateX(-2px); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .lock {
+    position: static;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    min-height: 60dvh;
+    animation-name: lockInMobile;
+  }
+
+  .lockCard {
+    min-width: 240px;
+    max-width: 300px;
+  }
+
+  .shake {
+    animation-name: lockShakeMobile;
+  }
+
+  .unlocking {
+    animation-name: lockOutMobile;
+  }
+
+  @keyframes lockInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes lockOutMobile {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+  }
+
+  @keyframes lockShakeMobile {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-8px); }
+    30% { transform: translateX(7px); }
+    45% { transform: translateX(-5px); }
+    60% { transform: translateX(4px); }
+    75% { transform: translateX(-2px); }
+  }
+}

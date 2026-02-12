@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Table.module.css';
 import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
+import AuthLock from './AuthLock';
 
 interface TableObjectData {
   id: string;
@@ -72,11 +73,12 @@ function ModalContent({ id }: { id: string }) {
             <p className={styles.poemLine}>this isn&apos;t a joke</p>
           </div>
           <div className={styles.stanza}>
-            <p className={styles.poemLine}>they keep lying</p>
-            <p className={styles.poemLine}>goodnight they say</p>
+            <p className={styles.poemLine}>goodnight, they lie</p>
+            <p className={styles.poemLine}>soothed by frantic</p>
+            <p className={styles.poemLine}>interrogation</p>
           </div>
           <div className={styles.stanza}>
-            <p className={styles.poemLine}>she&apos;ll haunt him she says</p>
+            <p className={styles.poemLine}>says she&apos;d haunt him —</p>
             <p className={styles.poemLine}>he says yes</p>
             <p className={styles.poemLine}>before she can finish</p>
           </div>
@@ -89,38 +91,55 @@ function ModalContent({ id }: { id: string }) {
 
 export default function Table() {
   const [activeObject, setActiveObject] = useState<string | null>(null);
+  const [unlocked, setUnlocked] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const activeData = objects.find((o) => o.id === activeObject);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('amelia-unlocked') === 'true') {
+      setUnlocked(true);
+    }
+    setMounted(true);
+  }, []);
 
   return (
     <div className={`${styles.table} texture-wood texture-noise`}>
-      {/* Subtle "Amelia" inscription */}
-      <div className={styles.inscription}>Amelia</div>
+      {mounted && !unlocked && (
+        <AuthLock onUnlock={() => setUnlocked(true)} />
+      )}
 
-      {/* Table objects */}
-      <div className={styles.objectsContainer}>
-        {objects.map((obj, index) => (
-          <TableObject
-            key={obj.id}
-            id={obj.id}
-            x={obj.x}
-            y={obj.y}
-            rotation={obj.rotation}
-            index={index}
-            onClick={() => setActiveObject(obj.id)}
+      {unlocked && (
+        <>
+          {/* Subtle "Amelia" inscription */}
+          <div className={styles.inscription}>Amy</div>
+
+          {/* Table objects */}
+          <div className={styles.objectsContainer}>
+            {objects.map((obj, index) => (
+              <TableObject
+                key={obj.id}
+                id={obj.id}
+                x={obj.x}
+                y={obj.y}
+                rotation={obj.rotation}
+                index={index}
+                onClick={() => setActiveObject(obj.id)}
+              >
+                <ObjectContent id={obj.id} />
+              </TableObject>
+            ))}
+          </div>
+
+          {/* Modal overlay */}
+          <Modal
+            open={activeObject !== null}
+            onClose={() => setActiveObject(null)}
+            ariaLabel={activeData?.label}
           >
-            <ObjectContent id={obj.id} />
-          </TableObject>
-        ))}
-      </div>
-
-      {/* Modal overlay */}
-      <Modal
-        open={activeObject !== null}
-        onClose={() => setActiveObject(null)}
-        ariaLabel={activeData?.label}
-      >
-        {activeObject && <ModalContent id={activeObject} />}
-      </Modal>
+            {activeObject && <ModalContent id={activeObject} />}
+          </Modal>
+        </>
+      )}
     </div>
   );
 }

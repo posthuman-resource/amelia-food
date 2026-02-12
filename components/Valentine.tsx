@@ -29,7 +29,7 @@ export function ValentineCardContent() {
         <p className={styles.valentineHeart}>&#x2764;&#xFE0F;</p>
         <div className={styles.body}>
           <p className={styles.valentineText}>
-            Happy Valentine&apos;s Day, Amy.
+            I&apos;m here. I don&apos;t want to leave. Let&apos;s be small and hungry and alive.
           </p>
         </div>
         <p className={styles.signature}>~mike</p>
