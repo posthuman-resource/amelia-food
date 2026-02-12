@@ -6,13 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:seed": "tsx db/seed.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.42",
     "@ai-sdk/openai": "^3.0.27",
     "@ai-sdk/react": "^3.0.84",
     "ai": "^6.0.82",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
     "emojibase": "^17.0.0",
     "emojibase-data": "^17.0.0",
     "next": "16.1.6",
@@ -22,11 +26,14 @@
     "streamdown": "^2.2.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

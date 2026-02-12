@@ -6,8 +6,9 @@ import TableObject from './TableObject';
 import Modal from './Modal';
 import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
-import { WordCardFace, WordCardContent } from './WordCard';
-import { words } from '@/data/words';
+import { WordCardContent } from './WordCard';
+import type { WordDefinition } from '@/data/words';
+import { CardStackFace, CardStackOverlay } from './CardStack';
 import AuthLock from './AuthLock';
 import { useTabTitle } from '../hooks/useTabTitle';
 
@@ -24,12 +25,11 @@ const objects: TableObjectData[] = [
   { id: 'welcome', x: 60, y: 55, rotation: 3, label: 'Welcome' },
   { id: 'poem', x: 20, y: 65, rotation: -1.5, label: 'Dendrites' },
   { id: 'valentine', x: 72, y: 30, rotation: 2, label: 'Valentine' },
-  { id: 'word-bildschirmumarmungsversuch', x: 48, y: 75, rotation: 1.5, label: 'Bildschirmumarmungsversuch' },
-  { id: 'word-schonimmerteilbegegnung', x: 15, y: 40, rotation: -2.5, label: 'Schonimmerteilbegegnung' },
+  { id: 'word-stack', x: 30, y: 55, rotation: -2, label: 'Word Cards' },
   { id: 'lock', x: 88, y: 85, rotation: 1, label: 'Lock' },
 ];
 
-function ObjectContent({ id }: { id: string }) {
+function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
   if (id === 'emoji-game') {
     return (
       <div className={styles.emojiCard}>
@@ -64,14 +64,13 @@ function ObjectContent({ id }: { id: string }) {
       </div>
     );
   }
-  const wordMatch = id.startsWith('word-') && words.find((w) => `word-${w.id}` === id);
-  if (wordMatch) {
-    return <WordCardFace word={wordMatch} />;
+  if (id === 'word-stack') {
+    return <CardStackFace count={words.length} />;
   }
   return null;
 }
 
-function ModalContent({ id }: { id: string }) {
+function ModalContent({ id, words }: { id: string; words: WordDefinition[] }) {
   if (id === 'emoji-game') {
     return <EmojiGame />;
   }
@@ -111,8 +110,13 @@ function ModalContent({ id }: { id: string }) {
   return null;
 }
 
-export default function Table() {
+interface TableProps {
+  words: WordDefinition[];
+}
+
+export default function Table({ words }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
+  const [stackFanned, setStackFanned] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const activeData = objects.find((o) => o.id === activeObject);
@@ -152,15 +156,26 @@ export default function Table() {
                   if (obj.id === 'lock') {
                     sessionStorage.removeItem('amelia-unlocked');
                     setUnlocked(false);
+                  } else if (obj.id === 'word-stack') {
+                    setStackFanned(true);
                   } else {
                     setActiveObject(obj.id);
                   }
                 }}
               >
-                <ObjectContent id={obj.id} />
+                <ObjectContent id={obj.id} words={words} />
               </TableObject>
             ))}
           </div>
+
+          {/* Card stack fan overlay */}
+          {stackFanned && (
+            <CardStackOverlay
+              words={words}
+              onCardClick={(wordId) => setActiveObject(`word-${wordId}`)}
+              onClose={() => setStackFanned(false)}
+            />
+          )}
 
           {/* Modal overlay */}
           <Modal
@@ -168,7 +183,7 @@ export default function Table() {
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
           >
-            {activeObject && <ModalContent id={activeObject} />}
+            {activeObject && <ModalContent id={activeObject} words={words} />}
           </Modal>
         </>
       )}

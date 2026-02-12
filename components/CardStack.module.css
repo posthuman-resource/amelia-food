@@ -1,0 +1,246 @@
+/* CardStack — Stacked word cards on table + fanned overlay */
+
+/* ========================================
+   Face (table card content)
+   ======================================== */
+
+.face {
+  text-align: center;
+}
+
+.stack {
+  position: relative;
+  width: 80px;
+  height: 56px;
+  margin: 0 auto var(--space-sm);
+}
+
+.shadowCard {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(237, 232, 223, 0.6);
+  box-shadow: 0 1px 3px rgba(44, 40, 37, 0.08);
+}
+
+.shadowCard1 {
+  transform: translate(3px, 3px) rotate(2deg);
+}
+
+.shadowCard2 {
+  transform: translate(6px, 6px) rotate(4.5deg);
+}
+
+.topCard {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(250, 247, 242, 0.9);
+  box-shadow: 0 1px 4px rgba(44, 40, 37, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topCardIcon {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: -0.02em;
+}
+
+.label {
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ========================================
+   Overlay (fanned cards)
+   ======================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn 300ms ease-out;
+}
+
+.overlayClosing {
+  animation: overlayOut 200ms ease-in forwards;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(58, 50, 48, 0.4);
+}
+
+.close {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-surface-light);
+  font-size: 1.5rem;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .close:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.close:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Fan layout — horizontal on desktop */
+.fan {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  padding: var(--space-2xl);
+}
+
+/* Individual fanned card */
+.fanCard {
+  animation: fanCardIn 400ms var(--bezier-gentle) both;
+  animation-delay: var(--fan-delay);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  /* Slight organic rotation per card */
+  transform: rotate(calc((var(--fan-index) - (var(--fan-total) - 1) / 2) * 3deg));
+  transition: transform 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .fanCard:hover {
+    transform: rotate(calc((var(--fan-index) - (var(--fan-total) - 1) / 2) * 3deg)) translateY(-8px) scale(1.03);
+  }
+}
+
+.fanCard:active {
+  transform: rotate(calc((var(--fan-index) - (var(--fan-total) - 1) / 2) * 3deg)) scale(0.97);
+  transition-duration: 100ms;
+}
+
+.fanCardInner {
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-md);
+  min-width: 180px;
+  box-shadow:
+    0 4px 16px rgba(44, 40, 37, 0.15),
+    0 2px 6px rgba(44, 40, 37, 0.08);
+  transition: box-shadow 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .fanCard:hover .fanCardInner {
+    box-shadow:
+      0 8px 28px rgba(44, 40, 37, 0.18),
+      0 4px 10px rgba(44, 40, 37, 0.1);
+  }
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fanCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(calc((var(--fan-index) - (var(--fan-total) - 1) / 2) * 3deg));
+  }
+}
+
+/* ========================================
+   Mobile — vertical fan, scrollable
+   ======================================== */
+
+@media (max-width: 768px) {
+  .close {
+    top: calc(var(--space-sm) + env(safe-area-inset-top));
+    right: var(--space-sm);
+    width: 44px;
+    height: 44px;
+    font-size: 1.75rem;
+  }
+
+  .fan {
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-2xl) var(--space-lg);
+    padding-top: calc(var(--space-3xl) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    max-height: 100vh;
+    max-height: 100dvh;
+  }
+
+  .fanCard {
+    /* No rotation on mobile — clean vertical stack */
+    transform: none;
+  }
+
+  @media (hover: hover) {
+    .fanCard:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+  }
+
+  .fanCard:active {
+    transform: scale(0.97);
+  }
+
+  .fanCardInner {
+    min-width: 260px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  @keyframes fanCardIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
