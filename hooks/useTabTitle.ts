@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Emojis relevant to the site — warm, food, whimsy, personal
+// Emoji that mean something — the shared palette
 const PALETTE = [
-  '🌙', '🍌', '💛', '✨', '🫶', '🌿', '🍊',
-  '🦋', '🌸', '🕯️', '🫧', '🍯', '🧸', '🪴',
+  '🌙', '🍌', '👻', '🐸', '👺', '🎶',        // the core dynamic
+  '💜', '😊', '🥪', '☕',                        // the warmth
+  '📜', '🔎', '🧠', '🌱',                        // the intentionality
+  '🍑', '🎂', '🐌', '🪄', '🤫',                 // the play
+  '🎺', '🐈', '🧶', '🍫',                        // the grounding
 ];
 
 const SIZE = 7;
