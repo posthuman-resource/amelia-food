@@ -23,9 +23,7 @@ const courierPrime = Courier_Prime({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "amelia.food",
-};
+export const metadata: Metadata = {};
 
 export const viewport: Viewport = {
   width: "device-width",

@@ -7,6 +7,7 @@ import Modal from './Modal';
 import EmojiGame from './EmojiGame';
 import { ValentineEnvelope, ValentineLetter, ValentineCard, ValentineCardContent } from './Valentine';
 import AuthLock from './AuthLock';
+import { useTabTitle } from '../hooks/useTabTitle';
 
 interface TableObjectData {
   id: string;
@@ -104,6 +105,8 @@ export default function Table() {
   const [mounted, setMounted] = useState(false);
   const activeData = objects.find((o) => o.id === activeObject);
 
+  const tabTitle = useTabTitle(unlocked);
+
   useEffect(() => {
     if (sessionStorage.getItem('amelia-unlocked') === 'true') {
       setUnlocked(true);
@@ -113,6 +116,7 @@ export default function Table() {
 
   return (
     <div className={`${styles.table} texture-wood texture-noise`}>
+      <title>{tabTitle}</title>
       {mounted && !unlocked && (
         <AuthLock onUnlock={() => setUnlocked(true)} />
       )}
