@@ -18,7 +18,7 @@ export function WelcomeLetterContent() {
     <div className={styles.letter}>
       <div className={`${styles.letterPaper} texture-paper`}>
         <div className={styles.body}>
-          <p>This table is here for you to eat from whenever you like.</p>
+          <p>This table is here for you.</p>
           <p>
             Think of it as a buffet-style scrapbook. I&apos;ll try to encode
             things into the menu for you, things that seem like good memories.
@@ -34,7 +34,7 @@ export function WelcomeLetterContent() {
             It&apos;s your table.
           </p>
           <p>
-            I&apos;ve never made anything quite like this one, and I&apos;m
+            I&apos;ve never made anything quite like this table, and I&apos;m
             guessing it is new to you too. It&apos;s an experiment in digital
             expression. I hope we have some fun with it.
           </p>
