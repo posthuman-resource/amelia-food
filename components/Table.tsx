@@ -15,6 +15,7 @@ import { PoemCard, PoemContent } from "./Poem";
 import { CardStackFace, CardStackOverlay } from "./CardStack";
 import WordCreator from "./WordCreator";
 import AuthLock from "./AuthLock";
+import TableCats from "./TableCats";
 import { useTabTitle } from "../hooks/useTabTitle";
 
 interface TableObjectData {
@@ -158,6 +159,13 @@ export default function Table({ words, poems }: TableProps) {
         <>
           {/* Table objects */}
           <div className={styles.objectsContainer}>
+            <TableCats
+              objectPositions={objects.map((o) => ({
+                id: o.id,
+                x: o.x,
+                y: o.y,
+              }))}
+            />
             {objects.map((obj, index) => (
               <TableObject
                 key={obj.id}
@@ -223,7 +231,9 @@ export default function Table({ words, poems }: TableProps) {
             open={activeObject !== null}
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
-            className={activeObject?.startsWith("poem-") ? modalStyles.wide : undefined}
+            className={
+              activeObject?.startsWith("poem-") ? modalStyles.wide : undefined
+            }
           >
             {activeObject && (
               <ModalContent

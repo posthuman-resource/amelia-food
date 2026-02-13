@@ -1,0 +1,108 @@
+/* TableCats — Roaming cat emoji on the table surface */
+
+.cat {
+  position: absolute;
+  font-size: 1.8rem;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  transform: translate(-50%, -50%);
+
+  /* Grounding shadow on the wood surface */
+  text-shadow:
+    0 2px 4px rgba(44, 40, 37, 0.18),
+    0 0 2px rgba(44, 40, 37, 0.08);
+
+  /* Only transition opacity for state changes — position is JS-driven */
+  transition: opacity 0.4s ease-out;
+}
+
+/* Hiding — behind a card, dimmed */
+.hiding {
+  z-index: 0;
+  opacity: 0.35;
+}
+
+/* Peeking — partially visible from card edge */
+.peeking {
+  z-index: 0;
+  opacity: 0.7;
+}
+
+/* Napping — on top of a card */
+.napping {
+  z-index: 2;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+/* Napping with flip */
+.nappingFlipped {
+  z-index: 2;
+  animation: breatheFlipped 3s ease-in-out infinite;
+}
+
+@keyframes breatheFlipped {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scaleX(-1) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scaleX(-1) scale(1.06);
+  }
+}
+
+/* Mobile: single cat, fixed to bottom-right corner */
+@media (max-width: 768px) {
+  .cat {
+    position: fixed;
+    font-size: 1.5rem;
+    bottom: 24px;
+    left: auto;
+    top: auto;
+    right: 16px;
+    transform: none;
+    z-index: 2;
+  }
+
+  .hiding {
+    opacity: 0;
+  }
+
+  .napping,
+  .nappingFlipped {
+    animation: breatheMobile 3s ease-in-out infinite;
+  }
+
+  @keyframes breatheMobile {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+}
+
+/* Reduced motion: no movement, just a static cat */
+@media (prefers-reduced-motion: reduce) {
+  .cat {
+    transition: none;
+    animation: none;
+  }
+
+  .napping,
+  .nappingFlipped {
+    animation: none;
+  }
+}

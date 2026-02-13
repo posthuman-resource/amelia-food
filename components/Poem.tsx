@@ -48,9 +48,7 @@ export function PoemContent({ poem }: { poem: Poem }) {
             ))}
           </div>
         ))}
-        {poem.author && (
-          <p className={styles.author}>&mdash; {poem.author}</p>
-        )}
+        {poem.author && <p className={styles.author}>&mdash; {poem.author}</p>}
       </div>
     </div>
   );
