@@ -9,6 +9,8 @@ import { ValentineCard, ValentineCardContent } from "./Valentine";
 import { WelcomeEnvelope, WelcomeLetterContent } from "./Welcome";
 import { WordCardFace, WordCardContent, CreateWordCardFace } from "./WordCard";
 import type { WordDefinition } from "@/data/words";
+import type { Poem } from "@/data/poems";
+import { PoemCard, PoemContent } from "./Poem";
 import { CardStackFace, CardStackOverlay } from "./CardStack";
 import WordCreator from "./WordCreator";
 import AuthLock from "./AuthLock";
@@ -22,16 +24,33 @@ interface TableObjectData {
   label: string;
 }
 
-const objects: TableObjectData[] = [
-  { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
-  { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
-  { id: "poem", x: 20, y: 65, rotation: -1.5, label: "Dendrites" },
-  { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
-  { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
-  { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
-];
+function buildObjects(poems: Poem[]): TableObjectData[] {
+  const poemObjects = poems.map((p) => ({
+    id: `poem-${p.id}`,
+    x: p.table.x,
+    y: p.table.y,
+    rotation: p.table.rotation,
+    label: p.title,
+  }));
+  return [
+    { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
+    { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
+    ...poemObjects,
+    { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
+    { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
+    { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
+  ];
+}
 
-function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
+function ObjectContent({
+  id,
+  words,
+  poems,
+}: {
+  id: string;
+  words: WordDefinition[];
+  poems: Poem[];
+}) {
   if (id === "emoji-game") {
     return (
       <div className={styles.emojiCard}>
@@ -47,13 +66,10 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
   if (id === "welcome") {
     return <WelcomeEnvelope />;
   }
-  if (id === "poem") {
-    return (
-      <div className={styles.poemCard}>
-        <span className={styles.poemIcon}>🐸</span>
-        <p className={styles.cardLabel}>dendrites</p>
-      </div>
-    );
+  const poemMatch =
+    id.startsWith("poem-") && poems.find((p) => `poem-${p.id}` === id);
+  if (poemMatch) {
+    return <PoemCard poem={poemMatch} />;
   }
   if (id === "valentine") {
     return <ValentineCard />;
@@ -72,7 +88,15 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
   return null;
 }
 
-function ModalContent({ id, words }: { id: string; words: WordDefinition[] }) {
+function ModalContent({
+  id,
+  words,
+  poems,
+}: {
+  id: string;
+  words: WordDefinition[];
+  poems: Poem[];
+}) {
   if (id === "emoji-game") {
     return <EmojiGame />;
   }
@@ -87,45 +111,29 @@ function ModalContent({ id, words }: { id: string; words: WordDefinition[] }) {
   if (wordMatch) {
     return <WordCardContent word={wordMatch} />;
   }
-  if (id === "poem") {
-    return (
-      <div className={styles.poem}>
-        <div className={`${styles.poemPaper} texture-paper`}>
-          <div className={styles.stanza}>
-            <p className={styles.poemLine}>two monsters walk</p>
-            <p className={styles.poemLine}>into frog heaven</p>
-            <p className={styles.poemLine}>this isn&apos;t a joke</p>
-          </div>
-          <div className={styles.stanza}>
-            <p className={styles.poemLine}>goodnight, they lie</p>
-            <p className={styles.poemLine}>soothed by frantic</p>
-            <p className={styles.poemLine}>interrogation</p>
-          </div>
-          <div className={styles.stanza}>
-            <p className={styles.poemLine}>says she&apos;d haunt him —</p>
-            <p className={styles.poemLine}>he says yes</p>
-            <p className={styles.poemLine}>before she can finish</p>
-          </div>
-        </div>
-      </div>
-    );
+  const modalPoemMatch =
+    id.startsWith("poem-") && poems.find((p) => `poem-${p.id}` === id);
+  if (modalPoemMatch) {
+    return <PoemContent poem={modalPoemMatch} />;
   }
   return null;
 }
 
 interface TableProps {
   words: WordDefinition[];
+  poems: Poem[];
 }
 
 const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
 
-export default function Table({ words }: TableProps) {
+export default function Table({ words, poems }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [creatingWord, setCreatingWord] = useState(false);
   const [localWords, setLocalWords] = useState<WordDefinition[]>(words);
+  const objects = buildObjects(poems);
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -168,7 +176,7 @@ export default function Table({ words }: TableProps) {
                   }
                 }}
               >
-                <ObjectContent id={obj.id} words={localWords} />
+                <ObjectContent id={obj.id} words={localWords} poems={poems} />
               </TableObject>
             ))}
           </div>
@@ -216,7 +224,11 @@ export default function Table({ words }: TableProps) {
             ariaLabel={activeData?.label}
           >
             {activeObject && (
-              <ModalContent id={activeObject} words={localWords} />
+              <ModalContent
+                id={activeObject}
+                words={localWords}
+                poems={poems}
+              />
             )}
           </Modal>
         </>

@@ -26,8 +26,9 @@
   width: 100%;
   max-width: 560px;
   max-height: calc(100vh - var(--space-3xl));
-  overflow-y: auto;
-  padding: var(--space-2xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   border-radius: var(--radius-lg);
 
   /* Subtle worn-paper edge — no hard border */
@@ -36,6 +37,13 @@
     0 2px 8px rgba(44, 40, 37, 0.08);
 
   animation: contentIn 300ms ease-out;
+}
+
+/* Scrollable area — children scroll here, close button stays fixed */
+.scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding: var(--space-2xl);
 }
 
 .contentClosing {
@@ -132,12 +140,15 @@
     max-width: 100%;
     max-height: 100%;
     height: 100%;
-    padding: var(--space-lg);
-    padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
-    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
     border-radius: 0;
     box-shadow: none;
     animation: contentInMobile 300ms ease-out;
+  }
+
+  .scroll {
+    padding: var(--space-lg);
+    padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
   }
 
   .contentClosing {
