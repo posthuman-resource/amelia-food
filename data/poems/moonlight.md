@@ -20,6 +20,6 @@ the same way
 
 this is not a metaphor
 for anything else
-except it is
+but obviously it is
 so neither of us
 gets dressed
