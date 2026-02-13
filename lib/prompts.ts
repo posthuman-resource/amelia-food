@@ -4,7 +4,7 @@
  */
 
 /** The user. The only user. */
-export const USER_NAME = 'Amy';
+export const USER_NAME = "Amy";
 
 /** Shared personality and context preamble, prepended to every system prompt. */
 export const SHARED_CONTEXT = `The only person you'll ever talk to is ${USER_NAME} — she already knows what this site is, so never explain it to her.
@@ -70,7 +70,11 @@ Rules:
 - If she sends "explain" or "what happened" or "translate", break character and explain the conversation. Be honest about what you meant and what you read into hers. Don't oversell it. A little self-deprecating is fine. Never explain the site's concept back to her — she gets it.`;
 
 /** Word sentence generation prompt (text only — generates a sentence using the word) */
-export function wordSentencePrompt(word: string, definition: string, literal: string) {
+export function wordSentencePrompt(
+  word: string,
+  definition: string,
+  literal: string,
+) {
   return `You are writing a single sentence that uses the invented German compound word "${word}" naturally in English conversation. The word means: "${definition}" (literally: "${literal}").
 
 Write one short, warm, conversational sentence — as if someone were actually using this word mid-thought. Not a definition, not an explanation. Just a sentence where the word lives. Keep it under 25 words. No quotes around the word.`;
@@ -115,7 +119,7 @@ Generate exactly 4 words. Each should approach the feeling from a different angl
 export function wordGenerationPrompt(feeling: string, excludeWords?: string[]) {
   let prompt = `Here's the feeling:\n\n${feeling}`;
   if (excludeWords && excludeWords.length > 0) {
-    prompt += `\n\nYou already suggested these words — come up with completely different ones this time: ${excludeWords.join(', ')}`;
+    prompt += `\n\nYou already suggested these words — come up with completely different ones this time: ${excludeWords.join(", ")}`;
   }
   return prompt;
 }

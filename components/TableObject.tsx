@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styles from './TableObject.module.css';
+import styles from "./TableObject.module.css";
 
 interface TableObjectProps {
   id: string;
@@ -12,17 +12,27 @@ interface TableObjectProps {
   onClick?: () => void;
 }
 
-export default function TableObject({ id, x, y, rotation, index = 0, children, onClick }: TableObjectProps) {
+export default function TableObject({
+  id,
+  x,
+  y,
+  rotation,
+  index = 0,
+  children,
+  onClick,
+}: TableObjectProps) {
   return (
     <div
       className={styles.object}
       data-object-id={id}
-      style={{
-        '--x': `${x}%`,
-        '--y': `${y}%`,
-        '--rotation': `${rotation}deg`,
-        '--stagger': `${index * 100}ms`,
-      } as React.CSSProperties}
+      style={
+        {
+          "--x": `${x}%`,
+          "--y": `${y}%`,
+          "--rotation": `${rotation}deg`,
+          "--stagger": `${index * 100}ms`,
+        } as React.CSSProperties
+      }
     >
       <button
         className={`${styles.card} texture-paper`}

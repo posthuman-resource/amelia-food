@@ -15,7 +15,7 @@
   text-align: center;
   transform: rotate(-1.5deg);
   box-shadow:
-    0 2px 6px rgba(44, 40, 37, 0.10),
+    0 2px 6px rgba(44, 40, 37, 0.1),
     0 6px 20px rgba(44, 40, 37, 0.06);
   min-width: 180px;
 }
@@ -93,12 +93,25 @@
 }
 
 @keyframes lockShake {
-  0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-  15% { transform: translate(-50%, -50%) translateX(-8px); }
-  30% { transform: translate(-50%, -50%) translateX(7px); }
-  45% { transform: translate(-50%, -50%) translateX(-5px); }
-  60% { transform: translate(-50%, -50%) translateX(4px); }
-  75% { transform: translate(-50%, -50%) translateX(-2px); }
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateX(0);
+  }
+  15% {
+    transform: translate(-50%, -50%) translateX(-8px);
+  }
+  30% {
+    transform: translate(-50%, -50%) translateX(7px);
+  }
+  45% {
+    transform: translate(-50%, -50%) translateX(-5px);
+  }
+  60% {
+    transform: translate(-50%, -50%) translateX(4px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translateX(-2px);
+  }
 }
 
 /* Mobile */
@@ -150,11 +163,24 @@
   }
 
   @keyframes lockShakeMobile {
-    0%, 100% { transform: translateX(0); }
-    15% { transform: translateX(-8px); }
-    30% { transform: translateX(7px); }
-    45% { transform: translateX(-5px); }
-    60% { transform: translateX(4px); }
-    75% { transform: translateX(-2px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    15% {
+      transform: translateX(-8px);
+    }
+    30% {
+      transform: translateX(7px);
+    }
+    45% {
+      transform: translateX(-5px);
+    }
+    60% {
+      transform: translateX(4px);
+    }
+    75% {
+      transform: translateX(-2px);
+    }
   }
 }

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useCallback, useState } from 'react';
-import { createPortal } from 'react-dom';
-import styles from './CardStack.module.css';
+import { useEffect, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
+import styles from "./CardStack.module.css";
 
 interface CardStackItem {
   id: string;
@@ -19,8 +19,12 @@ export function CardStackFace({ count, icon, label }: CardStackFaceProps) {
     <div className={styles.face}>
       <div className={styles.stack}>
         {/* Shadow cards behind */}
-        {count > 1 && <div className={`${styles.shadowCard} ${styles.shadowCard2}`} />}
-        {count > 0 && <div className={`${styles.shadowCard} ${styles.shadowCard1}`} />}
+        {count > 1 && (
+          <div className={`${styles.shadowCard} ${styles.shadowCard2}`} />
+        )}
+        {count > 0 && (
+          <div className={`${styles.shadowCard} ${styles.shadowCard1}`} />
+        )}
         {/* Top card preview */}
         <div className={styles.topCard}>
           <span className={styles.topCardIcon}>{icon}</span>
@@ -63,25 +67,25 @@ export function CardStackOverlay<T extends CardStackItem>({
   // Escape key
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === "Escape") handleClose();
     }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleClose]);
 
   // Prevent body scroll
   useEffect(() => {
     const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
+    document.body.style.left = "0";
+    document.body.style.right = "0";
 
     return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       window.scrollTo(0, scrollY);
     };
   }, []);
@@ -90,7 +94,7 @@ export function CardStackOverlay<T extends CardStackItem>({
 
   return createPortal(
     <div
-      className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`}
+      className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
@@ -114,11 +118,13 @@ export function CardStackOverlay<T extends CardStackItem>({
           <button
             key={item.id}
             className={styles.fanCard}
-            style={{
-              '--fan-index': i,
-              '--fan-total': items.length,
-              '--fan-delay': `${i * 60}ms`,
-            } as React.CSSProperties}
+            style={
+              {
+                "--fan-index": i,
+                "--fan-total": items.length,
+                "--fan-delay": `${i * 60}ms`,
+              } as React.CSSProperties
+            }
             onClick={() => onCardClick(item.id)}
             type="button"
           >
@@ -129,6 +135,6 @@ export function CardStackOverlay<T extends CardStackItem>({
         ))}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

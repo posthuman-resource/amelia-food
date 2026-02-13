@@ -132,7 +132,7 @@
 }
 
 .clearBtn:active:not(:disabled) {
-  background: rgba(44, 40, 37, 0.10);
+  background: rgba(44, 40, 37, 0.1);
 }
 
 .clearBtn:disabled {

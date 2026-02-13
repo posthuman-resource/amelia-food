@@ -60,7 +60,9 @@
   font-size: 1.1rem;
   line-height: 1;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 @media (hover: hover) {
@@ -72,7 +74,7 @@
 
 .clearBtn:active {
   color: var(--color-text);
-  background: rgba(44, 40, 37, 0.10);
+  background: rgba(44, 40, 37, 0.1);
 }
 
 /* ========================================
@@ -169,7 +171,7 @@
 /* Touch and click: press feedback */
 .cell:active {
   transform: scale(0.92);
-  background: rgba(107, 45, 91, 0.10);
+  background: rgba(107, 45, 91, 0.1);
 }
 
 /* Selection flash — brief warm glow */
@@ -206,8 +208,12 @@
 }
 
 @keyframes searchShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Semantic results fade in gently */

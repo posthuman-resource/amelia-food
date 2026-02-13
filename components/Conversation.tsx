@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import { useRef, useEffect } from 'react';
-import type { UIMessage } from '@ai-sdk/react';
-import styles from './Conversation.module.css';
+import { useRef, useEffect } from "react";
+import type { UIMessage } from "@ai-sdk/react";
+import styles from "./Conversation.module.css";
 
 interface ConversationProps {
   messages: UIMessage[];
   isLoading?: boolean;
 }
 
-export default function Conversation({ messages, isLoading }: ConversationProps) {
+export default function Conversation({
+  messages,
+  isLoading,
+}: ConversationProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to latest message
@@ -18,19 +21,22 @@ export default function Conversation({ messages, isLoading }: ConversationProps)
     if (!container) return;
     container.scrollTo({
       top: container.scrollHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   }, [messages, isLoading]);
 
   const getText = (m: UIMessage) =>
     m.parts
-      ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+      ?.filter((p): p is { type: "text"; text: string } => p.type === "text")
       .map((p) => p.text)
-      .join('') ?? '';
+      .join("") ?? "";
 
   // Filter out the initial system-trigger message from the user
   const visibleMessages = messages.filter((m) => {
-    if (m.role === 'user' && getText(m).includes('Start a new emoji conversation')) {
+    if (
+      m.role === "user" &&
+      getText(m).includes("Start a new emoji conversation")
+    ) {
       return false;
     }
     return true;
@@ -53,12 +59,10 @@ export default function Conversation({ messages, isLoading }: ConversationProps)
         <div
           key={message.id}
           className={`${styles.message} ${
-            message.role === 'user' ? styles.user : styles.assistant
+            message.role === "user" ? styles.user : styles.assistant
           }`}
         >
-          <div className={styles.tile}>
-            {getText(message)}
-          </div>
+          <div className={styles.tile}>{getText(message)}</div>
         </div>
       ))}
 

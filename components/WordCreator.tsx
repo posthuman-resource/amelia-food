@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import type { WordDefinition } from '@/data/words';
-import styles from './WordCreator.module.css';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
+import type { WordDefinition } from "@/data/words";
+import styles from "./WordCreator.module.css";
 
-type Step = 'describe' | 'pick' | 'saving';
+type Step = "describe" | "pick" | "saving";
 
 interface WordCreatorProps {
   onComplete: (word: WordDefinition) => void;
@@ -15,8 +15,8 @@ interface WordCreatorProps {
 export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [step, setStep] = useState<Step>('describe');
-  const [feeling, setFeeling] = useState('');
+  const [step, setStep] = useState<Step>("describe");
+  const [feeling, setFeeling] = useState("");
   const [words, setWords] = useState<WordDefinition[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,16 +30,16 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
   // Scroll lock
   useEffect(() => {
     const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
+    document.body.style.left = "0";
+    document.body.style.right = "0";
 
     return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       window.scrollTo(0, scrollY);
     };
   }, []);
@@ -52,30 +52,31 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
   // Escape key
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === "Escape") handleClose();
     }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleClose]);
 
   const generate = useCallback(async (text: string) => {
     setLoading(true);
     setError(null);
-    setStep('pick');
+    setStep("pick");
 
     try {
-      const res = await fetch('/api/words/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/words/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           feeling: text,
-          excludeWords: excludeRef.current.length > 0 ? excludeRef.current : undefined,
+          excludeWords:
+            excludeRef.current.length > 0 ? excludeRef.current : undefined,
         }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || 'Something went wrong.');
+        throw new Error(data.error || "Something went wrong.");
       }
 
       const data = await res.json();
@@ -86,7 +87,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         ...data.words.map((w: WordDefinition) => w.word),
       ];
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong.');
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -102,33 +103,36 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
   }, [feeling, generate]);
 
   const handleGoBack = useCallback(() => {
-    setStep('describe');
+    setStep("describe");
     setWords([]);
     setError(null);
     // Focus the textarea after transition
     setTimeout(() => textareaRef.current?.focus(), 50);
   }, []);
 
-  const handlePick = useCallback(async (word: WordDefinition) => {
-    setStep('saving');
-    try {
-      await fetch('/api/words', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(word),
-      });
-      onComplete(word);
-    } catch {
-      // Even if save fails, proceed — the word exists client-side
-      onComplete(word);
-    }
-  }, [onComplete]);
+  const handlePick = useCallback(
+    async (word: WordDefinition) => {
+      setStep("saving");
+      try {
+        await fetch("/api/words", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(word),
+        });
+        onComplete(word);
+      } catch {
+        // Even if save fails, proceed — the word exists client-side
+        onComplete(word);
+      }
+    },
+    [onComplete],
+  );
 
   if (!mounted) return null;
 
   return createPortal(
     <div
-      className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`}
+      className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label="Describe a feeling"
@@ -144,7 +148,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         &times;
       </button>
 
-      {step === 'describe' && (
+      {step === "describe" && (
         <div className={styles.step}>
           <div className={styles.card}>
             <h2 className={styles.heading}>what does it feel like?</h2>
@@ -159,7 +163,11 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
               placeholder="that thing where you..."
               autoFocus
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && e.metaKey && feeling.trim().length >= 20) {
+                if (
+                  e.key === "Enter" &&
+                  e.metaKey &&
+                  feeling.trim().length >= 20
+                ) {
                   handleSubmit();
                 }
               }}
@@ -178,7 +186,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         </div>
       )}
 
-      {step === 'pick' && (
+      {step === "pick" && (
         <div className={`${styles.step} ${styles.pickStep}`}>
           {loading && (
             <div className={styles.loading}>
@@ -210,18 +218,28 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
                     type="button"
                   >
                     <p className={styles.optionWord}>{word.word}</p>
-                    <p className={styles.optionPronunciation}>{word.pronunciation}</p>
+                    <p className={styles.optionPronunciation}>
+                      {word.pronunciation}
+                    </p>
                     <p className={styles.optionPos}>{word.partOfSpeech}</p>
-                    <p className={styles.optionDescription}>{word.description}</p>
+                    <p className={styles.optionDescription}>
+                      {word.description}
+                    </p>
                     <div className={styles.optionParts}>
                       {word.parts.map((part) => (
                         <span key={part.german} className={styles.optionPart}>
-                          <span className={styles.partGerman}>{part.german}</span>
-                          <span className={styles.partEnglish}>{part.english}</span>
+                          <span className={styles.partGerman}>
+                            {part.german}
+                          </span>
+                          <span className={styles.partEnglish}>
+                            {part.english}
+                          </span>
                         </span>
                       ))}
                     </div>
-                    <p className={styles.optionLiteral}>&ldquo;{word.literal}&rdquo;</p>
+                    <p className={styles.optionLiteral}>
+                      &ldquo;{word.literal}&rdquo;
+                    </p>
                   </button>
                 ))}
               </div>
@@ -246,7 +264,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         </div>
       )}
 
-      {step === 'saving' && (
+      {step === "saving" && (
         <div className={styles.step}>
           <div className={styles.loading}>
             <p className={styles.loadingText}>saving...</p>
@@ -254,6 +272,6 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         </div>
       )}
     </div>,
-    document.body
+    document.body,
   );
 }

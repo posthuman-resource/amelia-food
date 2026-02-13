@@ -1,12 +1,12 @@
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import { getDb } from './client';
-import { words as wordsTable } from './schema';
-import { words as wordData } from '../data/words';
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import { getDb } from "./client";
+import { words as wordsTable } from "./schema";
+import { words as wordData } from "../data/words";
 
 const db = getDb();
 
 // Apply pending migrations (creates tables if needed)
-migrate(db, { migrationsFolder: './db/migrations' });
+migrate(db, { migrationsFolder: "./db/migrations" });
 
 // Seed words — idempotent via onConflictDoNothing
 for (const word of wordData) {

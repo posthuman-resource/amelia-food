@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import styles from './Table.module.css';
-import TableObject from './TableObject';
-import Modal from './Modal';
-import EmojiGame from './EmojiGame';
-import { ValentineCard, ValentineCardContent } from './Valentine';
-import { WelcomeEnvelope, WelcomeLetterContent } from './Welcome';
-import { WordCardFace, WordCardContent, CreateWordCardFace } from './WordCard';
-import type { WordDefinition } from '@/data/words';
-import { CardStackFace, CardStackOverlay } from './CardStack';
-import WordCreator from './WordCreator';
-import AuthLock from './AuthLock';
-import { useTabTitle } from '../hooks/useTabTitle';
+import { useState, useEffect } from "react";
+import styles from "./Table.module.css";
+import TableObject from "./TableObject";
+import Modal from "./Modal";
+import EmojiGame from "./EmojiGame";
+import { ValentineCard, ValentineCardContent } from "./Valentine";
+import { WelcomeEnvelope, WelcomeLetterContent } from "./Welcome";
+import { WordCardFace, WordCardContent, CreateWordCardFace } from "./WordCard";
+import type { WordDefinition } from "@/data/words";
+import { CardStackFace, CardStackOverlay } from "./CardStack";
+import WordCreator from "./WordCreator";
+import AuthLock from "./AuthLock";
+import { useTabTitle } from "../hooks/useTabTitle";
 
 interface TableObjectData {
   id: string;
@@ -23,16 +23,16 @@ interface TableObjectData {
 }
 
 const objects: TableObjectData[] = [
-  { id: 'emoji-game', x: 35, y: 30, rotation: -2, label: 'Emoji Game' },
-  { id: 'welcome', x: 60, y: 55, rotation: 3, label: 'Welcome' },
-  { id: 'poem', x: 20, y: 65, rotation: -1.5, label: 'Dendrites' },
-  { id: 'valentine', x: 72, y: 30, rotation: 2, label: 'Valentine' },
-  { id: 'word-stack', x: 30, y: 55, rotation: -2, label: 'Word Cards' },
-  { id: 'lock', x: 88, y: 85, rotation: 1, label: 'Lock' },
+  { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
+  { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
+  { id: "poem", x: 20, y: 65, rotation: -1.5, label: "Dendrites" },
+  { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
+  { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
+  { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
 ];
 
 function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
-  if (id === 'emoji-game') {
+  if (id === "emoji-game") {
     return (
       <div className={styles.emojiCard}>
         <div className={styles.emojiTiles}>
@@ -44,10 +44,10 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
       </div>
     );
   }
-  if (id === 'welcome') {
+  if (id === "welcome") {
     return <WelcomeEnvelope />;
   }
-  if (id === 'poem') {
+  if (id === "poem") {
     return (
       <div className={styles.poemCard}>
         <span className={styles.poemIcon}>🐸</span>
@@ -55,10 +55,10 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
       </div>
     );
   }
-  if (id === 'valentine') {
+  if (id === "valentine") {
     return <ValentineCard />;
   }
-  if (id === 'lock') {
+  if (id === "lock") {
     return (
       <div className={styles.lockCard}>
         <span className={styles.lockIcon}>🔒</span>
@@ -66,27 +66,28 @@ function ObjectContent({ id, words }: { id: string; words: WordDefinition[] }) {
       </div>
     );
   }
-  if (id === 'word-stack') {
+  if (id === "word-stack") {
     return <CardStackFace count={words.length} icon="Aa" label="wortschatz" />;
   }
   return null;
 }
 
 function ModalContent({ id, words }: { id: string; words: WordDefinition[] }) {
-  if (id === 'emoji-game') {
+  if (id === "emoji-game") {
     return <EmojiGame />;
   }
-  if (id === 'welcome') {
+  if (id === "welcome") {
     return <WelcomeLetterContent />;
   }
-  if (id === 'valentine') {
+  if (id === "valentine") {
     return <ValentineCardContent />;
   }
-  const wordMatch = id.startsWith('word-') && words.find((w) => `word-${w.id}` === id);
+  const wordMatch =
+    id.startsWith("word-") && words.find((w) => `word-${w.id}` === id);
   if (wordMatch) {
     return <WordCardContent word={wordMatch} />;
   }
-  if (id === 'poem') {
+  if (id === "poem") {
     return (
       <div className={styles.poem}>
         <div className={`${styles.poemPaper} texture-paper`}>
@@ -116,7 +117,7 @@ interface TableProps {
   words: WordDefinition[];
 }
 
-const CREATE_SENTINEL = { id: '__create__' } as WordDefinition;
+const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
 
 export default function Table({ words }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
@@ -130,7 +131,7 @@ export default function Table({ words }: TableProps) {
   const tabTitle = useTabTitle(unlocked);
 
   useEffect(() => {
-    if (sessionStorage.getItem('amelia-unlocked') === 'true') {
+    if (sessionStorage.getItem("amelia-unlocked") === "true") {
       setUnlocked(true);
     }
     setMounted(true);
@@ -142,9 +143,7 @@ export default function Table({ words }: TableProps) {
       {/* Subtle "Amy" inscription — always visible */}
       <div className={styles.inscription}>Amy</div>
 
-      {mounted && !unlocked && (
-        <AuthLock onUnlock={() => setUnlocked(true)} />
-      )}
+      {mounted && !unlocked && <AuthLock onUnlock={() => setUnlocked(true)} />}
 
       {unlocked && (
         <>
@@ -159,10 +158,10 @@ export default function Table({ words }: TableProps) {
                 rotation={obj.rotation}
                 index={index}
                 onClick={() => {
-                  if (obj.id === 'lock') {
-                    sessionStorage.removeItem('amelia-unlocked');
+                  if (obj.id === "lock") {
+                    sessionStorage.removeItem("amelia-unlocked");
                     setUnlocked(false);
-                  } else if (obj.id === 'word-stack') {
+                  } else if (obj.id === "word-stack") {
                     setStackFanned(true);
                   } else {
                     setActiveObject(obj.id);
@@ -179,12 +178,14 @@ export default function Table({ words }: TableProps) {
             <CardStackOverlay
               items={[CREATE_SENTINEL, ...localWords]}
               renderCard={(word) =>
-                word.id === '__create__'
-                  ? <CreateWordCardFace />
-                  : <WordCardFace word={word} />
+                word.id === "__create__" ? (
+                  <CreateWordCardFace />
+                ) : (
+                  <WordCardFace word={word} />
+                )
               }
               onCardClick={(id) => {
-                if (id === '__create__') {
+                if (id === "__create__") {
                   setStackFanned(false);
                   setCreatingWord(true);
                 } else {
@@ -214,7 +215,9 @@ export default function Table({ words }: TableProps) {
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
           >
-            {activeObject && <ModalContent id={activeObject} words={localWords} />}
+            {activeObject && (
+              <ModalContent id={activeObject} words={localWords} />
+            )}
           </Modal>
         </>
       )}

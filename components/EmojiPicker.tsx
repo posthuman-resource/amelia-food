@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
-import { emojiData, searchEmoji, type EmojiEntry } from '@/data/emoji';
-import styles from './EmojiPicker.module.css';
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
+import { emojiData, searchEmoji, type EmojiEntry } from "@/data/emoji";
+import styles from "./EmojiPicker.module.css";
 
 interface EmojiPickerProps {
   onSelect: (emoji: string) => void;
@@ -37,9 +37,11 @@ for (const entry of emojiData) {
 const grouped = groupByCategory(emojiData);
 
 export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [flash, setFlash] = useState<string | null>(null);
-  const [semanticResults, setSemanticResults] = useState<SemanticResult[] | null>(null);
+  const [semanticResults, setSemanticResults] = useState<
+    SemanticResult[] | null
+  >(null);
   const [semanticLoading, setSemanticLoading] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -72,14 +74,14 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
       abortRef.current = controller;
 
       try {
-        const res = await fetch('/api/emoji-search', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/emoji-search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: trimmed, limit: 40 }),
           signal: controller.signal,
         });
 
-        if (!res.ok) throw new Error('search failed');
+        if (!res.ok) throw new Error("search failed");
 
         const data = await res.json();
         if (!controller.signal.aborted) {
@@ -141,7 +143,7 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
     <div className={styles.picker}>
       <div className={styles.searchWrap}>
         <input
-          className={`${styles.search} ${semanticLoading ? styles.searchLoading : ''}`}
+          className={`${styles.search} ${semanticLoading ? styles.searchLoading : ""}`}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -153,7 +155,7 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
           <button
             className={styles.clearBtn}
             onClick={() => {
-              setQuery('');
+              setQuery("");
               setSemanticResults(null);
             }}
             aria-label="Clear search"
@@ -174,7 +176,7 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
                     {mergedResults.keyword.map((entry) => (
                       <button
                         key={entry.emoji}
-                        className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ''}`}
+                        className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ""}`}
                         onClick={() => handleSelect(entry.emoji)}
                         title={entry.name}
                         type="button"
@@ -192,7 +194,7 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
                     {mergedResults.semanticOnly.map((entry) => (
                       <button
                         key={entry.emoji}
-                        className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ''}`}
+                        className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ""}`}
                         onClick={() => handleSelect(entry.emoji)}
                         title={entry.name}
                         type="button"
@@ -223,7 +225,7 @@ export default function EmojiPicker({ onSelect }: EmojiPickerProps) {
                 {entries.map((entry) => (
                   <button
                     key={entry.emoji}
-                    className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ''}`}
+                    className={`${styles.cell} ${flash === entry.emoji ? styles.pop : ""}`}
                     onClick={() => handleSelect(entry.emoji)}
                     title={entry.name}
                     type="button"

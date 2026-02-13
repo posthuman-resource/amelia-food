@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useChat, type UIMessage } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { Streamdown } from 'streamdown';
-import Conversation from './Conversation';
-import EmojiComposer from './EmojiComposer';
-import EmojiPicker from './EmojiPicker';
-import Modal from './Modal';
-import styles from './EmojiGame.module.css';
+import { useState, useCallback, useEffect, useRef } from "react";
+import { useChat, type UIMessage } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { Streamdown } from "streamdown";
+import Conversation from "./Conversation";
+import EmojiComposer from "./EmojiComposer";
+import EmojiPicker from "./EmojiPicker";
+import Modal from "./Modal";
+import styles from "./EmojiGame.module.css";
 
-const STORAGE_KEY = 'emoji-game-messages';
+const STORAGE_KEY = "emoji-game-messages";
 
-const chatTransport = new DefaultChatTransport({ api: '/api/chat' });
+const chatTransport = new DefaultChatTransport({ api: "/api/chat" });
 
 function loadMessages(): UIMessage[] | undefined {
   try {
@@ -20,28 +20,32 @@ function loadMessages(): UIMessage[] | undefined {
     if (!stored) return undefined;
     const parsed = JSON.parse(stored);
     if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch { /* corrupted data, start fresh */ }
+  } catch {
+    /* corrupted data, start fresh */
+  }
   return undefined;
 }
 
 function saveMessages(messages: UIMessage[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-  } catch { /* storage full, silently fail */ }
+  } catch {
+    /* storage full, silently fail */
+  }
 }
 
 export default function EmojiGame() {
   const { messages, sendMessage, setMessages, status } = useChat({
     transport: chatTransport,
   });
-  const isLoading = status === 'streaming' || status === 'submitted';
+  const isLoading = status === "streaming" || status === "submitted";
   const [selectedEmoji, setSelectedEmoji] = useState<string[]>([]);
   const hasSentOpener = useRef(false);
   const hasRestored = useRef(false);
 
   // Explain modal state
   const [explainOpen, setExplainOpen] = useState(false);
-  const [explainText, setExplainText] = useState('');
+  const [explainText, setExplainText] = useState("");
   const [explainLoading, setExplainLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -56,7 +60,7 @@ export default function EmojiGame() {
       setMessages(saved);
     } else {
       sendMessage({
-        text: 'Start a new emoji conversation. Send your opening emoji.',
+        text: "Start a new emoji conversation. Send your opening emoji.",
       });
     }
   }, [sendMessage, setMessages]);
@@ -82,7 +86,7 @@ export default function EmojiGame() {
 
   const handleSend = useCallback(() => {
     if (selectedEmoji.length === 0) return;
-    const message = selectedEmoji.join('');
+    const message = selectedEmoji.join("");
     sendMessage({ text: message });
     setSelectedEmoji([]);
   }, [selectedEmoji, sendMessage]);
@@ -91,45 +95,48 @@ export default function EmojiGame() {
     // Build a labeled transcript (skip system triggers)
     const getText = (m: UIMessage) =>
       m.parts
-        ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+        ?.filter((p): p is { type: "text"; text: string } => p.type === "text")
         .map((p) => p.text)
-        .join('') ?? '';
+        .join("") ?? "";
     const transcript = messages
-      .filter((m) => !getText(m).includes('Start a new emoji conversation'))
-      .map((m) => `${m.role === 'assistant' ? 'You (the bot)' : 'Amy'}: ${getText(m)}`)
-      .join('\n');
+      .filter((m) => !getText(m).includes("Start a new emoji conversation"))
+      .map(
+        (m) =>
+          `${m.role === "assistant" ? "You (the bot)" : "Amy"}: ${getText(m)}`,
+      )
+      .join("\n");
 
     const explainMessages = [
       {
-        role: 'user' as const,
+        role: "user" as const,
         content: `Here's the emoji conversation:\n\n${transcript}\n\nWhat just happened?`,
       },
     ];
 
     setExplainOpen(true);
-    setExplainText('');
+    setExplainText("");
     setExplainLoading(true);
 
     const controller = new AbortController();
     abortRef.current = controller;
 
     try {
-      const res = await fetch('/api/explain', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: explainMessages }),
         signal: controller.signal,
       });
 
       if (!res.ok || !res.body) {
-        setExplainText('Something went wrong. Try again?');
+        setExplainText("Something went wrong. Try again?");
         setExplainLoading(false);
         return;
       }
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let accumulated = '';
+      let accumulated = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -139,8 +146,8 @@ export default function EmojiGame() {
         setExplainText(accumulated);
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        setExplainText('Something went wrong. Try again?');
+      if ((err as Error).name !== "AbortError") {
+        setExplainText("Something went wrong. Try again?");
       }
     } finally {
       setExplainLoading(false);
@@ -152,21 +159,25 @@ export default function EmojiGame() {
     // Abort any in-flight request
     abortRef.current?.abort();
     setExplainOpen(false);
-    setExplainText('');
+    setExplainText("");
     setExplainLoading(false);
   }, []);
 
   const handleNewConversation = useCallback(() => {
     setMessages([]);
     setSelectedEmoji([]);
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
     hasRestored.current = false;
     hasSentOpener.current = false;
     // Re-trigger the opening message
     setTimeout(() => {
       hasSentOpener.current = true;
       sendMessage({
-        text: 'Start a new emoji conversation. Send your opening emoji.',
+        text: "Start a new emoji conversation. Send your opening emoji.",
       });
     }, 100);
   }, [setMessages, sendMessage]);
@@ -222,9 +233,7 @@ export default function EmojiGame() {
               <span className={styles.loadingDot} />
             </div>
           )}
-          <Streamdown isAnimating={explainLoading}>
-            {explainText}
-          </Streamdown>
+          <Streamdown isAnimating={explainLoading}>{explainText}</Streamdown>
         </div>
       </Modal>
     </div>

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useState, useCallback } from 'react';
-import styles from './EmojiComposer.module.css';
+import { useRef, useEffect, useState, useCallback } from "react";
+import styles from "./EmojiComposer.module.css";
 
 interface EmojiComposerProps {
   selectedEmoji: string[];
@@ -28,13 +28,16 @@ export default function EmojiComposer({
     prevLengthRef.current = selectedEmoji.length;
   }, [selectedEmoji.length]);
 
-  const handleRemove = useCallback((index: number) => {
-    setRemoving(index);
-    setTimeout(() => {
-      setRemoving(null);
-      onRemove(index);
-    }, 150);
-  }, [onRemove]);
+  const handleRemove = useCallback(
+    (index: number) => {
+      setRemoving(index);
+      setTimeout(() => {
+        setRemoving(null);
+        onRemove(index);
+      }, 150);
+    },
+    [onRemove],
+  );
 
   const isEmpty = selectedEmoji.length === 0;
 
@@ -47,7 +50,7 @@ export default function EmojiComposer({
           selectedEmoji.map((emoji, index) => (
             <button
               key={`${emoji}-${index}`}
-              className={`${styles.tile} ${removing === index ? styles.tileRemoving : ''}`}
+              className={`${styles.tile} ${removing === index ? styles.tileRemoving : ""}`}
               onClick={() => handleRemove(index)}
               title="Remove"
               type="button"

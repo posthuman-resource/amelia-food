@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { createPortal } from 'react-dom';
-import styles from './Modal.module.css';
+import { useEffect, useRef, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
+import styles from "./Modal.module.css";
 
 interface ModalProps {
   open: boolean;
@@ -11,7 +11,12 @@ interface ModalProps {
   ariaLabel?: string;
 }
 
-export default function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
+export default function Modal({
+  open,
+  onClose,
+  children,
+  ariaLabel,
+}: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -34,16 +39,16 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
   useEffect(() => {
     if (!open) return;
     const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
+    document.body.style.left = "0";
+    document.body.style.right = "0";
 
     return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       window.scrollTo(0, scrollY);
     };
   }, [open]);
@@ -64,12 +69,12 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         handleClose();
       }
     }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, handleClose]);
 
   // Focus trap
@@ -79,9 +84,9 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
     if (!content) return;
 
     function handleTab(e: KeyboardEvent) {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
       const focusable = content!.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length === 0) return;
 
@@ -97,22 +102,22 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
       }
     }
 
-    document.addEventListener('keydown', handleTab);
-    return () => document.removeEventListener('keydown', handleTab);
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
   }, [open]);
 
   if (!mounted || !open) return null;
 
   return createPortal(
     <div
-      className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`}
+      className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
     >
       <div
         ref={contentRef}
-        className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ''}`}
+        className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ""}`}
         tabIndex={-1}
       >
         <button
@@ -126,6 +131,6 @@ export default function Modal({ open, onClose, children, ariaLabel }: ModalProps
         {children}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

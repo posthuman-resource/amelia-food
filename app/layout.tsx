@@ -40,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lora.variable} ${caveat.variable} ${courierPrime.variable}`}>
+      <body
+        className={`${lora.variable} ${caveat.variable} ${courierPrime.variable}`}
+      >
         {children}
       </body>
     </html>

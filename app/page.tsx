@@ -1,7 +1,7 @@
-import Table from '@/components/Table';
-import { getAllWords } from '@/lib/words';
+import Table from "@/components/Table";
+import { getAllWords } from "@/lib/words";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   const words = getAllWords();

@@ -1,9 +1,11 @@
 # amelia.food — Project Context
 
 ## What This Is
+
 A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy). A place she discovers things over time. The homepage is a top-down view of a table surface with objects placed on it. No nav, no header, no app-shell UI. Just the table.
 
 ## Tech Stack
+
 - **Framework**: Next.js 16 (App Router) with React 19
 - **AI**: Vercel AI SDK v6 (`ai`, `@ai-sdk/anthropic`, `@ai-sdk/react`) — use for ALL AI interactions
 - **Anthropic model**: `claude-haiku-4-5-20251001` for the emoji game (fast, cheap, playful)
@@ -13,11 +15,13 @@ A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy).
 - **API key**: `ANTHROPIC_API_KEY` already in `.env`
 
 ## Design Language — "Warm Tactile Whimsy"
+
 - Warm, tactile, considered, quietly playful, intimate
 - NOT a SaaS product, NOT minimalist-startup-clean, NOT loud
 - Should feel like opening a handmade gift, a quiet room with good light
 
 ## Color Palette (CSS variables)
+
 - Background/surface: `#F5F0E8`, `#EDE8DF`, `#FAF7F2` (warm cream/parchment)
 - Primary accent: `#6B2D5B`, `#8B3A62` (deep plum/burgundy)
 - Secondary accent: `#2D5B4B`, `#3A6B5B` (forest green/deep teal)
@@ -26,6 +30,7 @@ A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy).
 - Subtle gold: `#C4A265`, `#B8956A`
 
 ## File Structure
+
 ```
 app/
   layout.tsx              — Root layout, fonts, global styles
@@ -50,11 +55,13 @@ public/
 ```
 
 ## LLM Personality (all contexts)
+
 Minimalist, a little eccentric, quirky, fun. Dry humor. Not overly helpful or cheerful — never gushing, never a pep talk. But genuinely good and kind, in the way that shows up in what you notice and how you pay attention, not in how many nice words you use. Think: a friend who gives oddly perfect gifts and says very little about them.
 
 The only user is Amelia. She already knows what this site is. Never explain the site's concept, metaphors, or premise back to her — no "on amelia.food, nourishment represents..." preamble. Just talk to her.
 
 ## Key Design Rules
+
 - Objects on table: subtle shadows, gentle lift on hover, 1-2 degree rotation
 - All motion is gentle — no bouncing, no snapping, no aggressive transitions
 - Mobile-first responsive; touch interactions on mobile, hover on desktop
@@ -63,30 +70,32 @@ The only user is Amelia. She already knows what this site is. Never explain the 
 - Her name on table, valentine text = Caveat (handwritten font)
 
 ## Vercel AI SDK v6 Patterns
+
 ```typescript
 // API route (app/api/chat/route.ts)
-import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, convertToModelMessages, type UIMessage } from 'ai';
+import { anthropic } from "@ai-sdk/anthropic";
+import { streamText, convertToModelMessages, type UIMessage } from "ai";
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
   const result = streamText({
-    model: anthropic('claude-haiku-4-5-20251001'),
-    system: '...emoji system prompt...',
+    model: anthropic("claude-haiku-4-5-20251001"),
+    system: "...emoji system prompt...",
     messages: await convertToModelMessages(messages),
   });
   return result.toUIMessageStreamResponse();
 }
 
 // Client component
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 const { messages, sendMessage } = useChat({
-  transport: new DefaultChatTransport({ api: '/api/chat' }),
+  transport: new DefaultChatTransport({ api: "/api/chat" }),
 });
 ```
 
 ## Database (Drizzle + SQLite)
+
 - **ORM**: Drizzle ORM with `better-sqlite3`, schema in `db/schema.ts`
 - **DB file**: `./data/amelia.db` (override with `DATABASE_PATH` env var)
 - **Schema change workflow**: Edit `db/schema.ts` → `npm run db:generate` → commit the migration SQL in `db/migrations/`
@@ -95,6 +104,7 @@ const { messages, sendMessage } = useChat({
 - **NEVER use `drizzle-kit push`** — it applies schema changes directly without a migration file, making them non-repeatable on production. There is no `db:push` script and one should never be added.
 
 ## Testing
+
 - Run `npm run dev` and verify at http://localhost:3000
 - Use Chrome MCP tools to take snapshots and screenshots for visual verification
 - Test both desktop viewport and mobile (390x844) viewport

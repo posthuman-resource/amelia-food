@@ -11,15 +11,15 @@ This is a Valentine's Day gift site at `amelia.food`. The homepage is a top-down
 
 ## Commands
 
-| Command               | Action                                                          |
-| --------------------- | --------------------------------------------------------------- |
-| `/todo`               | Work on next available item                                     |
-| `/todo next`          | Same as `/todo`                                                 |
-| `/todo <keyword>`     | Work on item matching keyword (e.g., `/todo emoji`)             |
-| `/todo list`          | Show all items, ask which to work on                            |
-| `/todo done`          | Remove current item (delete spec file if exists)                |
-| `/todo <instruction>` | Create, update, or manage items based on instruction            |
-| `/todo <issue/want>`  | Investigate and create well-researched item(s)                  |
+| Command               | Action                                               |
+| --------------------- | ---------------------------------------------------- |
+| `/todo`               | Work on next available item                          |
+| `/todo next`          | Same as `/todo`                                      |
+| `/todo <keyword>`     | Work on item matching keyword (e.g., `/todo emoji`)  |
+| `/todo list`          | Show all items, ask which to work on                 |
+| `/todo done`          | Remove current item (delete spec file if exists)     |
+| `/todo <instruction>` | Create, update, or manage items based on instruction |
+| `/todo <issue/want>`  | Investigate and create well-researched item(s)       |
 
 ## How It Works
 
@@ -138,6 +138,7 @@ When implementing an item:
 8. **If partially done:** Update the spec file with remaining unchecked items and a note on what's left
 
 **Design reminders while implementing:**
+
 - CSS modules or global CSS with CSS variables — no Tailwind
 - Self-host fonts via `next/font/google`
 - Warm, tactile, handmade aesthetic — not a tech product

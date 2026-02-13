@@ -110,7 +110,7 @@
 }
 
 .newBtn:active:not(:disabled) {
-  background: rgba(44, 40, 37, 0.10);
+  background: rgba(44, 40, 37, 0.1);
 }
 
 .newBtn:disabled {
@@ -154,7 +154,8 @@
 }
 
 @keyframes explainPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.2;
     transform: scale(0.85);
   }
@@ -171,8 +172,14 @@
 @media (max-width: 768px) {
   .game {
     /* Fill the full-screen modal minus the close button and padding */
-    height: calc(100vh - var(--space-lg) * 2 - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-    height: calc(100dvh - var(--space-lg) * 2 - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height: calc(
+      100vh - var(--space-lg) * 2 - env(safe-area-inset-top) -
+        env(safe-area-inset-bottom)
+    );
+    height: calc(
+      100dvh - var(--space-lg) * 2 - env(safe-area-inset-top) -
+        env(safe-area-inset-bottom)
+    );
     max-height: none;
   }
 

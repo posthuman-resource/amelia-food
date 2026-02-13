@@ -1,8 +1,8 @@
-import { openai } from '@ai-sdk/openai';
-import { embed, cosineSimilarity } from 'ai';
-import embeddingsData from '@/data/emoji-embeddings.json';
+import { openai } from "@ai-sdk/openai";
+import { embed, cosineSimilarity } from "ai";
+import embeddingsData from "@/data/emoji-embeddings.json";
 
-const MODEL_ID = 'text-embedding-3-small';
+const MODEL_ID = "text-embedding-3-small";
 const DIMENSIONS = 256;
 const DEFAULT_LIMIT = 30;
 

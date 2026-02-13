@@ -8,17 +8,17 @@
  * Requires: OPENAI_API_KEY in .env
  */
 
-import { openai } from '@ai-sdk/openai';
-import { embedMany } from 'ai';
-import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { openai } from "@ai-sdk/openai";
+import { embedMany } from "ai";
+import { readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 
 // We can't use the @/ path alias from tsx, so import the built dataset
 // by evaluating the emoji module at runtime. Instead, we'll load the
 // emojibase data directly — same logic as data/emoji.ts but standalone.
-import rawData from 'emojibase-data/en/data.json' with { type: 'json' };
+import rawData from "emojibase-data/en/data.json" with { type: "json" };
 
-const MODEL_ID = 'text-embedding-3-small';
+const MODEL_ID = "text-embedding-3-small";
 const DIMENSIONS = 256;
 const BATCH_SIZE = 512; // OpenAI allows up to 2048 inputs per request
 
@@ -41,10 +41,14 @@ async function main() {
     (e: { group?: number }) => e.group !== undefined && e.group !== 2,
   );
 
-  console.log(`Embedding ${emoji.length} emoji with ${MODEL_ID} @ ${DIMENSIONS}d...`);
+  console.log(
+    `Embedding ${emoji.length} emoji with ${MODEL_ID} @ ${DIMENSIONS}d...`,
+  );
 
   // Prepare text inputs: "😀 grinning face"
-  const texts = emoji.map((e: { emoji: string; label: string }) => `${e.emoji} ${e.label}`);
+  const texts = emoji.map(
+    (e: { emoji: string; label: string }) => `${e.emoji} ${e.label}`,
+  );
 
   // Batch the embeddings
   const allEmbeddings: number[][] = [];
@@ -52,7 +56,9 @@ async function main() {
     const batch = texts.slice(i, i + BATCH_SIZE);
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
     const totalBatches = Math.ceil(texts.length / BATCH_SIZE);
-    console.log(`  Batch ${batchNum}/${totalBatches} (${batch.length} items)...`);
+    console.log(
+      `  Batch ${batchNum}/${totalBatches} (${batch.length} items)...`,
+    );
 
     const { embeddings } = await embedMany({
       model: openai.embedding(MODEL_ID),
@@ -79,13 +85,19 @@ async function main() {
     entries,
   };
 
-  const outPath = join(process.cwd(), 'data', 'emoji-embeddings.json');
+  const outPath = join(process.cwd(), "data", "emoji-embeddings.json");
   writeFileSync(outPath, JSON.stringify(output));
-  const sizeMB = (Buffer.byteLength(JSON.stringify(output)) / 1024 / 1024).toFixed(1);
-  console.log(`\nWrote ${entries.length} embeddings to ${outPath} (${sizeMB} MB)`);
+  const sizeMB = (
+    Buffer.byteLength(JSON.stringify(output)) /
+    1024 /
+    1024
+  ).toFixed(1);
+  console.log(
+    `\nWrote ${entries.length} embeddings to ${outPath} (${sizeMB} MB)`,
+  );
 }
 
 main().catch((err) => {
-  console.error('Failed:', err);
+  console.error("Failed:", err);
   process.exit(1);
 });

@@ -66,7 +66,7 @@
     circle at 40% 35%,
     var(--color-plum-light) 0%,
     var(--color-plum) 60%,
-    #5A2550 100%
+    #5a2550 100%
   );
   box-shadow:
     0 1px 3px rgba(107, 45, 91, 0.3),
@@ -93,9 +93,8 @@
   border-radius: var(--radius-md);
   position: relative;
   /* Cream notecard — slightly warmer than the modal background */
-  background-color: #FAF6EE;
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
+  background-color: #faf6ee;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
   background-size: 300px 300px;
   box-shadow: 0 1px 4px rgba(44, 40, 37, 0.06);
 }

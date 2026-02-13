@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import styles from './AuthLock.module.css';
+import { useState, useRef, useEffect } from "react";
+import styles from "./AuthLock.module.css";
 
 interface AuthLockProps {
   onUnlock: () => void;
 }
 
 export default function AuthLock({ onUnlock }: AuthLockProps) {
-  const [value, setValue] = useState('');
-  const [label, setLabel] = useState('locked');
+  const [value, setValue] = useState("");
+  const [label, setLabel] = useState("locked");
   const [shaking, setShaking] = useState(false);
   const [unlocking, setUnlocking] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -21,31 +21,36 @@ export default function AuthLock({ onUnlock }: AuthLockProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (value.toLowerCase().trim() === 'under the banana moon') {
+    if (value.toLowerCase().trim() === "under the banana moon") {
       setUnlocking(true);
-      sessionStorage.setItem('amelia-unlocked', 'true');
+      sessionStorage.setItem("amelia-unlocked", "true");
       setTimeout(onUnlock, 500);
     } else {
       setShaking(true);
-      setLabel('hmm');
-      setValue('');
+      setLabel("hmm");
+      setValue("");
       setTimeout(() => {
         setShaking(false);
-        setLabel('locked');
+        setLabel("locked");
       }, 800);
     }
   }
 
   const lockClass = [
     styles.lock,
-    shaking ? styles.shake : '',
-    unlocking ? styles.unlocking : '',
-  ].filter(Boolean).join(' ');
+    shaking ? styles.shake : "",
+    unlocking ? styles.unlocking : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={lockClass}>
-      <form onSubmit={handleSubmit} className={`${styles.lockCard} texture-paper`}>
-        <span className={styles.emoji}>{unlocking ? '🔓' : '🔒'}</span>
+      <form
+        onSubmit={handleSubmit}
+        className={`${styles.lockCard} texture-paper`}
+      >
+        <span className={styles.emoji}>{unlocking ? "🔓" : "🔒"}</span>
         <p className={styles.label}>{label}</p>
         <input
           ref={inputRef}

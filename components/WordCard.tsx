@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useRef, useCallback } from 'react';
-import type { WordDefinition } from '@/data/words';
-import styles from './WordCard.module.css';
+import { useState, useRef, useCallback } from "react";
+import type { WordDefinition } from "@/data/words";
+import styles from "./WordCard.module.css";
 
 export function WordCardFace({ word }: { word: WordDefinition }) {
   return (
@@ -27,7 +27,7 @@ function playBase64Audio(
   audioRef: React.RefObject<HTMLAudioElement | null>,
 ) {
   const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
-  const blob = new Blob([bytes], { type: 'audio/mp3' });
+  const blob = new Blob([bytes], { type: "audio/mp3" });
   const url = URL.createObjectURL(blob);
 
   if (audioRef.current) {
@@ -37,7 +37,7 @@ function playBase64Audio(
 
   const audio = new Audio(url);
   audioRef.current = audio;
-  audio.addEventListener('ended', () => URL.revokeObjectURL(url));
+  audio.addEventListener("ended", () => URL.revokeObjectURL(url));
   return audio.play();
 }
 
@@ -52,13 +52,13 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
     setPronouncing(true);
 
     try {
-      const res = await fetch('/api/word-audio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/word-audio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word: word.word, pronounceOnly: true }),
       });
 
-      if (!res.ok) throw new Error('Failed to generate audio');
+      if (!res.ok) throw new Error("Failed to generate audio");
 
       const data = await res.json();
       await playBase64Audio(data.audio, audioRef);
@@ -75,9 +75,9 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
     setSentence(null);
 
     try {
-      const res = await fetch('/api/word-audio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/word-audio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           word: word.word,
           definition: word.description,
@@ -85,13 +85,13 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
         }),
       });
 
-      if (!res.ok) throw new Error('Failed to generate audio');
+      if (!res.ok) throw new Error("Failed to generate audio");
 
       const data = await res.json();
       setSentence(data.sentence);
       await playBase64Audio(data.audio, audioRef);
     } catch {
-      setSentence('Something went quiet. Try again?');
+      setSentence("Something went quiet. Try again?");
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
         <div className={styles.pronunciationRow}>
           <p className={styles.pronunciation}>{word.pronunciation}</p>
           <button
-            className={`${styles.speakerButton} ${pronouncing ? styles.speakerButtonLoading : ''}`}
+            className={`${styles.speakerButton} ${pronouncing ? styles.speakerButtonLoading : ""}`}
             onClick={handlePronounce}
             disabled={pronouncing}
             type="button"
@@ -119,7 +119,11 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none" />
+              <polygon
+                points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+                fill="currentColor"
+                stroke="none"
+              />
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
             </svg>
@@ -142,7 +146,7 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
 
         <div className={styles.audioSection}>
           <button
-            className={`${styles.playButton} ${loading ? styles.playButtonLoading : ''}`}
+            className={`${styles.playButton} ${loading ? styles.playButtonLoading : ""}`}
             onClick={handlePlay}
             disabled={loading}
             type="button"
@@ -165,16 +169,18 @@ export function WordCardContent({ word }: { word: WordDefinition }) {
                 </>
               ) : (
                 <>
-                  <polygon points="6 3 20 12 6 21 6 3" fill="currentColor" stroke="none" />
+                  <polygon
+                    points="6 3 20 12 6 21 6 3"
+                    fill="currentColor"
+                    stroke="none"
+                  />
                 </>
               )}
             </svg>
             <span className={styles.playLabel}>use naturally</span>
           </button>
 
-          {sentence && (
-            <p className={styles.sentence}>{sentence}</p>
-          )}
+          {sentence && <p className={styles.sentence}>{sentence}</p>}
         </div>
       </div>
     </div>
