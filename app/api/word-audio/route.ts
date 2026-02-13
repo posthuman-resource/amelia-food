@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const response = await openai.chat.completions.create({
       model: "gpt-audio",
       modalities: ["text", "audio"],
-      audio: { voice: "fable", format: "mp3" },
+      audio: { voice: "marin", format: "mp3" },
       messages: [
         { role: "system", content: wordPronouncePrompt(word) },
         { role: "user", content: word },
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   const response = await openai.chat.completions.create({
     model: "gpt-audio",
     modalities: ["text", "audio"],
-    audio: { voice: "fable", format: "mp3" },
+    audio: { voice: "marin", format: "mp3" },
     messages: [
       { role: "system", content: wordSpeakPrompt(word) },
       { role: "user", content: `Read this sentence aloud: ${sentence}` },
