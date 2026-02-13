@@ -21,7 +21,7 @@ export default function AuthLock({ onUnlock }: AuthLockProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (value.toLowerCase().trim() === "under the banana moon") {
+    if (value.toLowerCase().trim() === "bananamoon") {
       setUnlocking(true);
       sessionStorage.setItem("amelia-unlocked", "true");
       setTimeout(onUnlock, 500);
