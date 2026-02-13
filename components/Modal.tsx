@@ -9,6 +9,7 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   ariaLabel?: string;
+  className?: string;
 }
 
 export default function Modal({
@@ -16,6 +17,7 @@ export default function Modal({
   onClose,
   children,
   ariaLabel,
+  className,
 }: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -114,11 +116,13 @@ export default function Modal({
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
+      onClick={handleClose}
     >
       <div
         ref={contentRef}
-        className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ""}`}
+        className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ""} ${className || ""}`}
         tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           className={styles.close}

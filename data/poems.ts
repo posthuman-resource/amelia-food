@@ -3,6 +3,7 @@ export interface Poem {
   title: string;
   emoji: string;
   text: string;
+  author?: string;
   table: { x: number; y: number; rotation: number };
 }
 
@@ -10,6 +11,7 @@ export interface PoemMeta {
   id: string;
   title: string;
   emoji: string;
+  author?: string;
   table: { x: number; y: number; rotation: number };
 }
 
@@ -25,5 +27,12 @@ export const poemMeta: PoemMeta[] = [
     title: "by moonlight",
     emoji: "🍌",
     table: { x: 50, y: 80, rotation: 1.5 },
+  },
+  {
+    id: "tomatoes",
+    title: "tomatoes",
+    emoji: "🍅",
+    author: "Joy Sullivan",
+    table: { x: 75, y: 70, rotation: 2 },
   },
 ];

@@ -39,6 +39,11 @@
   animation: contentIn 300ms ease-out;
 }
 
+/* Wide variant — for content with longer lines (e.g. poems) */
+.wide {
+  max-width: 660px;
+}
+
 /* Scrollable area — children scroll here, close button stays fixed */
 .scroll {
   overflow-y: auto;

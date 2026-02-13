@@ -20,14 +20,20 @@ export function PoemContent({ poem }: { poem: Poem }) {
   const stanzaCount = stanzas.length;
 
   // Height factor: lines * line-height + stanza gaps (proportional to font)
-  const heightFactor = lineCount * 1.8 + (stanzaCount - 1) * 1.2;
+  // Add extra space for the author line when present
+  const authorExtra = poem.author ? 3 : 0;
+  const heightFactor = lineCount * 1.8 + (stanzaCount - 1) * 1.2 + authorExtra;
 
-  // Compute font size that tries to fit the poem without scrolling.
-  // Available height = viewport - fixed padding overhead (modal + poem + paper).
-  // fontSize = available / heightFactor, clamped to reasonable bounds.
+  // Width factor: longest line in chars * ~0.62 (monospace ch-to-em ratio).
+  // Available width: modal(560px) - scroll padding(6rem) - paper padding(4rem) = ~11rem overhead.
+  // Mobile: full-width - scroll padding(3rem) - paper padding(3rem) = ~6rem overhead.
+  const longestLine = Math.max(...poem.text.split("\n").map((l) => l.length));
+  const widthFactor = longestLine * 0.62;
+
+  // Font size = min(height-based, width-based), clamped to reasonable bounds.
   const paperStyle = {
-    "--poem-font-size": `clamp(1rem, calc((100vh - 18rem) / ${heightFactor}), 1.5rem)`,
-    "--poem-font-size-mobile": `clamp(0.875rem, calc((100dvh - 12rem) / ${heightFactor}), 1.25rem)`,
+    "--poem-font-size": `clamp(1.2rem, min(calc((100vh - 18rem) / ${heightFactor}), calc((min(660px, 100vw) - 11rem) / ${widthFactor})), 1.5rem)`,
+    "--poem-font-size-mobile": `clamp(1rem, min(calc((100dvh - 12rem) / ${heightFactor}), calc((100vw - 6rem) / ${widthFactor})), 1.25rem)`,
   } as React.CSSProperties;
 
   return (
@@ -42,6 +48,9 @@ export function PoemContent({ poem }: { poem: Poem }) {
             ))}
           </div>
         ))}
+        {poem.author && (
+          <p className={styles.author}>&mdash; {poem.author}</p>
+        )}
       </div>
     </div>
   );

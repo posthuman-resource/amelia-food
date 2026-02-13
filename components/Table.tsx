@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
 import Modal from "./Modal";
+import modalStyles from "./Modal.module.css";
 import EmojiGame from "./EmojiGame";
 import { ValentineCard, ValentineCardContent } from "./Valentine";
 import { WelcomeEnvelope, WelcomeLetterContent } from "./Welcome";
@@ -222,6 +223,7 @@ export default function Table({ words, poems }: TableProps) {
             open={activeObject !== null}
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
+            className={activeObject?.startsWith("poem-") ? modalStyles.wide : undefined}
           >
             {activeObject && (
               <ModalContent
