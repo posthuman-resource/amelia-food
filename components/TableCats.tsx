@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 import { createNoise2D } from "simplex-noise";
 import styles from "./TableCats.module.css";
 
@@ -423,24 +424,8 @@ function catClassName(behavior: CatBehavior, facingLeft: boolean): string {
 }
 
 export default function TableCats({ objectPositions }: TableCatsProps) {
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(max-width: 768px)");
-    setIsMobile(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const cat1 = useCat(CAT_EMOJIS[0], objectPositions, reducedMotion);
   const cat2 = useCat(CAT_EMOJIS[1], objectPositions, reducedMotion);

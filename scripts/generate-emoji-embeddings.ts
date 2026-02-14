@@ -10,7 +10,7 @@
 
 import { openai } from "@ai-sdk/openai";
 import { embedMany } from "ai";
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { join } from "path";
 
 // We can't use the @/ path alias from tsx, so import the built dataset

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
 import Modal from "./Modal";
@@ -17,6 +17,7 @@ import WordCreator from "./WordCreator";
 import AuthLock from "./AuthLock";
 import TableCats from "./TableCats";
 import { useTabTitle } from "../hooks/useTabTitle";
+import { useMounted } from "../hooks/useMounted";
 
 interface TableObjectData {
   id: string;
@@ -131,8 +132,14 @@ const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
 export default function Table({ words, poems }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
+  const sessionUnlocked = useSyncExternalStore(
+    () => () => {},
+    () => sessionStorage.getItem("amelia-unlocked") === "true",
+    () => false,
+  );
+  const [userUnlocked, setUserUnlocked] = useState(false);
+  const unlocked = sessionUnlocked || userUnlocked;
   const [creatingWord, setCreatingWord] = useState(false);
   const [localWords, setLocalWords] = useState<WordDefinition[]>(words);
   const objects = buildObjects(poems);
@@ -140,20 +147,13 @@ export default function Table({ words, poems }: TableProps) {
 
   const tabTitle = useTabTitle(unlocked);
 
-  useEffect(() => {
-    if (sessionStorage.getItem("amelia-unlocked") === "true") {
-      setUnlocked(true);
-    }
-    setMounted(true);
-  }, []);
-
   return (
     <div className={`${styles.table} texture-wood texture-noise`}>
       <title>{tabTitle}</title>
       {/* Subtle "Amy" inscription — always visible */}
       <div className={styles.inscription}>Amy</div>
 
-      {mounted && !unlocked && <AuthLock onUnlock={() => setUnlocked(true)} />}
+      {mounted && !unlocked && <AuthLock onUnlock={() => setUserUnlocked(true)} />}
 
       {unlocked && (
         <>
@@ -177,7 +177,7 @@ export default function Table({ words, poems }: TableProps) {
                 onClick={() => {
                   if (obj.id === "lock") {
                     sessionStorage.removeItem("amelia-unlocked");
-                    setUnlocked(false);
+                    setUserUnlocked(false);
                   } else if (obj.id === "word-stack") {
                     setStackFanned(true);
                   } else {

@@ -3,6 +3,7 @@
 import { useEffect, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./CardStack.module.css";
+import { useMounted } from "../hooks/useMounted";
 
 interface CardStackItem {
   id: string;
@@ -50,12 +51,8 @@ export function CardStackOverlay<T extends CardStackItem>({
   onClose,
   ariaLabel,
 }: CardStackOverlayProps<T>) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const [closing, setClosing] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleClose = useCallback(() => {
     setClosing(true);

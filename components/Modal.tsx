@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
+import { useMounted } from "../hooks/useMounted";
 
 interface ModalProps {
   open: boolean;
@@ -19,15 +20,10 @@ export default function Modal({
   ariaLabel,
   className,
 }: ModalProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const [closing, setClosing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-
-  // Track mount state for portal rendering
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleClose = useCallback(() => {
     setClosing(true);

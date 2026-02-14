@@ -74,18 +74,14 @@ function randomRow(): string[] {
 }
 
 export function useTabTitle(unlocked: boolean): string {
-  const [title, setTitle] = useState("🔒");
-  const rowRef = useRef<string[]>(randomRow());
+  const initialRow = randomRow();
+  const rowRef = useRef<string[]>(initialRow);
+  const [title, setTitle] = useState(initialRow.join(""));
   const awayFrameRef = useRef(0);
   const hiddenRef = useRef(false);
 
   useEffect(() => {
-    if (!unlocked) {
-      setTitle("🔒");
-      return;
-    }
-
-    setTitle(rowRef.current.join(""));
+    if (!unlocked) return;
 
     // --- Away animation (Web Worker for un-throttled timer) ---
     const blob = new Blob([WORKER_SRC], { type: "application/javascript" });
@@ -145,5 +141,5 @@ export function useTabTitle(unlocked: boolean): string {
     };
   }, [unlocked]);
 
-  return title;
+  return unlocked ? title : "🔒";
 }
