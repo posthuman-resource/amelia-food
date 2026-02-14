@@ -54,7 +54,7 @@ export default function AuthLock({ onUnlock }: AuthLockProps) {
         <p className={styles.label}>{label}</p>
         <input
           ref={inputRef}
-          type="text"
+          type="password"
           className={styles.input}
           value={value}
           onChange={(e) => setValue(e.target.value)}
