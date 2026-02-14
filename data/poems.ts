@@ -35,4 +35,10 @@ export const poemMeta: PoemMeta[] = [
     author: "Joy Sullivan",
     table: { x: 75, y: 70, rotation: 2 },
   },
+  {
+    id: "brass",
+    title: "brass",
+    emoji: "🎺",
+    table: { x: 15, y: 42, rotation: -1 },
+  },
 ];
