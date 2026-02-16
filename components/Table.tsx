@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
 import Modal from "./Modal";
@@ -123,8 +124,8 @@ function ModalContent({
 }
 
 interface TableProps {
-  words: WordDefinition[];
-  poems: Poem[];
+  words?: WordDefinition[];
+  poems?: Poem[];
 }
 
 const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
@@ -133,16 +134,14 @@ export default function Table({ words, poems }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
   const mounted = useMounted();
-  const sessionUnlocked = useSyncExternalStore(
-    () => () => {},
-    () => sessionStorage.getItem("amelia-unlocked") === "true",
-    () => false,
-  );
-  const [userUnlocked, setUserUnlocked] = useState(false);
-  const unlocked = sessionUnlocked || userUnlocked;
+  const router = useRouter();
+
+  const unlocked = !!(words && poems);
+  const [newWords, setNewWords] = useState<WordDefinition[]>([]);
+  const allWords = [...(words ?? []), ...newWords];
+
   const [creatingWord, setCreatingWord] = useState(false);
-  const [localWords, setLocalWords] = useState<WordDefinition[]>(words);
-  const objects = buildObjects(poems);
+  const objects = buildObjects(poems ?? []);
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -153,7 +152,7 @@ export default function Table({ words, poems }: TableProps) {
       {/* Subtle "Amy" inscription — always visible */}
       <div className={styles.inscription}>Amy</div>
 
-      {mounted && !unlocked && <AuthLock onUnlock={() => setUserUnlocked(true)} />}
+      {mounted && !unlocked && <AuthLock />}
 
       {unlocked && (
         <>
@@ -176,8 +175,9 @@ export default function Table({ words, poems }: TableProps) {
                 index={index}
                 onClick={() => {
                   if (obj.id === "lock") {
-                    sessionStorage.removeItem("amelia-unlocked");
-                    setUserUnlocked(false);
+                    fetch("/api/auth", { method: "DELETE" }).then(() =>
+                      router.refresh(),
+                    );
                   } else if (obj.id === "word-stack") {
                     setStackFanned(true);
                   } else {
@@ -185,7 +185,11 @@ export default function Table({ words, poems }: TableProps) {
                   }
                 }}
               >
-                <ObjectContent id={obj.id} words={localWords} poems={poems} />
+                <ObjectContent
+                  id={obj.id}
+                  words={allWords}
+                  poems={poems ?? []}
+                />
               </TableObject>
             ))}
           </div>
@@ -193,7 +197,7 @@ export default function Table({ words, poems }: TableProps) {
           {/* Card stack fan overlay */}
           {stackFanned && (
             <CardStackOverlay
-              items={[CREATE_SENTINEL, ...localWords]}
+              items={[CREATE_SENTINEL, ...allWords]}
               renderCard={(word) =>
                 word.id === "__create__" ? (
                   <CreateWordCardFace />
@@ -218,7 +222,7 @@ export default function Table({ words, poems }: TableProps) {
           {creatingWord && (
             <WordCreator
               onComplete={(word) => {
-                setLocalWords((prev) => [...prev, word]);
+                setNewWords((prev) => [...prev, word]);
                 setCreatingWord(false);
                 setActiveObject(`word-${word.id}`);
               }}
@@ -238,8 +242,8 @@ export default function Table({ words, poems }: TableProps) {
             {activeObject && (
               <ModalContent
                 id={activeObject}
-                words={localWords}
-                poems={poems}
+                words={allWords}
+                poems={poems ?? []}
               />
             )}
           </Modal>

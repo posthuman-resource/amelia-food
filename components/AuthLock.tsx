@@ -1,31 +1,47 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./AuthLock.module.css";
 
-interface AuthLockProps {
-  onUnlock: () => void;
-}
-
-export default function AuthLock({ onUnlock }: AuthLockProps) {
+export default function AuthLock() {
   const [value, setValue] = useState("");
   const [label, setLabel] = useState("locked");
   const [shaking, setShaking] = useState(false);
   const [unlocking, setUnlocking] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting) return;
 
-    if (value.toLowerCase().trim() === "bananamoon") {
-      setUnlocking(true);
-      sessionStorage.setItem("amelia-unlocked", "true");
-      setTimeout(onUnlock, 500);
-    } else {
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: value.toLowerCase().trim() }),
+      });
+
+      if (res.ok) {
+        setUnlocking(true);
+        setTimeout(() => router.refresh(), 500);
+      } else {
+        setShaking(true);
+        setLabel("hmm");
+        setValue("");
+        setTimeout(() => {
+          setShaking(false);
+          setLabel("locked");
+        }, 800);
+      }
+    } catch {
       setShaking(true);
       setLabel("hmm");
       setValue("");
@@ -33,6 +49,8 @@ export default function AuthLock({ onUnlock }: AuthLockProps) {
         setShaking(false);
         setLabel("locked");
       }, 800);
+    } finally {
+      if (!unlocking) setSubmitting(false);
     }
   }
 
@@ -61,7 +79,7 @@ export default function AuthLock({ onUnlock }: AuthLockProps) {
           placeholder="..."
           autoComplete="off"
           spellCheck={false}
-          disabled={unlocking}
+          disabled={unlocking || submitting}
         />
       </form>
     </div>
