@@ -25,7 +25,6 @@
     "openai": "^6.21.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "simplex-noise": "^4.0.3",
     "streamdown": "^2.2.0"
   },
   "devDependencies": {

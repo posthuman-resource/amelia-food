@@ -144,12 +144,13 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
         onClick={handleClose}
         aria-label="Close"
         type="button"
+        data-neko-block="true"
       >
         &times;
       </button>
 
       {step === "describe" && (
-        <div className={styles.step}>
+        <div className={styles.step} data-neko-block="true">
           <div className={styles.card}>
             <h2 className={styles.heading}>what does it feel like?</h2>
             <p className={styles.subtext}>
@@ -187,7 +188,10 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
       )}
 
       {step === "pick" && (
-        <div className={`${styles.step} ${styles.pickStep}`}>
+        <div
+          className={`${styles.step} ${styles.pickStep}`}
+          data-neko-block="true"
+        >
           {loading && (
             <div className={styles.loading}>
               <p className={styles.loadingText}>thinking...</p>
@@ -265,7 +269,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
       )}
 
       {step === "saving" && (
-        <div className={styles.step}>
+        <div className={styles.step} data-neko-block="true">
           <div className={styles.loading}>
             <p className={styles.loadingText}>saving...</p>
           </div>

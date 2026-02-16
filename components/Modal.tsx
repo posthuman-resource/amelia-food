@@ -116,6 +116,7 @@ export default function Modal({
     >
       <div
         ref={contentRef}
+        data-neko-block="true"
         className={`${styles.content} texture-paper ${closing ? styles.contentClosing : ""} ${className || ""}`}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}

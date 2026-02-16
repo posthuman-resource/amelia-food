@@ -1,0 +1,10 @@
+.neko {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  background-image: url("/oneko.gif");
+  background-position: calc(-3 * 32px) calc(-3 * 32px);
+}

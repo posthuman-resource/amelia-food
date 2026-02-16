@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
@@ -20,7 +20,7 @@ import WordCreator from "./WordCreator";
 import VennDiagram from "./VennDiagram";
 import type { VennEntry } from "@/lib/venn";
 import AuthLock from "./AuthLock";
-import TableCats from "./TableCats";
+import Neko from "./Neko";
 import { useTabTitle } from "../hooks/useTabTitle";
 import { useMounted } from "../hooks/useMounted";
 
@@ -75,9 +75,7 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
     return (
       <div className={styles.emojiCard}>
         <div className={styles.emojiTiles}>
-          <span>🎲</span>
           <span>💬</span>
-          <span>✨</span>
         </div>
         <p className={styles.cardLabel}>emoji game</p>
       </div>
@@ -186,6 +184,7 @@ export default function Table({
   const mounted = useMounted();
   const router = useRouter();
 
+  const objectsContainerRef = useRef<HTMLDivElement>(null);
   const unlocked = !!(words && poems);
   const [newWords, setNewWords] = useState<WordDefinition[]>([]);
   const allVennEntries = initialVennEntries ?? [];
@@ -208,14 +207,8 @@ export default function Table({
       {unlocked && (
         <>
           {/* Table objects */}
-          <div className={styles.objectsContainer}>
-            <TableCats
-              objectPositions={objects.map((o) => ({
-                id: o.id,
-                x: o.x,
-                y: o.y,
-              }))}
-            />
+          <div ref={objectsContainerRef} className={styles.objectsContainer}>
+            <Neko tableRef={objectsContainerRef} />
             {objects.map((obj, index) => (
               <TableObject
                 key={obj.id}

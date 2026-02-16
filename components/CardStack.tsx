@@ -105,12 +105,13 @@ export function CardStackOverlay<T extends CardStackItem>({
         onClick={handleClose}
         aria-label="Close"
         type="button"
+        data-neko-block="true"
       >
         ×
       </button>
 
       {/* Fan of cards */}
-      <div className={styles.fan}>
+      <div className={styles.fan} data-neko-block="true">
         {items.map((item, i) => (
           <button
             key={item.id}
