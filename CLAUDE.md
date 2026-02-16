@@ -8,7 +8,7 @@ A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy).
 
 - **Framework**: Next.js 16 (App Router) with React 19
 - **AI**: Vercel AI SDK v6 (`ai`, `@ai-sdk/anthropic`, `@ai-sdk/react`) — use for ALL AI interactions
-- **Anthropic model**: `claude-haiku-4-5-20251001` for the emoji game (fast, cheap, playful)
+- **Anthropic model**: `claude-sonnet-4-5-20250929` for the emoji game (better instruction-following)
 - **Styling**: CSS modules + CSS variables in globals.css — **NO TAILWIND** (remove it)
 - **Fonts**: `next/font/google` — Lora (display serif), Caveat (handwritten), system sans-serif fallback
 - **Emoji data**: `emojibase` v17 for comprehensive searchable emoji dataset
@@ -79,7 +79,7 @@ import { streamText, convertToModelMessages, type UIMessage } from "ai";
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
   const result = streamText({
-    model: anthropic("claude-haiku-4-5-20251001"),
+    model: anthropic("claude-sonnet-4-5-20250929"),
     system: "...emoji system prompt...",
     messages: await convertToModelMessages(messages),
   });

@@ -44,6 +44,11 @@
   max-width: 660px;
 }
 
+/* Fullscreen variant — for longer-form pages (e.g. booklist) */
+.fullscreen {
+  max-width: 800px;
+}
+
 /* Scrollable area — children scroll here, close button stays fixed */
 .scroll {
   overflow-y: auto;

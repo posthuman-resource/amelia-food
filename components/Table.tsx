@@ -13,6 +13,8 @@ import { WordCardFace, WordCardContent, CreateWordCardFace } from "./WordCard";
 import type { WordDefinition } from "@/data/words";
 import type { Poem } from "@/data/poems";
 import { PoemCard, PoemContent } from "./Poem";
+import type { Page } from "@/data/pages";
+import { PageCard, PageContent } from "./Page";
 import { CardStackFace, CardStackOverlay } from "./CardStack";
 import WordCreator from "./WordCreator";
 import AuthLock from "./AuthLock";
@@ -28,9 +30,16 @@ interface TableObjectData {
   label: string;
 }
 
-function buildObjects(poems: Poem[]): TableObjectData[] {
+function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
   const poemObjects = poems.map((p) => ({
     id: `poem-${p.id}`,
+    x: p.table.x,
+    y: p.table.y,
+    rotation: p.table.rotation,
+    label: p.title,
+  }));
+  const pageObjects = pages.map((p) => ({
+    id: `page-${p.id}`,
     x: p.table.x,
     y: p.table.y,
     rotation: p.table.rotation,
@@ -40,6 +49,7 @@ function buildObjects(poems: Poem[]): TableObjectData[] {
     { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
     { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
     ...poemObjects,
+    ...pageObjects,
     { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
     { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
     { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
@@ -50,10 +60,12 @@ function ObjectContent({
   id,
   words,
   poems,
+  pages,
 }: {
   id: string;
   words: WordDefinition[];
   poems: Poem[];
+  pages: Page[];
 }) {
   if (id === "emoji-game") {
     return (
@@ -74,6 +86,11 @@ function ObjectContent({
     id.startsWith("poem-") && poems.find((p) => `poem-${p.id}` === id);
   if (poemMatch) {
     return <PoemCard poem={poemMatch} />;
+  }
+  const pageMatch =
+    id.startsWith("page-") && pages.find((p) => `page-${p.id}` === id);
+  if (pageMatch) {
+    return <PageCard page={pageMatch} />;
   }
   if (id === "valentine") {
     return <ValentineCard />;
@@ -96,10 +113,12 @@ function ModalContent({
   id,
   words,
   poems,
+  pages,
 }: {
   id: string;
   words: WordDefinition[];
   poems: Poem[];
+  pages: Page[];
 }) {
   if (id === "emoji-game") {
     return <EmojiGame />;
@@ -120,17 +139,23 @@ function ModalContent({
   if (modalPoemMatch) {
     return <PoemContent poem={modalPoemMatch} />;
   }
+  const modalPageMatch =
+    id.startsWith("page-") && pages.find((p) => `page-${p.id}` === id);
+  if (modalPageMatch) {
+    return <PageContent page={modalPageMatch} />;
+  }
   return null;
 }
 
 interface TableProps {
   words?: WordDefinition[];
   poems?: Poem[];
+  pages?: Page[];
 }
 
 const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
 
-export default function Table({ words, poems }: TableProps) {
+export default function Table({ words, poems, pages }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
   const mounted = useMounted();
@@ -141,7 +166,7 @@ export default function Table({ words, poems }: TableProps) {
   const allWords = [...(words ?? []), ...newWords];
 
   const [creatingWord, setCreatingWord] = useState(false);
-  const objects = buildObjects(poems ?? []);
+  const objects = buildObjects(poems ?? [], pages ?? []);
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -189,6 +214,7 @@ export default function Table({ words, poems }: TableProps) {
                   id={obj.id}
                   words={allWords}
                   poems={poems ?? []}
+                  pages={pages ?? []}
                 />
               </TableObject>
             ))}
@@ -236,7 +262,11 @@ export default function Table({ words, poems }: TableProps) {
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
             className={
-              activeObject?.startsWith("poem-") ? modalStyles.wide : undefined
+              activeObject?.startsWith("poem-")
+                ? modalStyles.wide
+                : activeObject?.startsWith("page-")
+                  ? modalStyles.fullscreen
+                  : undefined
             }
           >
             {activeObject && (
@@ -244,6 +274,7 @@ export default function Table({ words, poems }: TableProps) {
                 id={activeObject}
                 words={allWords}
                 poems={poems ?? []}
+                pages={pages ?? []}
               />
             )}
           </Modal>
