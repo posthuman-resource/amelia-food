@@ -59,17 +59,18 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
   ];
 }
 
-function ObjectContent({
-  id,
-  words,
-  poems,
-  pages,
-}: {
+interface ObjectContentProps {
   id: string;
   words: WordDefinition[];
   poems: Poem[];
   pages: Page[];
-}) {
+}
+
+interface ModalContentProps extends ObjectContentProps {
+  vennEntries: VennEntry[];
+}
+
+function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
   if (id === "emoji-game") {
     return (
       <div className={styles.emojiCard}>
@@ -126,13 +127,7 @@ function ModalContent({
   poems,
   pages,
   vennEntries,
-}: {
-  id: string;
-  words: WordDefinition[];
-  poems: Poem[];
-  pages: Page[];
-  vennEntries: VennEntry[];
-}) {
+}: ModalContentProps) {
   if (id === "emoji-game") {
     return <EmojiGame />;
   }
@@ -170,7 +165,15 @@ interface TableProps {
   vennEntries?: VennEntry[];
 }
 
-const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
+const CREATE_SENTINEL: WordDefinition = {
+  id: "__create__",
+  word: "",
+  partOfSpeech: "",
+  pronunciation: "",
+  description: "",
+  parts: [],
+  literal: "",
+};
 
 export default function Table({
   words,

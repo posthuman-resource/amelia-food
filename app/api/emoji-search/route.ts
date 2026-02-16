@@ -15,10 +15,15 @@ interface EmbeddingEntry {
 // Module-scope cache — loaded once, stays in memory
 const entries: EmbeddingEntry[] = embeddingsData.entries;
 
+interface EmojiSearchBody {
+  query: string;
+  limit?: number;
+}
+
 export async function POST(req: Request) {
-  const body = await req.json();
-  const query: string = body.query?.trim();
-  const limit: number = Math.min(body.limit ?? DEFAULT_LIMIT, 80);
+  const body: EmojiSearchBody = await req.json();
+  const query = body.query?.trim();
+  const limit = Math.min(body.limit ?? DEFAULT_LIMIT, 80);
 
   if (!query || query.length < 2) {
     return Response.json({ results: [] });

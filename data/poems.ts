@@ -1,10 +1,12 @@
+import type { TablePosition } from "./types";
+
 export interface Poem {
   id: string;
   title: string;
   emoji: string;
   text: string;
   author?: string;
-  table: { x: number; y: number; rotation: number };
+  table: TablePosition;
 }
 
 export interface PoemMeta {
@@ -12,7 +14,7 @@ export interface PoemMeta {
   title: string;
   emoji: string;
   author?: string;
-  table: { x: number; y: number; rotation: number };
+  table: TablePosition;
 }
 
 export const poemMeta: PoemMeta[] = [

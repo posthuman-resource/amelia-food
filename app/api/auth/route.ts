@@ -7,7 +7,7 @@ import {
 } from "@/lib/auth";
 
 export async function POST(req: Request) {
-  const { password } = (await req.json()) as { password: string };
+  const { password }: { password: string } = await req.json();
 
   if (!verifyPassword(password)) {
     return Response.json({ error: "wrong password" }, { status: 401 });

@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useChat, type UIMessage } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Streamdown } from "streamdown";
+import { getMessageText } from "@/lib/messages";
 import Conversation from "./Conversation";
 import EmojiComposer from "./EmojiComposer";
 import EmojiPicker from "./EmojiPicker";
@@ -93,16 +94,13 @@ export default function EmojiGame() {
 
   const handleExplain = useCallback(async () => {
     // Build a labeled transcript (skip system triggers)
-    const getText = (m: UIMessage) =>
-      m.parts
-        ?.filter((p): p is { type: "text"; text: string } => p.type === "text")
-        .map((p) => p.text)
-        .join("") ?? "";
     const transcript = messages
-      .filter((m) => !getText(m).includes("Start a new emoji conversation"))
+      .filter(
+        (m) => !getMessageText(m).includes("Start a new emoji conversation"),
+      )
       .map(
         (m) =>
-          `${m.role === "assistant" ? "You (the bot)" : "Amy"}: ${getText(m)}`,
+          `${m.role === "assistant" ? "You (the bot)" : "Amy"}: ${getMessageText(m)}`,
       )
       .join("\n");
 

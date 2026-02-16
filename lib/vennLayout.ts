@@ -3,16 +3,13 @@
  * No React — runs in the browser using Canvas API for text measurement.
  */
 
-export interface VennEntry {
-  id: string;
-  text: string;
-  section: "left" | "right" | "both";
-}
+import type { VennSection, VennEntry } from "@/lib/venn";
+export type { VennEntry };
 
 export interface PlacedWord {
   id: string;
   text: string;
-  section: "left" | "right" | "both";
+  section: VennSection;
   x: number;
   y: number;
   fontSize: number;
@@ -91,7 +88,7 @@ function inRightCircle(
 function inRegion(
   x: number,
   y: number,
-  section: "left" | "right" | "both",
+  section: VennSection,
   g: CircleGeometry,
   margin = 0,
 ): boolean {
@@ -103,7 +100,7 @@ function inRegion(
 }
 
 function regionCentroid(
-  section: "left" | "right" | "both",
+  section: VennSection,
   g: CircleGeometry,
 ): { x: number; y: number } {
   if (section === "both") {
@@ -209,7 +206,7 @@ export function layoutWords(
   const placed: PlacedWord[] = [];
   const placedRects: Rect[] = [];
 
-  const sections: ("left" | "right" | "both")[] = ["both", "left", "right"];
+  const sections: VennSection[] = ["both", "left", "right"];
   const insetMargin = 6;
 
   for (const section of sections) {

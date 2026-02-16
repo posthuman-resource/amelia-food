@@ -3,9 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import styles from "./VennDiagram.module.css";
 import { layoutWords, computeCircles, type PlacedWord } from "@/lib/vennLayout";
-import type { VennEntry } from "@/lib/venn";
-
-type Section = "left" | "right" | "both";
+import type { VennEntry, VennSection } from "@/lib/venn";
 
 interface VennDiagramProps {
   entries: VennEntry[];
@@ -15,13 +13,18 @@ export default function VennDiagram({
   entries: initialEntries,
 }: VennDiagramProps) {
   const [entries, setEntries] = useState<VennEntry[]>(initialEntries);
-  const [activeInput, setActiveInput] = useState<Section | null>(null);
+  const [activeInput, setActiveInput] = useState<VennSection | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [layout, setLayout] = useState<PlacedWord[]>([]);
 
   const diagramRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // SVG circle geometry — compute from a reference size and scale via viewBox
+  const svgWidth = 600;
+  const svgHeight = 460;
+  const circles = useMemo(() => computeCircles(svgWidth, svgHeight), []);
 
   // Sync if props change (e.g. from server re-fetch)
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function VennDiagram({
     };
   }, [selectedWord]);
 
-  const handleAdd = useCallback(async (section: Section, text: string) => {
+  const handleAdd = useCallback(async (section: VennSection, text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
 
@@ -97,7 +100,7 @@ export default function VennDiagram({
   }, []);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent, section: Section) => {
+    (e: React.KeyboardEvent, section: VennSection) => {
       if (e.key === "Enter") {
         handleAdd(section, inputValue);
       } else if (e.key === "Escape") {
@@ -109,7 +112,7 @@ export default function VennDiagram({
   );
 
   const toggleInput = useCallback(
-    (section: Section) => {
+    (section: VennSection) => {
       if (activeInput === section) {
         setActiveInput(null);
         setInputValue("");
@@ -121,16 +124,11 @@ export default function VennDiagram({
     [activeInput],
   );
 
-  // SVG circle geometry — compute from a reference size and scale via viewBox
-  const svgWidth = 600;
-  const svgHeight = 460;
-  const circles = useMemo(() => computeCircles(svgWidth, svgHeight), []);
-
   return (
     <div className={styles.container}>
       {/* Add buttons */}
       <div className={styles.controls}>
-        {(["left", "both", "right"] as Section[]).map((section) => {
+        {(["left", "both", "right"] as VennSection[]).map((section) => {
           const label =
             section === "left"
               ? "+ Mike"

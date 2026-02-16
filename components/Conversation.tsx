@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import type { UIMessage } from "@ai-sdk/react";
+import { getMessageText } from "@/lib/messages";
 import styles from "./Conversation.module.css";
 
 interface ConversationProps {
@@ -25,17 +26,11 @@ export default function Conversation({
     });
   }, [messages, isLoading]);
 
-  const getText = (m: UIMessage) =>
-    m.parts
-      ?.filter((p): p is { type: "text"; text: string } => p.type === "text")
-      .map((p) => p.text)
-      .join("") ?? "";
-
   // Filter out the initial system-trigger message from the user
   const visibleMessages = messages.filter((m) => {
     if (
       m.role === "user" &&
-      getText(m).includes("Start a new emoji conversation")
+      getMessageText(m).includes("Start a new emoji conversation")
     ) {
       return false;
     }
@@ -62,7 +57,7 @@ export default function Conversation({
             message.role === "user" ? styles.user : styles.assistant
           }`}
         >
-          <div className={styles.tile}>{getText(message)}</div>
+          <div className={styles.tile}>{getMessageText(message)}</div>
         </div>
       ))}
 

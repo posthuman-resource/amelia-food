@@ -1,16 +1,18 @@
+import type { TablePosition } from "./types";
+
 export interface Page {
   id: string;
   title: string;
   emoji: string;
   text: string;
-  table: { x: number; y: number; rotation: number };
+  table: TablePosition;
 }
 
 export interface PageMeta {
   id: string;
   title: string;
   emoji: string;
-  table: { x: number; y: number; rotation: number };
+  table: TablePosition;
 }
 
 export const pageMeta: PageMeta[] = [

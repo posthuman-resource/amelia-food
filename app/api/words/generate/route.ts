@@ -1,5 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject, jsonSchema } from "ai";
+import type { WordPart } from "@/data/words";
 import {
   WORD_GENERATION_SYSTEM_PROMPT,
   wordGenerationPrompt,
@@ -14,7 +15,7 @@ const wordSchema = jsonSchema<{
     partOfSpeech: string;
     pronunciation: string;
     description: string;
-    parts: { german: string; english: string }[];
+    parts: WordPart[];
     literal: string;
   }[];
 }>({
@@ -84,8 +85,13 @@ const wordSchema = jsonSchema<{
   required: ["words"],
 });
 
+interface GenerateWordsBody {
+  feeling: string;
+  excludeWords?: string[];
+}
+
 export async function POST(req: Request) {
-  const { feeling, excludeWords } = await req.json();
+  const { feeling, excludeWords }: GenerateWordsBody = await req.json();
 
   if (!feeling || typeof feeling !== "string" || feeling.trim().length < 20) {
     return Response.json(

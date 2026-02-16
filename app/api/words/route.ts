@@ -1,8 +1,9 @@
 import { getDb } from "@/db/client";
 import { words } from "@/db/schema";
+import type { WordDefinition } from "@/data/words";
 
 export async function POST(req: Request) {
-  const word = await req.json();
+  const word: WordDefinition = await req.json();
 
   if (!word?.id || !word?.word) {
     return Response.json({ error: "Invalid word data" }, { status: 400 });

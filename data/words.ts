@@ -1,10 +1,15 @@
+export interface WordPart {
+  german: string;
+  english: string;
+}
+
 export interface WordDefinition {
   id: string;
   word: string;
   partOfSpeech: string;
   pronunciation: string;
   description: string;
-  parts: { german: string; english: string }[];
+  parts: WordPart[];
   literal: string;
 }
 

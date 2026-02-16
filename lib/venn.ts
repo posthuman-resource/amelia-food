@@ -1,10 +1,12 @@
 import { getDb } from "@/db/client";
 import { vennEntries } from "@/db/schema";
 
+export type VennSection = "left" | "right" | "both";
+
 export interface VennEntry {
   id: string;
   text: string;
-  section: "left" | "right" | "both";
+  section: VennSection;
   createdAt: string;
 }
 

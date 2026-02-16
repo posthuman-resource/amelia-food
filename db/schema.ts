@@ -1,4 +1,5 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import type { WordPart } from "@/data/words";
 
 export const vennEntries = sqliteTable("venn_entries", {
   id: text().primaryKey(),
@@ -13,8 +14,6 @@ export const words = sqliteTable("words", {
   partOfSpeech: text("part_of_speech").notNull(),
   pronunciation: text().notNull(),
   description: text().notNull(),
-  parts: text({ mode: "json" })
-    .notNull()
-    .$type<{ german: string; english: string }[]>(),
+  parts: text({ mode: "json" }).notNull().$type<WordPart[]>(),
   literal: text().notNull(),
 });

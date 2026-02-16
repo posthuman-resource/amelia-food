@@ -11,8 +11,16 @@ export const maxDuration = 30;
 
 const openai = new OpenAI();
 
+interface WordAudioBody {
+  word: string;
+  definition?: string;
+  literal?: string;
+  pronounceOnly?: boolean;
+}
+
 export async function POST(req: Request) {
-  const { word, definition, literal, pronounceOnly } = await req.json();
+  const { word, definition, literal, pronounceOnly }: WordAudioBody =
+    await req.json();
 
   // Pronounce just the word
   if (pronounceOnly) {
@@ -29,6 +37,13 @@ export async function POST(req: Request) {
     return Response.json({
       audio: response.choices[0].message.audio?.data ?? "",
     });
+  }
+
+  if (!definition || !literal) {
+    return Response.json(
+      { error: "definition and literal are required" },
+      { status: 400 },
+    );
   }
 
   // Generate a sentence that uses the word naturally
