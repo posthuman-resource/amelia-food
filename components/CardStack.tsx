@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./CardStack.module.css";
 import { useMounted } from "../hooks/useMounted";
+import { useScrollLock } from "../hooks/useScrollLock";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { useCloseAnimation } from "../hooks/useCloseAnimation";
 
 interface CardStackItem {
   id: string;
@@ -52,40 +54,10 @@ export function CardStackOverlay<T extends CardStackItem>({
   ariaLabel,
 }: CardStackOverlayProps<T>) {
   const mounted = useMounted();
-  const [closing, setClosing] = useState(false);
+  const { closing, handleClose } = useCloseAnimation(onClose);
 
-  const handleClose = useCallback(() => {
-    setClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 200);
-  }, [onClose]);
-
-  // Escape key
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") handleClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleClose]);
-
-  // Prevent body scroll
-  useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      window.scrollTo(0, scrollY);
-    };
-  }, []);
+  useScrollLock(true);
+  useEscapeKey(handleClose);
 
   if (!mounted) return null;
 

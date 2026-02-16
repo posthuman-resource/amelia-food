@@ -20,6 +20,24 @@
   animation: overlayOut 200ms ease-in forwards;
 }
 
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 /* Content panel — paper card brought closer */
 .content {
   position: relative;
@@ -105,24 +123,6 @@
 /* ========================================
    Animations
    ======================================== */
-
-@keyframes overlayIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes overlayOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
 
 @keyframes contentIn {
   from {

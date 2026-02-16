@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
 import { useMounted } from "../hooks/useMounted";
+import { useScrollLock } from "../hooks/useScrollLock";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { useCloseAnimation } from "../hooks/useCloseAnimation";
 
 interface ModalProps {
   open: boolean;
@@ -21,35 +24,12 @@ export default function Modal({
   className,
 }: ModalProps) {
   const mounted = useMounted();
-  const [closing, setClosing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const { closing, handleClose } = useCloseAnimation(onClose);
 
-  const handleClose = useCallback(() => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      onClose();
-    }, 200);
-  }, [onClose]);
-
-  // Prevent body scroll when open
-  useEffect(() => {
-    if (!open) return;
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      window.scrollTo(0, scrollY);
-    };
-  }, [open]);
+  useScrollLock(open);
+  useEscapeKey(handleClose, open);
 
   // Focus management
   useEffect(() => {
@@ -62,18 +42,6 @@ export default function Modal({
       previousFocusRef.current?.focus();
     };
   }, [open]);
-
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, handleClose]);
 
   // Focus trap
   useEffect(() => {

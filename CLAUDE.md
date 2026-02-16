@@ -9,10 +9,11 @@ A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy).
 - **Framework**: Next.js 16 (App Router) with React 19
 - **AI**: Vercel AI SDK v6 (`ai`, `@ai-sdk/anthropic`, `@ai-sdk/react`) — use for ALL AI interactions
 - **Anthropic model**: `claude-sonnet-4-5-20250929` for the emoji game (better instruction-following)
+- **OpenAI**: `openai` + `@ai-sdk/openai` — embeddings (`text-embedding-3-small`) and TTS (`gpt-audio`)
+- **Markdown rendering**: `streamdown` — streaming AI explanation text
 - **Styling**: CSS modules + CSS variables in globals.css — **NO TAILWIND** (remove it)
-- **Fonts**: `next/font/google` — Lora (display serif), Caveat (handwritten), system sans-serif fallback
+- **Fonts**: `next/font/google` — Lora (display serif), Caveat (handwritten), Courier Prime (monospace), system sans-serif fallback
 - **Emoji data**: `emojibase` v17 for comprehensive searchable emoji dataset
-- **API key**: `ANTHROPIC_API_KEY` already in `.env`
 
 ## Design Language — "Warm Tactile Whimsy"
 
@@ -33,25 +34,59 @@ A personal website at `amelia.food` — a Valentine's Day gift for Amelia (Amy).
 
 ```
 app/
-  layout.tsx              — Root layout, fonts, global styles
-  page.tsx                — The Table homepage
-  globals.css             — CSS variables, textures, base styles
-  api/chat/route.ts       — Vercel AI SDK streaming endpoint
-components/
-  Table.tsx + Table.module.css
-  TableObject.tsx + TableObject.module.css
-  EmojiGame.tsx + EmojiGame.module.css
-  EmojiPicker.tsx + EmojiPicker.module.css
-  EmojiComposer.tsx + EmojiComposer.module.css
-  Conversation.tsx + Conversation.module.css
-  Valentine.tsx + Valentine.module.css
-  Modal.tsx + Modal.module.css
+  layout.tsx, page.tsx, globals.css
+  api/
+    auth/route.ts             — Password auth (HMAC tokens)
+    chat/route.ts             — Emoji game streaming (Anthropic)
+    emoji-search/route.ts     — Semantic emoji search (OpenAI embeddings)
+    explain/route.ts          — Explain emoji conversation (Anthropic)
+    words/route.ts            — Save generated word to DB
+    words/generate/route.ts   — Generate German compound words (Anthropic)
+    word-audio/route.ts       — TTS pronunciation (OpenAI)
+    venn/route.ts             — Create Venn entry
+    venn/[id]/route.ts        — Delete Venn entry
+components/                   — Each with .tsx + .module.css
+  Table, TableObject          — Main layout + draggable objects
+  Modal                       — Reusable dialog overlay
+  CardStack                   — Stacked cards on table + fanned overlay
+  EmojiGame, EmojiPicker,
+    EmojiComposer, Conversation — Emoji chat feature
+  WordCard, WordCreator       — German compound word feature
+  Poem, Page                  — Content display (markdown)
+  VennDiagram                 — Interactive Venn diagram
+  Valentine, Welcome          — Gift card + welcome letter
+  AuthLock                    — Password lock overlay
+  Neko                        — Pixel cat animation
+hooks/
+  useMediaQuery.ts            — SSR-safe media query
+  useMounted.ts               — SSR-safe mounted flag
+  useScrollLock.ts            — Prevent body scroll (overlays)
+  useEscapeKey.ts             — Escape key listener
+  useCloseAnimation.ts        — Animated close with delay
+  useTabTitle.ts              — Animated emoji title bar (Web Worker)
 data/
-  emoji.ts                — Processed emoji dataset with search metadata
+  types.ts                    — Shared types (TablePosition)
+  emoji.ts                    — Processed emoji dataset
+  emoji-embeddings.json       — Vector embeddings for semantic search
+  words.ts                    — Seeded word definitions
+  pages.ts + pages/*.md       — Page metadata + markdown content
+  poems.ts + poems/*.md       — Poem metadata + markdown content
 lib/
-  anthropic.ts            — Server-side AI helper (Vercel AI SDK)
-public/
-  assets/textures/        — Generated SVG/CSS textures
+  auth.ts                     — HMAC token auth + password verification
+  messages.ts                 — AI message text extraction
+  prompts.ts                  — All LLM system prompts (single source of truth)
+  pages.ts                    — Load pages from filesystem
+  poems.ts                    — Load poems from filesystem
+  words.ts                    — Load words from database
+  venn.ts                     — Venn diagram DB queries
+  vennLayout.ts               — Word-packing layout algorithm (SAT collision)
+db/
+  schema.ts                   — Drizzle schema (words, vennEntries tables)
+  client.ts                   — SQLite connection (singleton)
+  seed.ts                     — Idempotent data seeding
+  migrations/                 — Generated SQL migrations
+scripts/
+  generate-emoji-embeddings.ts — Batch emoji vector generation (OpenAI)
 ```
 
 ## LLM Personality (all contexts)
@@ -102,6 +137,22 @@ const { messages, sendMessage } = useChat({
 - **Apply migrations**: `npm run db:migrate` (runs `drizzle-kit migrate`) — run on every deploy
 - **Seeding**: `npm run db:seed` (runs `tsx db/seed.ts`)
 - **NEVER use `drizzle-kit push`** — it applies schema changes directly without a migration file, making them non-repeatable on production. There is no `db:push` script and one should never be added.
+
+## Environment Variables
+
+- `ANTHROPIC_API_KEY` — Required. Anthropic API access for chat/generation.
+- `OPENAI_API_KEY` — Required. OpenAI embeddings + TTS.
+- `SITE_PASSWORD` — Required. Single password protecting the site.
+- `DATABASE_PATH` — Optional. SQLite DB path (default: `./data/amelia.db`).
+
+## Conventions
+
+- **Overlay components**: Use `useScrollLock`, `useEscapeKey`, `useCloseAnimation` hooks
+- **Card pattern**: Export `{Name}Face` + `{Name}Content` for table object + modal content
+- **CSS**: Use CSS variables from globals.css — never hardcode palette colors
+- **Textures**: Use `.texture-paper` / `.texture-wood` global classes
+- **Animations**: Put shared keyframes in `globals.css`, component-specific ones stay local
+- **API routes**: Always wrap in try-catch, return descriptive error JSON
 
 ## Testing
 

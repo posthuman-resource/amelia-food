@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { WordDefinition } from "@/data/words";
 import styles from "./WordCreator.module.css";
+import { useMounted } from "../hooks/useMounted";
+import { useScrollLock } from "../hooks/useScrollLock";
+import { useEscapeKey } from "../hooks/useEscapeKey";
+import { useCloseAnimation } from "../hooks/useCloseAnimation";
 
 type Step = "describe" | "pick" | "saving";
 
@@ -13,8 +17,7 @@ interface WordCreatorProps {
 }
 
 export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
-  const [mounted, setMounted] = useState(false);
-  const [closing, setClosing] = useState(false);
+  const mounted = useMounted();
   const [step, setStep] = useState<Step>("describe");
   const [feeling, setFeeling] = useState("");
   const [words, setWords] = useState<WordDefinition[]>([]);
@@ -22,41 +25,10 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
   const [error, setError] = useState<string | null>(null);
   const excludeRef = useRef<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { closing, handleClose } = useCloseAnimation(onClose);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Scroll lock
-  useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      window.scrollTo(0, scrollY);
-    };
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setClosing(true);
-    setTimeout(() => onClose(), 200);
-  }, [onClose]);
-
-  // Escape key
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") handleClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleClose]);
+  useScrollLock(true);
+  useEscapeKey(handleClose);
 
   const generate = useCallback(async (text: string) => {
     setLoading(true);
@@ -151,7 +123,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
 
       {step === "describe" && (
         <div className={styles.step} data-neko-block="true">
-          <div className={styles.card}>
+          <div className={`${styles.card} texture-paper`}>
             <h2 className={styles.heading}>what does it feel like?</h2>
             <p className={styles.subtext}>
               describe a feeling you don&apos;t have a word for
@@ -217,7 +189,7 @@ export default function WordCreator({ onComplete, onClose }: WordCreatorProps) {
                 {words.map((word) => (
                   <button
                     key={word.id}
-                    className={styles.wordOption}
+                    className={`${styles.wordOption} texture-paper`}
                     onClick={() => handlePick(word)}
                     type="button"
                   >
