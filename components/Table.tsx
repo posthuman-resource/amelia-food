@@ -184,6 +184,7 @@ export default function Table({
   const mounted = useMounted();
   const router = useRouter();
 
+  const tableRef = useRef<HTMLDivElement>(null);
   const objectsContainerRef = useRef<HTMLDivElement>(null);
   const unlocked = !!(words && poems);
   const [newWords, setNewWords] = useState<WordDefinition[]>([]);
@@ -197,7 +198,10 @@ export default function Table({
   const tabTitle = useTabTitle(unlocked);
 
   return (
-    <div className={`${styles.table} texture-wood texture-noise`}>
+    <div
+      ref={tableRef}
+      className={`${styles.table} texture-wood texture-noise`}
+    >
       <title>{tabTitle}</title>
       {/* Subtle "Amy" inscription — always visible */}
       <div className={styles.inscription}>Amy</div>
@@ -207,8 +211,8 @@ export default function Table({
       {unlocked && (
         <>
           {/* Table objects */}
+          <Neko tableRef={tableRef} />
           <div ref={objectsContainerRef} className={styles.objectsContainer}>
-            <Neko tableRef={objectsContainerRef} />
             {objects.map((obj, index) => (
               <TableObject
                 key={obj.id}
