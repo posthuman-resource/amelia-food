@@ -1,0 +1,256 @@
+/* VennDiagram — "Improbable" interactive diagram */
+
+.container {
+  width: 100%;
+}
+
+/* ========================================
+   Controls — Add buttons row
+   ======================================== */
+
+.controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.addButton {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1.5px dashed rgba(44, 40, 37, 0.2);
+  background: rgba(44, 40, 37, 0.03);
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .addButton:hover {
+    color: var(--color-plum);
+    border-color: var(--color-plum);
+    background: rgba(107, 45, 91, 0.05);
+  }
+}
+
+.addButton:active {
+  background: rgba(107, 45, 91, 0.08);
+}
+
+.addButtonActive {
+  color: var(--color-plum);
+  border-color: var(--color-plum);
+  border-style: solid;
+  background: rgba(107, 45, 91, 0.06);
+}
+
+/* Input that appears below the active add button */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: fadeSlideIn 200ms ease-out;
+}
+
+.input {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: rgba(44, 40, 37, 0.04);
+  border: 1.5px solid rgba(44, 40, 37, 0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  width: 140px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input:focus {
+  border-color: var(--color-plum);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   Diagram area
+   ======================================== */
+
+.diagramArea {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 600 / 460;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.svgLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wordLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ========================================
+   Words
+   ======================================== */
+
+.word {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  white-space: nowrap;
+  user-select: none;
+  transition: opacity var(--transition-fast);
+  /* Center the word on its coordinate */
+  transform-origin: center center;
+}
+
+@media (hover: hover) {
+  .word:hover {
+    opacity: 0.7;
+  }
+}
+
+.wordSelected {
+  opacity: 0.85;
+}
+
+.removeButton {
+  position: absolute;
+  top: -10px;
+  right: -14px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-plum);
+  color: var(--color-surface-light);
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(44, 40, 37, 0.2);
+  animation: gentlePop 150ms ease-out;
+}
+
+@media (hover: hover) {
+  .removeButton:hover {
+    background: var(--color-burgundy);
+  }
+}
+
+/* ========================================
+   Labels below circles
+   ======================================== */
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10%;
+  margin-top: var(--space-sm);
+}
+
+.label {
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+/* ========================================
+   Empty state
+   ======================================== */
+
+.emptyHint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .controls {
+    gap: var(--space-sm);
+  }
+
+  .addButton {
+    font-size: 1rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .input {
+    width: 110px;
+    font-size: 0.85rem;
+  }
+
+  .label {
+    font-size: 1.2rem;
+  }
+
+  .diagramArea {
+    aspect-ratio: 600 / 460;
+  }
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes gentlePop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

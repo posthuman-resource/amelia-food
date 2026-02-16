@@ -17,6 +17,8 @@ import type { Page } from "@/data/pages";
 import { PageCard, PageContent } from "./Page";
 import { CardStackFace, CardStackOverlay } from "./CardStack";
 import WordCreator from "./WordCreator";
+import VennDiagram from "./VennDiagram";
+import type { VennEntry } from "@/lib/venn";
 import AuthLock from "./AuthLock";
 import TableCats from "./TableCats";
 import { useTabTitle } from "../hooks/useTabTitle";
@@ -52,6 +54,7 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     ...pageObjects,
     { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
     { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
+    { id: "venn-diagram", x: 62, y: 80, rotation: -1, label: "Improbable" },
     { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
   ];
 }
@@ -103,6 +106,14 @@ function ObjectContent({
       </div>
     );
   }
+  if (id === "venn-diagram") {
+    return (
+      <div className={styles.vennCard}>
+        <span className={styles.vennIcon}>🧩</span>
+        <p className={styles.cardLabel}>improbable</p>
+      </div>
+    );
+  }
   if (id === "word-stack") {
     return <CardStackFace count={words.length} icon="Aa" label="wortschatz" />;
   }
@@ -114,11 +125,13 @@ function ModalContent({
   words,
   poems,
   pages,
+  vennEntries,
 }: {
   id: string;
   words: WordDefinition[];
   poems: Poem[];
   pages: Page[];
+  vennEntries: VennEntry[];
 }) {
   if (id === "emoji-game") {
     return <EmojiGame />;
@@ -128,6 +141,9 @@ function ModalContent({
   }
   if (id === "valentine") {
     return <ValentineCardContent />;
+  }
+  if (id === "venn-diagram") {
+    return <VennDiagram entries={vennEntries} />;
   }
   const wordMatch =
     id.startsWith("word-") && words.find((w) => `word-${w.id}` === id);
@@ -151,11 +167,17 @@ interface TableProps {
   words?: WordDefinition[];
   poems?: Poem[];
   pages?: Page[];
+  vennEntries?: VennEntry[];
 }
 
 const CREATE_SENTINEL = { id: "__create__" } as WordDefinition;
 
-export default function Table({ words, poems, pages }: TableProps) {
+export default function Table({
+  words,
+  poems,
+  pages,
+  vennEntries: initialVennEntries,
+}: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
   const mounted = useMounted();
@@ -163,6 +185,7 @@ export default function Table({ words, poems, pages }: TableProps) {
 
   const unlocked = !!(words && poems);
   const [newWords, setNewWords] = useState<WordDefinition[]>([]);
+  const allVennEntries = initialVennEntries ?? [];
   const allWords = [...(words ?? []), ...newWords];
 
   const [creatingWord, setCreatingWord] = useState(false);
@@ -262,11 +285,13 @@ export default function Table({ words, poems, pages }: TableProps) {
             onClose={() => setActiveObject(null)}
             ariaLabel={activeData?.label}
             className={
-              activeObject?.startsWith("poem-")
-                ? modalStyles.wide
-                : activeObject?.startsWith("page-")
-                  ? modalStyles.fullscreen
-                  : undefined
+              activeObject === "venn-diagram"
+                ? modalStyles.vennWide
+                : activeObject?.startsWith("poem-")
+                  ? modalStyles.wide
+                  : activeObject?.startsWith("page-")
+                    ? modalStyles.fullscreen
+                    : undefined
             }
           >
             {activeObject && (
@@ -275,6 +300,7 @@ export default function Table({ words, poems, pages }: TableProps) {
                 words={allWords}
                 poems={poems ?? []}
                 pages={pages ?? []}
+                vennEntries={allVennEntries}
               />
             )}
           </Modal>

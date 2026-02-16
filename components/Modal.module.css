@@ -49,6 +49,16 @@
   max-width: 800px;
 }
 
+/* Venn wide variant — needs horizontal space for the diagram */
+.vennWide {
+  max-width: 960px;
+  max-height: calc(100vh - var(--space-xl));
+}
+
+.vennWide .scroll {
+  padding: var(--space-lg) var(--space-xl);
+}
+
 /* Scrollable area — children scroll here, close button stays fixed */
 .scroll {
   overflow-y: auto;

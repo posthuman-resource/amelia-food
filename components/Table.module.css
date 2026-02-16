@@ -75,6 +75,17 @@
   margin: 0;
 }
 
+/* Venn diagram card face */
+.vennCard {
+  text-align: center;
+}
+
+.vennIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
 /* Lock card face */
 .lockCard {
   text-align: center;
