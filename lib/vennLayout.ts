@@ -39,7 +39,7 @@ const WORD_COLORS = [
 ];
 
 const ROTATION_ANGLES = [0, 0, 0, -18, 18, -30, 30];
-const OVERLAP_RATIO = 0.66;
+const OVERLAP_RATIO = 0.69;
 const PADDING = 3; // px between words
 
 function hashString(s: string): number {
