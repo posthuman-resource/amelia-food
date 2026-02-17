@@ -94,8 +94,8 @@ function inRegion(
 ): boolean {
   const inL = inLeftCircle(x, y, g, margin);
   const inR = inRightCircle(x, y, g, margin);
-  if (section === "left") return inL && !inR;
-  if (section === "right") return !inL && inR;
+  if (section === "left") return inL && !inRightCircle(x, y, g, -margin);
+  if (section === "right") return !inLeftCircle(x, y, g, -margin) && inR;
   return inL && inR; // both
 }
 
