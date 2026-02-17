@@ -154,6 +154,18 @@ const { messages, sendMessage } = useChat({
 - **Animations**: Put shared keyframes in `globals.css`, component-specific ones stay local
 - **API routes**: Always wrap in try-catch, return descriptive error JSON
 
+## Production (Render.com)
+
+- **URL**: https://amelia.food
+- **Host**: Render.com (personal account)
+- **SSH**: `ssh srv-d66ir00gjchc7395c830@ssh.oregon.render.com`
+- **SSH key**: Stored in 1Password as **"render.com personal SSH key"** (Ed25519). This key works for any machine on the personal Render account.
+- **Retrieving the key for SSH access**:
+  1. Open 1Password, find "render.com personal SSH key"
+  2. Save the private key to `~/.ssh/render_ed25519`
+  3. `chmod 600 ~/.ssh/render_ed25519`
+  4. `ssh -i ~/.ssh/render_ed25519 srv-d66ir00gjchc7395c830@ssh.oregon.render.com`
+
 ## Testing
 
 - Run `npm run dev` and verify at http://localhost:3000

@@ -37,7 +37,7 @@ const WORD_COLORS = [
 
 const ROTATION_ANGLES = [0, 0, 0, -18, 18, -30, 30];
 const OVERLAP_RATIO = 0.69;
-const PADDING = 3; // px between words
+const PADDING = 2; // px between words
 
 function hashString(s: string): number {
   let h = 0;
@@ -217,12 +217,12 @@ export function layoutWords(
 
   // Global font cap based on total entries — scales down when diagram is dense
   const totalCount = entries.length;
-  const globalCap = Math.min(28, Math.max(10, 200 / Math.sqrt(totalCount)));
+  const globalCap = Math.min(22, Math.max(8, 150 / Math.sqrt(totalCount)));
 
-  // Adaptive parameters for dense layouts
-  const minFontSize = totalCount > 40 ? 6 : 8;
-  const padding = totalCount > 30 ? 2 : PADDING;
-  const spiralSteps = totalCount > 50 ? 1200 : 800;
+  // Packing parameters
+  const minFontSize = 6;
+  const padding = PADDING;
+  const spiralSteps = 1200;
 
   for (const section of sections) {
     const sectionEntries = entries
@@ -237,7 +237,7 @@ export function layoutWords(
     // crescents are ~39% each — and crescents are harder to pack (thin curved shape)
     const regionScale = section === "both" ? 0.7 : 0.55;
     const sectionCap = Math.min(
-      28,
+      22,
       Math.max(
         minFontSize,
         (g.r * regionScale) / Math.sqrt(sectionEntries.length),
@@ -262,7 +262,7 @@ export function layoutWords(
         for (
           let fontSize = maxFontSize;
           fontSize >= minFontSize;
-          fontSize -= 1
+          fontSize -= 0.5
         ) {
           const textWidth = measureText(entry.text, fontSize);
           const hw = (textWidth + padding) / 2;
@@ -271,7 +271,7 @@ export function layoutWords(
           // Spiral search from centroid
           for (let t = 0; t < spiralSteps; t++) {
             const theta = t * 0.25;
-            const rSpiral = t * 1.0;
+            const rSpiral = t * 0.7;
             const cx = centroid.x + rSpiral * Math.cos(theta);
             const cy = centroid.y + rSpiral * Math.sin(theta);
 
