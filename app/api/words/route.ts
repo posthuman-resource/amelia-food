@@ -1,8 +1,12 @@
 import { getDb } from "@/db/client";
 import { words } from "@/db/schema";
 import type { WordDefinition } from "@/data/words";
+import { requireAuth } from "@/lib/auth";
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const word: WordDefinition = await req.json();
 
   if (!word?.id || !word?.word) {

@@ -1,4 +1,4 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { WordPart } from "@/data/words";
 
 export const vennEntries = sqliteTable("venn_entries", {
@@ -6,6 +6,12 @@ export const vennEntries = sqliteTable("venn_entries", {
   text: text().notNull(),
   section: text().notNull(), // "left" | "right" | "both"
   createdAt: text("created_at").notNull(),
+});
+
+export const rateLimits = sqliteTable("rate_limits", {
+  ip: text().primaryKey(),
+  attempts: integer().notNull(),
+  windowStart: text("window_start").notNull(),
 });
 
 export const words = sqliteTable("words", {

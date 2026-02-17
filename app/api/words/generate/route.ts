@@ -5,6 +5,7 @@ import {
   WORD_GENERATION_SYSTEM_PROMPT,
   wordGenerationPrompt,
 } from "@/lib/prompts";
+import { requireAuth } from "@/lib/auth";
 
 export const maxDuration = 60;
 
@@ -91,6 +92,9 @@ interface GenerateWordsBody {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const { feeling, excludeWords }: GenerateWordsBody = await req.json();
 
   if (!feeling || typeof feeling !== "string" || feeling.trim().length < 20) {

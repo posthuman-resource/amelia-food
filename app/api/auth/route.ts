@@ -2,11 +2,15 @@ import { cookies } from "next/headers";
 import {
   verifyPassword,
   createToken,
+  checkRateLimit,
   COOKIE_NAME,
   MAX_AGE_SECONDS,
 } from "@/lib/auth";
 
 export async function POST(req: Request) {
+  const limited = checkRateLimit(req);
+  if (limited) return limited;
+
   const { password }: { password: string } = await req.json();
 
   if (!verifyPassword(password)) {

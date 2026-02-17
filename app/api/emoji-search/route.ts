@@ -1,6 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { embed, cosineSimilarity } from "ai";
 import embeddingsData from "@/data/emoji-embeddings.json";
+import { requireAuth } from "@/lib/auth";
 
 const MODEL_ID = "text-embedding-3-small";
 const DIMENSIONS = 256;
@@ -21,6 +22,9 @@ interface EmojiSearchBody {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const body: EmojiSearchBody = await req.json();
   const query = body.query?.trim();
   const limit = Math.min(body.limit ?? DEFAULT_LIMIT, 80);

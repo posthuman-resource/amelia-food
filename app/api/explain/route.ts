@@ -1,10 +1,14 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText, type ModelMessage } from "ai";
 import { EXPLAIN_SYSTEM_PROMPT } from "@/lib/prompts";
+import { requireAuth } from "@/lib/auth";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const { messages }: { messages: ModelMessage[] } = await req.json();
 
   const result = streamText({

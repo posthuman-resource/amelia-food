@@ -6,6 +6,7 @@ import {
   wordPronouncePrompt,
   wordSpeakPrompt,
 } from "@/lib/prompts";
+import { requireAuth } from "@/lib/auth";
 
 export const maxDuration = 30;
 
@@ -19,6 +20,9 @@ interface WordAudioBody {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const { word, definition, literal, pronounceOnly }: WordAudioBody =
     await req.json();
 

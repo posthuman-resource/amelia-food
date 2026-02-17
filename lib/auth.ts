@@ -1,8 +1,13 @@
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "crypto";
+import { getDb } from "@/db/client";
+import { rateLimits } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 const COOKIE_NAME = "amelia-auth";
 const MAX_AGE_SECONDS = 30 * 24 * 60 * 60; // 30 days
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
 function getPassword(): string {
   const pw = process.env.SITE_PASSWORD;
@@ -57,6 +62,64 @@ export function verifyPassword(password: string): boolean {
   } catch {
     return false;
   }
+}
+
+export async function requireAuth(): Promise<Response | null> {
+  const authed = await isAuthenticated();
+  if (!authed) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return null;
+}
+
+function getClientIp(req: Request): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return "unknown";
+}
+
+export function checkRateLimit(req: Request): Response | null {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const db = getDb();
+
+  const row = db.select().from(rateLimits).where(eq(rateLimits.ip, ip)).get();
+
+  if (row) {
+    const windowStart = Number(row.windowStart);
+    if (now - windowStart > RATE_LIMIT_WINDOW_MS) {
+      // Window expired — reset
+      db.update(rateLimits)
+        .set({ attempts: 1, windowStart: now.toString() })
+        .where(eq(rateLimits.ip, ip))
+        .run();
+      return null;
+    }
+
+    if (row.attempts >= RATE_LIMIT_MAX) {
+      const retryAfter = Math.ceil(
+        (RATE_LIMIT_WINDOW_MS - (now - windowStart)) / 1000,
+      );
+      return Response.json(
+        { error: "Too many attempts. Try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": retryAfter.toString() },
+        },
+      );
+    }
+
+    db.update(rateLimits)
+      .set({ attempts: row.attempts + 1 })
+      .where(eq(rateLimits.ip, ip))
+      .run();
+  } else {
+    db.insert(rateLimits)
+      .values({ ip, attempts: 1, windowStart: now.toString() })
+      .run();
+  }
+
+  return null;
 }
 
 export { COOKIE_NAME, MAX_AGE_SECONDS };

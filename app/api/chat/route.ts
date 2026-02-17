@@ -1,10 +1,14 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText, convertToModelMessages, type UIMessage } from "ai";
 import { EMOJI_SYSTEM_PROMPT } from "@/lib/prompts";
+import { requireAuth } from "@/lib/auth";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const denied = await requireAuth();
+  if (denied) return denied;
+
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = streamText({
