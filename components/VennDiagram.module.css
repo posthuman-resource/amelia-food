@@ -213,6 +213,95 @@
 }
 
 /* ========================================
+   Hidden entries overflow
+   ======================================== */
+
+.hiddenToggle {
+  display: block;
+  margin: var(--space-sm) auto 0;
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: none;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .hiddenToggle:hover {
+    color: var(--color-plum);
+    opacity: 1;
+  }
+}
+
+.hiddenList {
+  margin-top: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(44, 40, 37, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(44, 40, 37, 0.08);
+  animation: fadeSlideIn 200ms ease-out;
+}
+
+.hiddenSection {
+  margin-bottom: var(--space-sm);
+}
+
+.hiddenSection:last-child {
+  margin-bottom: 0;
+}
+
+.hiddenSectionLabel {
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.hiddenItems {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-xs) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.hiddenItem {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-xs);
+  background: rgba(44, 40, 37, 0.05);
+  border-radius: var(--radius-sm);
+}
+
+.hiddenRemove {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .hiddenRemove:hover {
+    opacity: 1;
+    color: var(--color-plum);
+  }
+}
+
+/* ========================================
    Mobile
    ======================================== */
 

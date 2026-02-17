@@ -17,6 +17,8 @@ export default function VennDiagram({
   const [inputValue, setInputValue] = useState("");
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [layout, setLayout] = useState<PlacedWord[]>([]);
+  const [hiddenEntries, setHiddenEntries] = useState<VennEntry[]>([]);
+  const [showHidden, setShowHidden] = useState(false);
 
   const diagramRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,8 +35,9 @@ export default function VennDiagram({
 
   // Run layout in the fixed SVG coordinate space
   const runLayout = useCallback(() => {
-    const result = layoutWords(entries, svgWidth, svgHeight);
-    setLayout(result);
+    const { placed, hidden } = layoutWords(entries, svgWidth, svgHeight);
+    setLayout(placed);
+    setHiddenEntries(hidden);
   }, [entries]);
 
   useEffect(() => {
@@ -249,6 +252,55 @@ export default function VennDiagram({
         <span className={styles.label}>Mike</span>
         <span className={styles.label}>Amy</span>
       </div>
+
+      {/* Hidden entries overflow */}
+      {hiddenEntries.length > 0 && (
+        <>
+          <button
+            className={styles.hiddenToggle}
+            onClick={() => setShowHidden((v) => !v)}
+            type="button"
+          >
+            {showHidden ? "hide" : `and ${hiddenEntries.length} more\u2026`}
+          </button>
+          {showHidden && (
+            <div className={styles.hiddenList}>
+              {(["left", "both", "right"] as VennSection[]).map((section) => {
+                const sectionHidden = hiddenEntries.filter(
+                  (e) => e.section === section,
+                );
+                if (sectionHidden.length === 0) return null;
+                const label =
+                  section === "left"
+                    ? "Mike"
+                    : section === "right"
+                      ? "Amy"
+                      : "Both";
+                return (
+                  <div key={section} className={styles.hiddenSection}>
+                    <span className={styles.hiddenSectionLabel}>{label}</span>
+                    <ul className={styles.hiddenItems}>
+                      {sectionHidden.map((entry) => (
+                        <li key={entry.id} className={styles.hiddenItem}>
+                          <span>{entry.text}</span>
+                          <button
+                            className={styles.hiddenRemove}
+                            onClick={() => handleRemove(entry.id)}
+                            type="button"
+                            aria-label={`Remove ${entry.text}`}
+                          >
+                            &times;
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

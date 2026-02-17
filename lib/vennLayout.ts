@@ -194,20 +194,35 @@ function measureText(text: string, fontSize: number): number {
   return ctx.measureText(text).width;
 }
 
+export interface LayoutResult {
+  placed: PlacedWord[];
+  hidden: VennEntry[];
+}
+
 export function layoutWords(
   entries: VennEntry[],
   containerWidth: number,
   containerHeight: number,
-): PlacedWord[] {
+): LayoutResult {
   if (entries.length === 0 || containerWidth === 0 || containerHeight === 0)
-    return [];
+    return { placed: [], hidden: [] };
 
   const g = computeCircles(containerWidth, containerHeight);
   const placed: PlacedWord[] = [];
+  const hidden: VennEntry[] = [];
   const placedRects: Rect[] = [];
 
   const sections: VennSection[] = ["both", "left", "right"];
   const insetMargin = 6;
+
+  // Global font cap based on total entries — scales down when diagram is dense
+  const totalCount = entries.length;
+  const globalCap = Math.min(28, Math.max(10, 200 / Math.sqrt(totalCount)));
+
+  // Adaptive parameters for dense layouts
+  const minFontSize = totalCount > 40 ? 6 : 8;
+  const padding = totalCount > 30 ? 2 : PADDING;
+  const spiralSteps = totalCount > 50 ? 1200 : 800;
 
   for (const section of sections) {
     const sectionEntries = entries
@@ -217,10 +232,18 @@ export function layoutWords(
     if (sectionEntries.length === 0) continue;
 
     const centroid = regionCentroid(section, g);
-    const maxFontSize = Math.min(
+
+    // Region-aware scaling: at OVERLAP_RATIO=0.69 the lens is ~61% of a circle,
+    // crescents are ~39% each — and crescents are harder to pack (thin curved shape)
+    const regionScale = section === "both" ? 0.7 : 0.55;
+    const sectionCap = Math.min(
       28,
-      Math.max(12, (g.r * 0.9) / Math.sqrt(sectionEntries.length)),
+      Math.max(
+        minFontSize,
+        (g.r * regionScale) / Math.sqrt(sectionEntries.length),
+      ),
     );
+    const maxFontSize = Math.min(globalCap, sectionCap);
 
     for (let wi = 0; wi < sectionEntries.length; wi++) {
       const entry = sectionEntries[wi];
@@ -236,13 +259,17 @@ export function layoutWords(
         if (didPlace) break;
         const rotationRad = (rotationDeg * Math.PI) / 180;
 
-        for (let fontSize = maxFontSize; fontSize >= 8; fontSize -= 1) {
+        for (
+          let fontSize = maxFontSize;
+          fontSize >= minFontSize;
+          fontSize -= 1
+        ) {
           const textWidth = measureText(entry.text, fontSize);
-          const hw = (textWidth + PADDING) / 2;
-          const hh = (fontSize * 1.3 + PADDING) / 2;
+          const hw = (textWidth + padding) / 2;
+          const hh = (fontSize * 1.3 + padding) / 2;
 
           // Spiral search from centroid
-          for (let t = 0; t < 800; t++) {
+          for (let t = 0; t < spiralSteps; t++) {
             const theta = t * 0.25;
             const rSpiral = t * 1.0;
             const cx = centroid.x + rSpiral * Math.cos(theta);
@@ -292,8 +319,12 @@ export function layoutWords(
           if (didPlace) break;
         }
       }
+
+      if (!didPlace) {
+        hidden.push(entry);
+      }
     }
   }
 
-  return placed;
+  return { placed, hidden };
 }

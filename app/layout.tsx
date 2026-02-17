@@ -25,6 +25,16 @@ const courierPrime = Courier_Prime({
 
 export const metadata: Metadata = {
   description: "Sustenance for a singular person.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
 };
 
 export const viewport: Viewport = {
