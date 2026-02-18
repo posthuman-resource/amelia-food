@@ -36,8 +36,25 @@ const WORD_COLORS = [
 ];
 
 const ROTATION_ANGLES = [0, 0, 0, -18, 18, -30, 30];
-const OVERLAP_RATIO = 0.69;
+const OVERLAP_RATIO = 0.72;
 const PADDING = 2; // px between words
+
+// — Font sizing —
+const MAX_FONT_SIZE = 14; // absolute ceiling for any word
+const MIN_FONT_SIZE = 7; // smallest a word can shrink to
+const FONT_STEP = 1; // decrement per sizing attempt
+const DENSITY_FACTOR = 150; // larger = bigger fonts when few words (globalCap = DENSITY_FACTOR / √totalCount)
+const LINE_HEIGHT = 1; // text bounding box height multiplier
+
+// — Region scaling (controls per-section font cap) —
+const REGION_SCALE_BOTH = 0.7; // overlap lens — larger region, more room
+const REGION_SCALE_SIDE = 0.55; // left/right crescents — tighter, harder to pack
+
+// — Placement —
+const INSET_MARGIN = 6; // px inset from circle edge for word corners
+const SPIRAL_STEPS = 1200; // max spiral positions to try per word
+const SPIRAL_ANGLE_STEP = 0.25; // radians per spiral step (tightness of spiral)
+const SPIRAL_RADIUS_STEP = 0.7; // px outward per spiral step
 
 function hashString(s: string): number {
   let h = 0;
@@ -213,16 +230,12 @@ export function layoutWords(
   const placedRects: Rect[] = [];
 
   const sections: VennSection[] = ["both", "left", "right"];
-  const insetMargin = 6;
-
   // Global font cap based on total entries — scales down when diagram is dense
   const totalCount = entries.length;
-  const globalCap = Math.min(22, Math.max(8, 150 / Math.sqrt(totalCount)));
-
-  // Packing parameters
-  const minFontSize = 6;
-  const padding = PADDING;
-  const spiralSteps = 1200;
+  const globalCap = Math.min(
+    MAX_FONT_SIZE,
+    Math.max(MIN_FONT_SIZE, DENSITY_FACTOR / Math.sqrt(totalCount)),
+  );
 
   for (const section of sections) {
     const sectionEntries = entries
@@ -235,11 +248,12 @@ export function layoutWords(
 
     // Region-aware scaling: at OVERLAP_RATIO=0.69 the lens is ~61% of a circle,
     // crescents are ~39% each — and crescents are harder to pack (thin curved shape)
-    const regionScale = section === "both" ? 0.7 : 0.55;
+    const regionScale =
+      section === "both" ? REGION_SCALE_BOTH : REGION_SCALE_SIDE;
     const sectionCap = Math.min(
-      22,
+      MAX_FONT_SIZE,
       Math.max(
-        minFontSize,
+        MIN_FONT_SIZE,
         (g.r * regionScale) / Math.sqrt(sectionEntries.length),
       ),
     );
@@ -261,17 +275,17 @@ export function layoutWords(
 
         for (
           let fontSize = maxFontSize;
-          fontSize >= minFontSize;
-          fontSize -= 0.5
+          fontSize >= MIN_FONT_SIZE;
+          fontSize -= FONT_STEP
         ) {
           const textWidth = measureText(entry.text, fontSize);
-          const hw = (textWidth + padding) / 2;
-          const hh = (fontSize * 1.3 + padding) / 2;
+          const hw = (textWidth + PADDING) / 2;
+          const hh = (fontSize * LINE_HEIGHT + PADDING) / 2;
 
           // Spiral search from centroid
-          for (let t = 0; t < spiralSteps; t++) {
-            const theta = t * 0.25;
-            const rSpiral = t * 0.7;
+          for (let t = 0; t < SPIRAL_STEPS; t++) {
+            const theta = t * SPIRAL_ANGLE_STEP;
+            const rSpiral = t * SPIRAL_RADIUS_STEP;
             const cx = centroid.x + rSpiral * Math.cos(theta);
             const cy = centroid.y + rSpiral * Math.sin(theta);
 
@@ -286,7 +300,7 @@ export function layoutWords(
             // Check all corners are in region
             const corners = rotatedCorners(candidate);
             const allInRegion = corners.every(([px, py]) =>
-              inRegion(px, py, section, g, insetMargin),
+              inRegion(px, py, section, g, INSET_MARGIN),
             );
             if (!allInRegion) continue;
 
