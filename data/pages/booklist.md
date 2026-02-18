@@ -14,7 +14,7 @@ building, making, and why we won't stop
 
 what it's like to be anything at all
 
-- **being you** by anil seth, the hard problem of consciousness is the most important question almost nobody takes seriously. this book takes it seriously. it's about how your brain constructs your entire experience of reality, and it made me genuinely uncomfortable in the best way
+- **being you** by anil seth, the hard problem of consciousness is the most important question almost nobody takes seriously. this book takes it seriously. it's about how your brain constructs your entire experience of reality, and it made me uncomfortable in the best way
 
 - **god, human, animal, machine** by o'gieblyn, she used to study theology and now she's asking the same questions about AI that she used to ask about god, and the parallels are uncomfortably familiar. this one hit close to home for me given everything i think about with AI and meaning
 
@@ -26,9 +26,9 @@ what it's like to be anything at all
 
 wonder and terror
 
-- **when we cease to understand the world** by labatut, scientists who got too close to the truth and it cost them everything. it blurs fact and fiction so seamlessly you stop being able to tell which is which. the writing is extraordinary
+- **when we cease to understand the world** by labatut, scientists who got too close to the truth and it cost them everything. it blurs fact and fiction until you stop being able to tell which is which. the writing is unreal
 
-- **the maniac** by benjamin labatut, same method but this time it's von neumann. this book is the closest thing to the kind of book i want to write. it's about genius and the terrible things genius makes possible, and it's formally inventive in a way that serves the story perfectly
+- **the maniac** by benjamin labatut, same method but this time it's von neumann. this book is the closest thing to the kind of book i want to write. it's about genius and the terrible things genius makes possible, and it does things with form that i haven't seen anyone else try
 
 - **exhalation** by ted chiang, every story is a thought experiment that makes you feel something you didn't expect to feel. he uses science the way poets use metaphor, except the science is real and the feelings are realer. i think you would love this one
 
@@ -44,7 +44,7 @@ love, longing, and the distance between people
 
 - **on earth we're briefly gorgeous** by ocean vuong, a novel made of poems, or poems arranged into a novel. tenderness and violence doing something together that neither could do alone. the language in this is so careful and so devastating
 
-- **priestdaddy** by lockwood, sardonic and sincere in the same breath, and you never quite know which is which. she grew up in a rectory with her dad who was a catholic priest (long story) and the memoir is hilarious and strange and deeply felt
+- **priestdaddy** by lockwood, sardonic and sincere in the same breath, and you never quite know which is which. she grew up in a rectory with her dad who was a catholic priest (long story) and the memoir is hilarious and strange and more honest than it pretends to be
 
 - **no one is talking about this** by patricia lockwood, a novel about the internet that becomes a novel about grief so fast it gives you whiplash. the first half is funny and the second half destroyed me. she's one of my favorite writers and this is a big reason why
 
@@ -56,7 +56,7 @@ nothing mattering, beautifully
 
 - **amusing ourselves to death** by postman, written in 1985 and more true every single year. it explains why someone who builds technology for a living would also be deeply worried about what technology does to people. huxley was right, not orwell. that's the thesis and it's correct
 
-- **determined** by robert sapolsky, the most rigorous case against free will currently available, and somehow reading it makes you kinder instead of more nihilistic. he walks you through neuroscience and biology and behavior until the idea that anyone "chose" anything starts to feel a little absurd. i found it weirdly comforting
+- **determined** by robert sapolsky, the most rigorous case against free will currently available, and reading it makes you kinder instead of more nihilistic. he walks you through neuroscience and biology and behavior until the idea that anyone "chose" anything starts to feel a little absurd. i found it weirdly comforting
 
 - **the rigor of angels** by egginton, borges, kant, and heisenberg walk into a book about the limits of human knowledge. it shouldn't work but it does. it's about what we can and can't know and why the boundary between those two things is where all the interesting stuff happens
 
@@ -72,12 +72,12 @@ falling in and not coming back for a while
 
 - **ficciones** by borges, short stories that feel like mathematical proofs. libraries containing every possible book, gardens where time forks, maps that become the territory. borges is the writer i return to most often because every story teaches me something new about how ideas can be structured
 
-- **if on a winter's night a traveler** by calvino, a novel about trying to read a novel. it's self-referential in a way that makes you want to try the same trick in a different medium. playful and smart and somehow also genuinely romantic
+- **if on a winter's night a traveler** by calvino, a novel about trying to read a novel. it's self-referential in a way that makes you want to try the same trick in a different medium. playful and smart and more romantic than it has any right to be
 
 - **the metamorphosis** by kafka, it's not about a man turning into a bug. it's about what happens to the people around him, which is worse. you'll read it in an afternoon and think about it for a very long time
 
-- **blood meridian** by cormac mccarthy, the most beautiful prose ever written about the most terrible things. his sentences feel like weather. i can't recommend this to everyone because it's genuinely harrowing, but the writing is a thing i aspire to at the sentence level
+- **blood meridian** by cormac mccarthy, the most beautiful prose ever written about the most terrible things. his sentences feel like weather. i can't recommend this to everyone because it's harrowing, but the writing is a thing i aspire to at the sentence level
 
 - **pale fire** by nabokov, a poem with a commentary that devours the poem. the unreliable narrator to end all unreliable narrators. it's a puzzle box and a tragedy and one of the most formally inventive novels ever written
 
-- **waiting for godot** by beckett, two people wait for someone who never comes, and somehow it's the funniest and saddest thing ever written. you can read it in an hour and it will rearrange something in your chest
+- **waiting for godot** by beckett, two people wait for someone who never comes, and it's the funniest and saddest thing ever written. you can read it in an hour and it will rearrange something in your chest
