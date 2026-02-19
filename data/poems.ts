@@ -43,4 +43,10 @@ export const poemMeta: PoemMeta[] = [
     emoji: "🎺",
     table: { x: 15, y: 42, rotation: -1 },
   },
+  {
+    id: "obvious",
+    title: "obvious",
+    emoji: "🍫",
+    table: { x: 45, y: 50, rotation: 1 },
+  },
 ];
