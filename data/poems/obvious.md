@@ -3,16 +3,16 @@ describe a truffle you ruined
 than taste the best one
 anyone else ever made
 
+i would rather give you
+the kind of sleep
+where nothing gets in
+than ever rest well
+
 i would rather hear you
 play the tuba in my kitchen
 at 6am on a sunday
 than be serenaded
 by any normal person
-
-i would rather give you
-the kind of sleep
-where nothing gets in
-than ever rest well
 
 i would rather sit with you
 when you're prickly and sick
