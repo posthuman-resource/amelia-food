@@ -30,15 +30,9 @@
   box-shadow: 0 1px 4px rgba(44, 40, 37, 0.06);
 }
 
-.section {
-  margin-bottom: var(--space-xl);
-}
+/* Markdown typography */
 
-.section:last-child {
-  margin-bottom: 0;
-}
-
-.sectionHeader {
+.markdown h2 {
   font-family: var(--font-hand);
   font-size: 1.5rem;
   color: var(--color-plum);
@@ -46,13 +40,17 @@
   font-weight: 400;
 }
 
-.list {
+.markdown h2:not(:first-child) {
+  margin-top: var(--space-2xl);
+}
+
+.markdown ul {
   list-style: none;
-  margin: 0;
+  margin: 0 0 var(--space-sm) 0;
   padding: 0;
 }
 
-.item {
+.markdown li {
   font-family: var(--font-serif);
   font-size: 1rem;
   line-height: 1.7;
@@ -62,12 +60,30 @@
   margin-bottom: var(--space-sm);
 }
 
-.item:last-child {
+.markdown li:last-child {
   margin-bottom: 0;
 }
 
-.item strong {
+.markdown li strong,
+.markdown li [data-streamdown="strong"] {
+  font-weight: 600;
   color: var(--color-plum);
+}
+
+.markdown p {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--color-text);
+  margin: 0 0 var(--space-lg) 0;
+}
+
+.markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown em {
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
@@ -75,12 +91,17 @@
     padding: var(--space-xl) var(--space-lg);
   }
 
-  .sectionHeader {
+  .markdown h2 {
     font-size: 1.35rem;
   }
 
-  .item {
+  .markdown li {
     font-size: 0.95rem;
     padding-left: var(--space-sm);
+  }
+
+  .markdown p {
+    font-size: 0.95rem;
+    line-height: 1.75;
   }
 }

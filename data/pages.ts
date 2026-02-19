@@ -22,4 +22,10 @@ export const pageMeta: PageMeta[] = [
     emoji: "📚",
     table: { x: 82, y: 55, rotation: 1.5 },
   },
+  {
+    id: "fieldwork",
+    title: "fieldwork",
+    emoji: "🔬",
+    table: { x: 15, y: 15, rotation: -1.5 },
+  },
 ];

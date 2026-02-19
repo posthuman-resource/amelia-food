@@ -1,6 +1,6 @@
-building, making, and why we won't stop
+## building, making, and why we won't stop
 
-- **gödel, escher, bach** by hofstadter, this is the book where self-reference and strange loops stopped being abstract concepts and started feeling personal to me. it's about how systems that refer to themselves create something that looks a lot like consciousness, and it changed how i think about thinking. it's long and dense and completely worth it
+- **godel, escher, bach** by hofstadter, this is the book where self-reference and strange loops stopped being abstract concepts and started feeling personal to me. it's about how systems that refer to themselves create something that looks a lot like consciousness, and it changed how i think about thinking. it's long and dense and completely worth it
 
 - **what technology wants** by kevin kelly, the closest anyone has come to explaining why some people can't stop building things even when they don't know what they're building yet. i have never been able to not make things, and this book made me feel less weird about that
 
@@ -12,7 +12,7 @@ building, making, and why we won't stop
 
 - **the fountainhead** by ayn rand, i know, i know. but this one is about what it means to be someone who makes versus someone who takes, and it arrives at some complicated counterintuitive conclusions about each. it's worth reading even if you end up disagreeing with half of it, which i do
 
-what it's like to be anything at all
+## what it's like to be anything at all
 
 - **being you** by anil seth, the hard problem of consciousness is the most important question almost nobody takes seriously. this book takes it seriously. it's about how your brain constructs your entire experience of reality, and it made me uncomfortable in the best way
 
@@ -24,7 +24,7 @@ what it's like to be anything at all
 
 - **why does the world exist?** by jim holt, he takes the question "why is there anything at all?" and actually pursues it, talks to physicists and philosophers and theologians, and never quite arrives at an answer, which is kind of the point
 
-wonder and terror
+## wonder and terror
 
 - **when we cease to understand the world** by labatut, scientists who got too close to the truth and it cost them everything. it blurs fact and fiction until you stop being able to tell which is which. the writing is unreal
 
@@ -38,7 +38,7 @@ wonder and terror
 
 - **hyperphantasia** by akant, what happens when imagination becomes so vivid it stops being metaphorical. perception as a haunting. this one is weird and i loved it
 
-love, longing, and the distance between people
+## love, longing, and the distance between people
 
 - **letters to a young poet** by rilke, solitude described so precisely it stops feeling lonely and starts feeling necessary. he writes about patience and creativity and love in a way that feels like someone handing you permission to be exactly who you are. i think about this book when i think about you
 
@@ -52,7 +52,7 @@ love, longing, and the distance between people
 
 - **cloud cuckoo land** by anthony doerr, stories separated by centuries that are really about the same thing: the need to preserve something beautiful before it disappears. it's about libraries and war and children and the stubborn belief that words can survive anything
 
-nothing mattering, beautifully
+## nothing mattering, beautifully
 
 - **amusing ourselves to death** by postman, written in 1985 and more true every single year. it explains why someone who builds technology for a living would also be deeply worried about what technology does to people. huxley was right, not orwell. that's the thesis and it's correct
 
@@ -62,13 +62,13 @@ nothing mattering, beautifully
 
 - **how to change your mind** by michael pollan, it's not really about psychedelics, it's about what happens when the default mode network in your brain shuts up for five minutes and you meet whoever is underneath. the neuroscience sections are the best parts
 
-survival and trust
+## survival and trust
 
 - **piranesi** by susanna clarke, a man alone in an impossible house, keeping meticulous records of everything he sees. it's about the dignity of paying careful attention to a world that doesn't explain itself. i think you would understand this character immediately
 
 - **the left hand of darkness** by le guin, ostensibly about an ice planet where gender is fluid. actually about what it takes to trust one other person completely. the relationship at the center of this book is one of the most honest depictions of intimacy i've ever read, and i mean intimacy in the broadest sense
 
-falling in and not coming back for a while
+## falling in and not coming back for a while
 
 - **ficciones** by borges, short stories that feel like mathematical proofs. libraries containing every possible book, gardens where time forks, maps that become the territory. borges is the writer i return to most often because every story teaches me something new about how ideas can be structured
 
