@@ -5,6 +5,9 @@
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
+  will-change: transform;
+  contain: layout style paint;
+  isolation: isolate;
 }
 
 /* "Amy" inscription — scratched into bark, exposing heartwood orange beneath */

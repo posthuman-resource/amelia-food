@@ -105,9 +105,21 @@ export default function Neko({ tableRef }: NekoProps) {
     const nekoEl = nekoRef.current;
     if (!container || !nekoEl) return;
 
+    // Cached container dimensions — updated by ResizeObserver, not per-frame
+    let containerWidth = container.clientWidth;
+    let containerHeight = container.clientHeight;
+    let containerRect = container.getBoundingClientRect();
+
+    const resizeObserver = new ResizeObserver(() => {
+      containerWidth = container.clientWidth;
+      containerHeight = container.clientHeight;
+      containerRect = container.getBoundingClientRect();
+    });
+    resizeObserver.observe(container);
+
     // State refs — all mutation, no React re-renders
-    let nekoX = container.clientWidth / 2;
-    let nekoY = container.clientHeight / 2;
+    let nekoX = containerWidth / 2;
+    let nekoY = containerHeight / 2;
     let mouseX = nekoX;
     let mouseY = nekoY;
     let cursorVisible = false;
@@ -123,9 +135,8 @@ export default function Neko({ tableRef }: NekoProps) {
     nekoEl.style.top = `${nekoY}px`;
 
     function handleMouseMove(e: MouseEvent) {
-      const rect = container!.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      mouseX = e.clientX - containerRect.left;
+      mouseY = e.clientY - containerRect.top;
       cursorVisible = isCursorChaseable(e.clientX, e.clientY);
     }
 
@@ -191,14 +202,8 @@ export default function Neko({ tableRef }: NekoProps) {
       nekoY += (diffY / distance) * NEKO_SPEED;
 
       // Clamp to container
-      nekoX = Math.max(
-        0,
-        Math.min(container!.clientWidth - SPRITE_SIZE, nekoX),
-      );
-      nekoY = Math.max(
-        0,
-        Math.min(container!.clientHeight - SPRITE_SIZE, nekoY),
-      );
+      nekoX = Math.max(0, Math.min(containerWidth - SPRITE_SIZE, nekoX));
+      nekoY = Math.max(0, Math.min(containerHeight - SPRITE_SIZE, nekoY));
 
       nekoEl!.style.left = `${nekoX}px`;
       nekoEl!.style.top = `${nekoY}px`;
@@ -219,9 +224,9 @@ export default function Neko({ tableRef }: NekoProps) {
       if (!idleAnimation) {
         // Pick a random idle animation
         const nearLeft = nekoX < SPRITE_SIZE;
-        const nearRight = nekoX > container!.clientWidth - SPRITE_SIZE * 2;
+        const nearRight = nekoX > containerWidth - SPRITE_SIZE * 2;
         const nearTop = nekoY < SPRITE_SIZE;
-        const nearBottom = nekoY > container!.clientHeight - SPRITE_SIZE * 2;
+        const nearBottom = nekoY > containerHeight - SPRITE_SIZE * 2;
 
         const options: string[] = ["sleeping", "scratchSelf"];
         if (nearLeft) options.push("scratchWallW");
@@ -259,6 +264,7 @@ export default function Neko({ tableRef }: NekoProps) {
       container.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(animationId);
+      resizeObserver.disconnect();
     };
   }, [reducedMotion, isMobile, tableRef]);
 

@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Generate Noise Textures</title>
+    <style>
+      body {
+        font-family: system-ui;
+        padding: 2rem;
+        background: #1a1a1a;
+        color: #eee;
+      }
+      .texture {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #2a2a2a;
+        border-radius: 8px;
+      }
+      .texture canvas {
+        border: 1px solid #444;
+      }
+      .texture h3 {
+        margin: 0 0 0.5rem;
+      }
+      button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 1rem;
+      }
+      #status {
+        margin-top: 1rem;
+        color: #8f8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Noise Texture Generator</h1>
+    <p>
+      Click "Generate All" to render SVG feTurbulence filters to canvas and
+      download as PNGs.
+    </p>
+    <button onclick="generateAll()">Generate All</button>
+    <div id="status"></div>
+    <div id="textures"></div>
+
+    <script>
+      const textures = [
+        {
+          name: "noise-coarse-347",
+          width: 347,
+          height: 347,
+          svg: `<svg viewBox="0 0 347 347" xmlns="http://www.w3.org/2000/svg">
+      <filter id="b1">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" seed="7" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0.1"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#b1)" opacity="0.09"/>
+    </svg>`,
+        },
+        {
+          name: "noise-fine-211",
+          width: 211,
+          height: 211,
+          svg: `<svg viewBox="0 0 211 211" xmlns="http://www.w3.org/2000/svg">
+      <filter id="b2">
+        <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="3" seed="19" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0.08"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#b2)" opacity="0.07"/>
+    </svg>`,
+        },
+        {
+          name: "noise-medium-503",
+          width: 503,
+          height: 503,
+          svg: `<svg viewBox="0 0 503 503" xmlns="http://www.w3.org/2000/svg">
+      <filter id="b3">
+        <feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="5" seed="31" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0.12"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#b3)" opacity="0.06"/>
+    </svg>`,
+        },
+        {
+          name: "noise-overlay-256",
+          width: 256,
+          height: 256,
+          svg: `<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noise-overlay">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise-overlay)" opacity="0.05"/>
+    </svg>`,
+        },
+        {
+          name: "noise-paper-300",
+          width: 300,
+          height: 300,
+          svg: `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      <filter id="paper">
+        <feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="3" seed="2" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#paper)" opacity="0.03"/>
+    </svg>`,
+        },
+      ];
+
+      async function renderTexture(tex) {
+        return new Promise((resolve, reject) => {
+          const blob = new Blob([tex.svg], { type: "image/svg+xml" });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = tex.width;
+            canvas.height = tex.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, tex.width, tex.height);
+            URL.revokeObjectURL(url);
+
+            canvas.toBlob((pngBlob) => {
+              if (!pngBlob) {
+                reject(new Error("toBlob failed"));
+                return;
+              }
+              resolve({ canvas, blob: pngBlob });
+            }, "image/png");
+          };
+          img.onerror = () =>
+            reject(new Error(`Failed to load SVG for ${tex.name}`));
+          img.src = url;
+        });
+      }
+
+      async function generateAll() {
+        const container = document.getElementById("textures");
+        const status = document.getElementById("status");
+        container.innerHTML = "";
+        status.textContent = "Generating...";
+
+        for (const tex of textures) {
+          const div = document.createElement("div");
+          div.className = "texture";
+          div.innerHTML = `<h3>${tex.name} (${tex.width}x${tex.height})</h3>`;
+
+          try {
+            const { canvas, blob } = await renderTexture(tex);
+            div.appendChild(canvas);
+
+            // Auto-download
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `${tex.name}.png`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+
+            div.innerHTML += `<p style="color:#8f8">✓ Downloaded ${tex.name}.png (${(blob.size / 1024).toFixed(1)} KB)</p>`;
+          } catch (err) {
+            div.innerHTML += `<p style="color:#f88">✗ Error: ${err.message}</p>`;
+          }
+
+          container.appendChild(div);
+        }
+
+        status.textContent =
+          "Done! Move the downloaded PNGs to public/textures/";
+      }
+    </script>
+  </body>
+</html>
