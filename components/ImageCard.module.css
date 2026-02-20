@@ -1,0 +1,28 @@
+/* Image card face (on the table) */
+.card {
+  text-align: center;
+}
+
+.icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.label {
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Image modal content */
+.content {
+  line-height: 0;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}

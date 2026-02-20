@@ -15,6 +15,8 @@ import type { Poem } from "@/data/poems";
 import { PoemCard, PoemContent } from "./Poem";
 import type { Page } from "@/data/pages";
 import { PageCard, PageContent } from "./Page";
+import { images } from "@/data/images";
+import { ImageCardFace, ImageCardContent } from "./ImageCard";
 import { CardStackFace, CardStackOverlay } from "./CardStack";
 import WordCreator from "./WordCreator";
 import VennDiagram from "./VennDiagram";
@@ -47,11 +49,19 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     rotation: p.table.rotation,
     label: p.title,
   }));
+  const imageObjects = images.map((img) => ({
+    id: `image-${img.id}`,
+    x: img.table.x,
+    y: img.table.y,
+    rotation: img.table.rotation,
+    label: img.title,
+  }));
   return [
     { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
     { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
     ...poemObjects,
     ...pageObjects,
+    ...imageObjects,
     { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
     { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
     { id: "venn-diagram", x: 62, y: 80, rotation: -1, label: "Improbable" },
@@ -93,6 +103,11 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
     id.startsWith("page-") && pages.find((p) => `page-${p.id}` === id);
   if (pageMatch) {
     return <PageCard page={pageMatch} />;
+  }
+  const imageMatch =
+    id.startsWith("image-") && images.find((img) => `image-${img.id}` === id);
+  if (imageMatch) {
+    return <ImageCardFace image={imageMatch} />;
   }
   if (id === "valentine") {
     return <ValentineCard />;
@@ -152,6 +167,11 @@ function ModalContent({
     id.startsWith("page-") && pages.find((p) => `page-${p.id}` === id);
   if (modalPageMatch) {
     return <PageContent page={modalPageMatch} />;
+  }
+  const modalImageMatch =
+    id.startsWith("image-") && images.find((img) => `image-${img.id}` === id);
+  if (modalImageMatch) {
+    return <ImageCardContent image={modalImageMatch} />;
   }
   return null;
 }
@@ -291,7 +311,9 @@ export default function Table({
                   ? modalStyles.wide
                   : activeObject?.startsWith("page-")
                     ? modalStyles.fullscreen
-                    : undefined
+                    : activeObject?.startsWith("image-")
+                      ? modalStyles.imageFlush
+                      : undefined
             }
           >
             {activeObject && (

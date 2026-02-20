@@ -77,6 +77,21 @@
   padding: var(--space-lg) var(--space-xl);
 }
 
+/* Image flush variant — edge-to-edge image, no padding */
+.imageFlush {
+  max-width: 900px;
+}
+
+.imageFlush .scroll {
+  padding: 0;
+}
+
+.imageFlush .close {
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border-radius: 50%;
+}
+
 /* Scrollable area — children scroll here, close button stays fixed */
 .scroll {
   overflow-y: auto;
@@ -182,6 +197,10 @@
     height: 44px;
     font-size: 1.5rem;
     z-index: 1;
+  }
+
+  .imageFlush .scroll {
+    padding: 0;
   }
 }
 
