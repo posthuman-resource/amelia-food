@@ -45,8 +45,8 @@
 
 .markdown li {
   font-family: var(--font-page);
-  font-size: 1.2rem;
-  line-height: 1.75;
+  font-size: 1.35rem;
+  line-height: 1.55;
   color: var(--color-text);
   padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
   border-left: 2px solid rgba(107, 45, 91, 0.15);
@@ -65,8 +65,8 @@
 
 .markdown p {
   font-family: var(--font-page);
-  font-size: 1.25rem;
-  line-height: 1.85;
+  font-size: 1.4rem;
+  line-height: 1.6;
   color: var(--color-text);
   margin: 0 0 var(--space-lg) 0;
 }
@@ -98,12 +98,12 @@
   }
 
   .markdown li {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     padding-left: var(--space-sm);
   }
 
   .markdown p {
-    font-size: 1.15rem;
-    line-height: 1.8;
+    font-size: 1.3rem;
+    line-height: 1.55;
   }
 }

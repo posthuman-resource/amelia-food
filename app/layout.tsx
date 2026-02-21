@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Lora, Caveat, Courier_Prime, Source_Serif_4 } from "next/font/google";
+import { Lora, Caveat, Courier_Prime, Forum } from "next/font/google";
 import "./globals.css";
 
 const lora = Lora({
@@ -16,9 +16,9 @@ const caveat = Caveat({
   display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
+const forum = Forum({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400"],
   variable: "--font-page",
   display: "swap",
 });
@@ -65,7 +65,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${lora.variable} ${caveat.variable} ${courierPrime.variable} ${sourceSerif.variable}`}
+        className={`${lora.variable} ${caveat.variable} ${courierPrime.variable} ${forum.variable}`}
       >
         {children}
       </body>
