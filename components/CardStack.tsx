@@ -33,7 +33,6 @@ export function CardStackFace({ count, icon, label }: CardStackFaceProps) {
           <span className={styles.topCardIcon}>{icon}</span>
         </div>
       </div>
-      {label && <p className={styles.label}>{label}</p>}
     </div>
   );
 }

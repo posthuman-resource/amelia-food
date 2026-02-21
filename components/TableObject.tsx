@@ -2,12 +2,31 @@
 
 import styles from "./TableObject.module.css";
 
+export type TableObjectVariant =
+  | "poem"
+  | "page"
+  | "image"
+  | "emoji-game"
+  | "valentine"
+  | "welcome"
+  | "word-stack"
+  | "venn"
+  | "lock";
+
+const noTextureVariants = new Set<TableObjectVariant>([
+  "welcome",
+  "word-stack",
+  "image",
+]);
+
 interface TableObjectProps {
   id: string;
   x: number;
   y: number;
   rotation: number;
   index?: number;
+  variant?: TableObjectVariant;
+  label?: string;
   children: React.ReactNode;
   onClick?: () => void;
 }
@@ -18,12 +37,26 @@ export default function TableObject({
   y,
   rotation,
   index = 0,
+  variant,
+  label,
   children,
   onClick,
 }: TableObjectProps) {
+  const variantClass = variant ? styles[variant] : undefined;
+  const useTexture = !variant || !noTextureVariants.has(variant);
+  const useDropShadow = variant === "page";
+
+  const cardClasses = [styles.card, useTexture && "texture-paper", variantClass]
+    .filter(Boolean)
+    .join(" ");
+
+  const objectClasses = [styles.object, useDropShadow && styles.dropShadow]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div
-      className={styles.object}
+      className={objectClasses}
       data-object-id={id}
       style={
         {
@@ -35,13 +68,14 @@ export default function TableObject({
       }
     >
       <button
-        className={`${styles.card} texture-paper`}
+        className={cardClasses}
         onClick={onClick}
         type="button"
         aria-label={id}
       >
         {children}
       </button>
+      {label && <p className={styles.label}>{label}</p>}
     </div>
   );
 }

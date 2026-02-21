@@ -8,7 +8,6 @@ export function WelcomeEnvelope() {
         <div className={styles.envelopeFold} />
         <div className={styles.seal} />
       </div>
-      <p className={styles.label}>welcome</p>
     </div>
   );
 }

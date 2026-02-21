@@ -50,13 +50,6 @@
   letter-spacing: -0.02em;
 }
 
-.label {
-  font-family: var(--font-hand);
-  font-size: 1.35rem;
-  color: var(--color-text-muted);
-  margin: 0;
-}
-
 /* ========================================
    Overlay (fanned cards)
    ======================================== */

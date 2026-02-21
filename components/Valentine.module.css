@@ -10,16 +10,9 @@
 }
 
 .cardHeart {
-  font-size: 2.5rem;
+  font-size: 2.15rem;
   line-height: 1;
   margin-bottom: var(--space-xs);
-}
-
-.label {
-  font-family: var(--font-hand);
-  font-size: 1.35rem;
-  color: var(--color-text-muted);
-  margin: var(--space-sm) 0 0;
 }
 
 /* ========================================

@@ -6,7 +6,6 @@ export function ImageCardFace({ image }: { image: ImageCardData }) {
   return (
     <div className={styles.card}>
       <span className={styles.icon}>{image.emoji}</span>
-      <p className={styles.label}>{image.title}</p>
     </div>
   );
 }

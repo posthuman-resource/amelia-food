@@ -12,6 +12,16 @@
   animation-delay: var(--stagger, 0ms);
 }
 
+/* For page variant: clip-path clips box-shadow, so use filter drop-shadow */
+.dropShadow .card {
+  box-shadow: none;
+}
+.dropShadow {
+  filter: drop-shadow(0 2px 6px rgba(44, 40, 37, 0.1))
+    drop-shadow(0 6px 20px rgba(44, 40, 37, 0.06));
+  transition: filter 200ms ease-out;
+}
+
 @keyframes objectIn {
   from {
     opacity: 0;
@@ -23,19 +33,22 @@
   }
 }
 
-/* The interactive card surface */
+/* ========================================
+   The interactive card surface (base)
+   ======================================== */
 .card {
   display: block;
-  padding: var(--space-xl);
+  padding: 1.5rem;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   font-family: inherit;
   color: var(--color-text);
-  min-width: 140px;
+  min-width: 110px;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 
-  /* Slightly transparent so the table peeks through — content stays fully opaque */
+  /* Slightly transparent so the table peeks through */
   background-color: rgba(237, 232, 223, 0.82);
 
   /* Rest state transform + shadow */
@@ -48,6 +61,24 @@
   transition:
     transform 200ms ease-out,
     box-shadow 200ms ease-out;
+}
+
+/* Label below the card — carved into the wood surface */
+.label {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgba(175, 88, 48, 0.65);
+  text-align: center;
+  margin: var(--space-xs) 0 0;
+  pointer-events: none;
+  letter-spacing: 0.02em;
+
+  /* Groove effect — dark edge top-left, light catch bottom-right */
+  text-shadow:
+    -1px -1px 1px rgba(40, 36, 32, 0.45),
+    1px 1px 1px rgba(200, 195, 185, 0.25),
+    0px 0px 2px rgba(160, 80, 42, 0.2);
 }
 
 /* Active/press: subtle settle (both desktop and mobile) */
@@ -70,6 +101,14 @@
       0 16px 32px rgba(44, 40, 37, 0.08);
   }
 
+  .dropShadow .card:hover {
+    box-shadow: none;
+  }
+  .dropShadow:has(.card:hover) {
+    filter: drop-shadow(0 6px 16px rgba(44, 40, 37, 0.12))
+      drop-shadow(0 16px 32px rgba(44, 40, 37, 0.08));
+  }
+
   .card:active {
     transform: rotate(var(--rotation)) translateY(-1px) scale(0.98);
     box-shadow:
@@ -90,7 +129,193 @@
   }
 }
 
-/* Mobile: flex-column layout, no absolute positioning, enhanced shadow */
+/* ========================================
+   Variant: Poem — Folded note
+   ======================================== */
+.poem {
+  min-width: 90px;
+  max-width: 110px;
+  background-color: rgba(240, 232, 218, 0.85);
+}
+
+/* Fold crease across the middle */
+.poem::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(44, 40, 37, 0.08) 20%,
+    rgba(44, 40, 37, 0.12) 50%,
+    rgba(44, 40, 37, 0.08) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ========================================
+   Variant: Page — Torn notebook page
+   ======================================== */
+.page {
+  background-color: rgba(248, 245, 240, 0.88);
+  clip-path: polygon(
+    0% 4%,
+    5% 0%,
+    10% 3%,
+    15% 0%,
+    20% 4%,
+    25% 1%,
+    30% 3%,
+    35% 0%,
+    40% 4%,
+    45% 1%,
+    50% 3%,
+    55% 0%,
+    60% 4%,
+    65% 1%,
+    70% 3%,
+    75% 0%,
+    80% 4%,
+    85% 1%,
+    90% 3%,
+    95% 0%,
+    100% 4%,
+    100% 100%,
+    0% 100%
+  );
+  padding-top: calc(1.5rem + 4px);
+}
+
+/* Faint ruled lines */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 22px,
+    rgba(107, 135, 170, 0.08) 22px,
+    rgba(107, 135, 170, 0.08) 23px
+  );
+  pointer-events: none;
+}
+
+/* ========================================
+   Variant: Image — Polaroid
+   ======================================== */
+.image {
+  background-color: #fff;
+  padding: 0.6rem 0.6rem 1.8rem;
+  border-radius: 2px;
+  border: 1px solid rgba(44, 40, 37, 0.06);
+}
+
+/* Slight gloss highlight */
+.image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+/* ========================================
+   Variant: Emoji Game — Speech bubble
+   ======================================== */
+.emoji-game {
+  border-radius: 16px 16px 16px 4px;
+}
+
+/* Speech bubble tail */
+.emoji-game::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 10px;
+  width: 16px;
+  height: 12px;
+  background-color: inherit;
+  clip-path: polygon(0% 0%, 100% 0%, 30% 100%);
+  pointer-events: none;
+}
+
+/* ========================================
+   Variant: Valentine — Blush card with wax seal
+   ======================================== */
+.valentine {
+  background-color: rgba(242, 232, 230, 0.82);
+}
+
+/* Tiny wax seal in top-right */
+.valentine::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 35%,
+    var(--color-plum-light) 0%,
+    var(--color-plum) 60%,
+    #5a2550 100%
+  );
+  box-shadow:
+    0 1px 2px rgba(107, 45, 91, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+/* ========================================
+   Variant: Welcome — Transparent wrapper
+   ======================================== */
+.welcome {
+  background: none;
+  box-shadow: none;
+  padding: 1rem;
+}
+
+/* ========================================
+   Variant: Word Stack — Transparent wrapper
+   ======================================== */
+.word-stack {
+  background: none;
+  box-shadow: none;
+  padding: 1rem;
+}
+
+/* ========================================
+   Variant: Venn — Pill/tag shape
+   ======================================== */
+.venn {
+  border-radius: 20px;
+}
+
+/* ========================================
+   Variant: Lock — Tiny luggage tag
+   ======================================== */
+.lock {
+  padding: 0.5rem 1rem;
+  min-width: unset;
+  box-shadow:
+    0 1px 4px rgba(44, 40, 37, 0.06),
+    0 3px 10px rgba(44, 40, 37, 0.03);
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
 @media (max-width: 768px) {
   .object {
     position: static;
@@ -99,13 +324,47 @@
   }
 
   .card {
-    min-width: 260px;
+    min-width: 220px;
     width: 100%;
-    max-width: 340px;
+    max-width: 300px;
     /* Slightly more shadow on mobile to enhance "looking down at table" feel */
     box-shadow:
       0 3px 8px rgba(44, 40, 37, 0.12),
       0 8px 24px rgba(44, 40, 37, 0.08);
+  }
+
+  /* Variants keep their shape but adjust width for mobile */
+  .poem {
+    min-width: 200px;
+    max-width: 250px;
+  }
+
+  .page {
+    min-width: 220px;
+    max-width: 300px;
+  }
+
+  .image {
+    min-width: 200px;
+    max-width: 260px;
+  }
+
+  .lock {
+    min-width: unset;
+    width: auto;
+    max-width: none;
+  }
+
+  .welcome,
+  .word-stack {
+    min-width: unset;
+    width: auto;
+    max-width: none;
+    box-shadow: none;
+  }
+
+  .dropShadow .card {
+    box-shadow: none;
   }
 }
 

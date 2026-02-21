@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
+import type { TableObjectVariant } from "./TableObject";
 import Modal from "./Modal";
 import modalStyles from "./Modal.module.css";
 import EmojiGame from "./EmojiGame";
@@ -32,6 +33,7 @@ interface TableObjectData {
   y: number; // percentage from top (desktop)
   rotation: number; // degrees
   label: string;
+  variant?: TableObjectVariant;
 }
 
 function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
@@ -41,6 +43,7 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     y: p.table.y,
     rotation: p.table.rotation,
     label: p.title,
+    variant: "poem" as const,
   }));
   const pageObjects = pages.map((p) => ({
     id: `page-${p.id}`,
@@ -48,6 +51,7 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     y: p.table.y,
     rotation: p.table.rotation,
     label: p.title,
+    variant: "page" as const,
   }));
   const imageObjects = images.map((img) => ({
     id: `image-${img.id}`,
@@ -55,17 +59,60 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     y: img.table.y,
     rotation: img.table.rotation,
     label: img.title,
+    variant: "image" as const,
   }));
   return [
-    { id: "emoji-game", x: 35, y: 30, rotation: -2, label: "Emoji Game" },
-    { id: "welcome", x: 60, y: 55, rotation: 3, label: "Welcome" },
+    {
+      id: "emoji-game",
+      x: 35,
+      y: 30,
+      rotation: -2,
+      label: "emoji game",
+      variant: "emoji-game" as const,
+    },
+    {
+      id: "welcome",
+      x: 60,
+      y: 55,
+      rotation: 3,
+      label: "welcome",
+      variant: "welcome" as const,
+    },
     ...poemObjects,
     ...pageObjects,
     ...imageObjects,
-    { id: "valentine", x: 72, y: 30, rotation: 2, label: "Valentine" },
-    { id: "word-stack", x: 30, y: 55, rotation: -2, label: "Word Cards" },
-    { id: "venn-diagram", x: 62, y: 80, rotation: -1, label: "Improbable" },
-    { id: "lock", x: 88, y: 85, rotation: 1, label: "Lock" },
+    {
+      id: "valentine",
+      x: 72,
+      y: 30,
+      rotation: 2,
+      label: "valentine",
+      variant: "valentine" as const,
+    },
+    {
+      id: "word-stack",
+      x: 30,
+      y: 55,
+      rotation: -2,
+      label: "wortschatz",
+      variant: "word-stack" as const,
+    },
+    {
+      id: "venn-diagram",
+      x: 62,
+      y: 80,
+      rotation: -1,
+      label: "improbable",
+      variant: "venn" as const,
+    },
+    {
+      id: "lock",
+      x: 88,
+      y: 85,
+      rotation: 1,
+      label: "lock",
+      variant: "lock" as const,
+    },
   ];
 }
 
@@ -87,7 +134,6 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
         <div className={styles.emojiTiles}>
           <span>💬</span>
         </div>
-        <p className={styles.cardLabel}>emoji game</p>
       </div>
     );
   }
@@ -116,7 +162,6 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
     return (
       <div className={styles.lockCard}>
         <span className={styles.lockIcon}>🔒</span>
-        <p className={styles.cardLabel}>lock</p>
       </div>
     );
   }
@@ -124,12 +169,11 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
     return (
       <div className={styles.vennCard}>
         <span className={styles.vennIcon}>🧩</span>
-        <p className={styles.cardLabel}>improbable</p>
       </div>
     );
   }
   if (id === "word-stack") {
-    return <CardStackFace count={words.length} icon="Aa" label="wortschatz" />;
+    return <CardStackFace count={words.length} icon="Aa" />;
   }
   return null;
 }
@@ -241,6 +285,8 @@ export default function Table({
                 y={obj.y}
                 rotation={obj.rotation}
                 index={index}
+                variant={obj.variant}
+                label={obj.label}
                 onClick={() => {
                   if (obj.id === "lock") {
                     fetch("/api/auth", { method: "DELETE" }).then(() =>

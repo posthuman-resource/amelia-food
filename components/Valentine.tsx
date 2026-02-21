@@ -4,7 +4,6 @@ export function ValentineCard() {
   return (
     <div className={styles.card}>
       <div className={styles.cardHeart}>&#x2764;&#xFE0F;</div>
-      <p className={styles.label}>valentine</p>
     </div>
   );
 }

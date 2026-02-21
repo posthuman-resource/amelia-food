@@ -4,16 +4,9 @@
 }
 
 .icon {
-  font-size: 2.5rem;
+  font-size: 2.15rem;
   display: block;
   margin-bottom: var(--space-xs);
-}
-
-.label {
-  font-family: var(--font-hand);
-  font-size: 1.35rem;
-  color: var(--color-text-muted);
-  margin: 0;
 }
 
 /* Page modal content */

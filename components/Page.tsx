@@ -8,7 +8,6 @@ export function PageCard({ page }: { page: Page }) {
   return (
     <div className={styles.card}>
       <span className={styles.icon}>{page.emoji}</span>
-      <p className={styles.label}>{page.title}</p>
     </div>
   );
 }

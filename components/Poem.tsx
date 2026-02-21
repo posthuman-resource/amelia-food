@@ -9,7 +9,6 @@ export function PoemCard({ poem }: { poem: Poem }) {
   return (
     <div className={styles.card}>
       <span className={styles.icon}>{poem.emoji}</span>
-      <p className={styles.label}>{poem.title}</p>
     </div>
   );
 }
