@@ -191,6 +191,40 @@
 }
 
 /* ========================================
+   Dark theme
+   ======================================== */
+
+[data-theme="dark"] .search {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .search:focus {
+  box-shadow: 0 0 0 3px rgba(160, 72, 136, 0.15);
+}
+
+[data-theme="dark"] .grid {
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+[data-theme="dark"] .grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .categoryHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .clearBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+[data-theme="dark"] .clearBtn:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ========================================
    Semantic search — loading shimmer
    ======================================== */
 

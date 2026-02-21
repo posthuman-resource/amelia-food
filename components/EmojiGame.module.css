@@ -68,7 +68,7 @@
   height: 1.5rem;
   border-radius: 50%;
   background: var(--color-plum);
-  color: var(--color-surface-light);
+  color: #faf7f2;
   font-family: var(--font-serif);
   font-size: 0.85rem;
   font-weight: 600;
@@ -107,6 +107,30 @@
 .newBtn:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+/* ========================================
+   Dark theme
+   ======================================== */
+
+@media (hover: hover) {
+  [data-theme="dark"] .explainBtn:hover:not(:disabled) {
+    background: rgba(160, 72, 136, 0.12);
+  }
+}
+
+[data-theme="dark"] .explainBtn:active:not(:disabled) {
+  background: rgba(160, 72, 136, 0.18);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .newBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+[data-theme="dark"] .newBtn:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ========================================

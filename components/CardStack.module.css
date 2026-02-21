@@ -44,7 +44,7 @@
 
 .topCardIcon {
   font-family: var(--font-serif);
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--color-text-muted);
   letter-spacing: -0.02em;
@@ -103,7 +103,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  color: var(--color-surface-light);
+  color: #faf7f2;
   font-size: 1.5rem;
   line-height: 1;
   -webkit-tap-highlight-color: transparent;
@@ -192,6 +192,20 @@
 
 [data-theme="dark"] .topCard {
   background: rgba(58, 52, 48, 0.9);
+}
+
+[data-theme="dark"] .fanCardInner {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .fanCard:hover .fanCardInner {
+    box-shadow:
+      0 8px 28px rgba(0, 0, 0, 0.35),
+      0 4px 10px rgba(0, 0, 0, 0.2);
+  }
 }
 
 /* ========================================

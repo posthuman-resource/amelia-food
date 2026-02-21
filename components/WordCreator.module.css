@@ -49,7 +49,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  color: var(--color-surface-light);
+  color: #faf7f2;
   font-size: 1.5rem;
   line-height: 1;
   -webkit-tap-highlight-color: transparent;
@@ -196,7 +196,7 @@
 .loadingText {
   font-family: var(--font-hand);
   font-size: 1.5rem;
-  color: var(--color-surface-light);
+  color: #faf7f2;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -351,7 +351,7 @@
 .moreButton {
   font-family: var(--font-hand);
   font-size: 1.25rem;
-  color: var(--color-surface-light);
+  color: #faf7f2;
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-md);
   transition: background var(--transition-fast);
@@ -378,7 +378,7 @@
 
 @media (hover: hover) {
   .backButton:hover {
-    color: var(--color-surface-light);
+    color: #faf7f2;
   }
 }
 
@@ -401,7 +401,7 @@
 .retryButton {
   font-family: var(--font-hand);
   font-size: 1.2rem;
-  color: var(--color-surface-light);
+  color: #faf7f2;
   padding: var(--space-sm) var(--space-lg);
   border-radius: var(--radius-md);
   transition: background var(--transition-fast);
@@ -417,6 +417,47 @@
 /* ========================================
    Animations
    ======================================== */
+
+/* ========================================
+   Dark theme
+   ======================================== */
+
+[data-theme="dark"] .textarea {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .textarea::placeholder {
+  color: rgba(255, 248, 240, 0.35);
+}
+
+[data-theme="dark"] .card {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .wordOption {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .wordOption:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+  }
+}
+
+[data-theme="dark"] .optionPart {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .submitButton:not(:disabled):hover {
+    background: rgba(160, 72, 136, 0.12);
+  }
+}
+
+[data-theme="dark"] .submitButton:not(:disabled):active {
+  background: rgba(160, 72, 136, 0.18);
+}
 
 /* ========================================
    Mobile

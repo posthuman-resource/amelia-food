@@ -161,7 +161,7 @@
   height: 20px;
   border-radius: 50%;
   background: var(--color-plum);
-  color: var(--color-surface-light);
+  color: #faf7f2;
   font-size: 0.7rem;
   display: flex;
   align-items: center;

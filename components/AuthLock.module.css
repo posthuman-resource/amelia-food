@@ -59,6 +59,17 @@
   border-bottom-color: var(--color-plum);
 }
 
+/* Dark theme */
+[data-theme="dark"] .lockCard {
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .input {
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
 /* Shake on wrong password — desktop (has translate(-50%,-50%) base) */
 .shake {
   animation: lockShake 500ms ease-out;

@@ -144,7 +144,7 @@
 .sendBtn {
   font-family: var(--font-hand);
   font-size: 1.15rem;
-  color: var(--color-surface-light);
+  color: #faf7f2;
   background: var(--color-plum);
   padding: var(--space-xs) var(--space-lg);
   border-radius: var(--radius-md);
@@ -169,6 +169,24 @@
 .sendBtn:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+/* ========================================
+   Dark theme
+   ======================================== */
+
+[data-theme="dark"] .composer {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .clearBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+[data-theme="dark"] .clearBtn:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ========================================
