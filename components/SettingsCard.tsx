@@ -129,8 +129,6 @@ export function SettingsCardContent() {
   return (
     <div className={styles.content}>
       <div className={`${styles.paper} texture-paper`}>
-        <h2 className={styles.title}>flavor</h2>
-
         <div className={styles.toggles}>
           <button
             className={`${styles.toggle}${kuro ? ` ${styles.toggleOn}` : ""}`}

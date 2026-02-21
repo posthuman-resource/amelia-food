@@ -42,15 +42,6 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
-.title {
-  font-family: var(--font-hand);
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: var(--color-text-dark);
-  margin: 0 0 var(--space-xl);
-  line-height: 1;
-}
-
 /* ========================================
    Variant picker
    ======================================== */
@@ -213,10 +204,6 @@
 @media (max-width: 768px) {
   .paper {
     padding: var(--space-xl) var(--space-lg);
-  }
-
-  .title {
-    font-size: 2rem;
   }
 
   .variantSprite {

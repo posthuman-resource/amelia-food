@@ -6,33 +6,51 @@
   top: 45%;
   transform: translate(-50%, -50%);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   animation: lockIn 600ms var(--bezier-gentle) both;
 }
 
 .lockCard {
-  padding: var(--space-xl) var(--space-2xl);
+  padding: 1.5rem;
   border-radius: var(--radius-md);
+  background-color: var(--color-card-bg);
+  color: var(--color-text);
   text-align: center;
   transform: rotate(-1.5deg);
   box-shadow:
     0 2px 6px rgba(44, 40, 37, 0.1),
     0 6px 20px rgba(44, 40, 37, 0.06);
   min-width: 180px;
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
 }
 
 .emoji {
-  font-size: 2.5rem;
+  font-size: 2.15rem;
   display: block;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
   line-height: 1;
 }
 
 .label {
   font-family: var(--font-hand);
-  font-size: 1.2rem;
-  color: var(--color-text-muted);
-  margin: 0 0 var(--space-lg);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgba(175, 88, 48, 0.65);
+  text-align: center;
+  margin: var(--space-xs) 0 0;
+  pointer-events: none;
+  letter-spacing: 0.02em;
   transition: opacity 150ms ease-out;
+
+  /* Groove effect — dark edge top-left, light catch bottom-right */
+  text-shadow:
+    -1px -1px 1px rgba(40, 36, 32, 0.45),
+    1px 1px 1px rgba(200, 195, 185, 0.25),
+    0px 0px 2px rgba(160, 80, 42, 0.2);
 }
 
 .input {
@@ -43,6 +61,7 @@
   border-bottom: 1.5px solid rgba(44, 40, 37, 0.2);
   font-family: var(--font-hand);
   font-size: 1.3rem;
+  letter-spacing: 0.3em;
   color: var(--color-text);
   text-align: center;
   padding: var(--space-xs) 0;
@@ -63,11 +82,19 @@
 [data-theme="dark"] .lockCard {
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.2),
-    0 6px 20px rgba(0, 0, 0, 0.15);
+    0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="dark"] .input {
   border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .label {
+  color: rgba(200, 165, 122, 0.65);
+  text-shadow:
+    -1px -1px 1px rgba(0, 0, 0, 0.5),
+    1px 1px 1px rgba(100, 90, 80, 0.2),
+    0px 0px 2px rgba(200, 165, 122, 0.15);
 }
 
 /* Shake on wrong password — desktop (has translate(-50%,-50%) base) */

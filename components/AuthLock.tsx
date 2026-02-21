@@ -69,7 +69,6 @@ export default function AuthLock() {
         className={`${styles.lockCard} texture-paper`}
       >
         <span className={styles.emoji}>{unlocking ? "🔓" : "🔒"}</span>
-        <p className={styles.label}>{label}</p>
         <input
           ref={inputRef}
           type="password"
@@ -82,6 +81,7 @@ export default function AuthLock() {
           disabled={unlocking || submitting}
         />
       </form>
+      <p className={styles.label}>{label}</p>
     </div>
   );
 }

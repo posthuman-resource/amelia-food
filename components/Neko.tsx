@@ -189,10 +189,8 @@ export default function Neko({ tableRef }: NekoProps) {
     // --- Mouse handlers ---
 
     function handleMouseMove(e: MouseEvent) {
-      if (localForceSleep) return;
       mouseX = e.clientX - containerRect.left;
       mouseY = e.clientY - containerRect.top;
-      cursorVisible = isCursorChaseable(e.clientX, e.clientY);
 
       if (grabbing) {
         nekoX = mouseX;
@@ -206,6 +204,8 @@ export default function Neko({ tableRef }: NekoProps) {
         grabStopTimer = setTimeout(() => {
           grabStop = true;
         }, 150);
+      } else if (!localForceSleep) {
+        cursorVisible = isCursorChaseable(e.clientX, e.clientY);
       }
     }
 
