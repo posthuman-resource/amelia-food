@@ -7,8 +7,12 @@ i'm still listening
 
 which is how you say goodnight
 without it being a lie
-which is how a lie has never
-been so honest
 
-the dish is aimed
-i know exactly at what
+we have said goodnight four hundred times
+and meant it zero
+which has to be some kind of record
+even for two people
+who are this bad at leaving
+
+i'm not going to get better at it
+i'm not going to want to
