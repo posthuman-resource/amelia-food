@@ -1,16 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import styles from "./SettingsCard.module.css";
-
-type NekoVariant = "classic" | "dog" | "tora" | "maia";
-
-const VARIANTS: { id: NekoVariant; label: string }[] = [
-  { id: "classic", label: "Neko" },
-  { id: "dog", label: "Dog" },
-  { id: "tora", label: "Tora" },
-  { id: "maia", label: "Maia" },
-];
+import { NEKO_VARIANTS, DEFAULT_NAMES, type NekoVariant } from "@/lib/neko";
 
 function parseLocalStorage<T>(key: string, fallback: T): T {
   try {
@@ -63,6 +55,18 @@ export function SettingsCardContent() {
   const [variant, setVariant] = useState<NekoVariant>("classic");
   const [kuro, setKuro] = useState(false);
   const [forceSleep, setForceSleep] = useState(false);
+  const [customNames, setCustomNames] = useState<
+    Partial<Record<NekoVariant, string>>
+  >({});
+  const savingRef = useRef<Record<string, AbortController>>({});
+
+  // Fetch custom names from DB on mount
+  useEffect(() => {
+    fetch("/api/neko-names")
+      .then((r) => (r.ok ? r.json() : {}))
+      .then(setCustomNames)
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     function sync() {
@@ -97,6 +101,31 @@ export function SettingsCardContent() {
     persistAndNotify("neko-force-sleep", next);
   }, []);
 
+  const saveName = useCallback((v: NekoVariant, name: string) => {
+    // Cancel any in-flight save for this variant
+    savingRef.current[v]?.abort();
+    const controller = new AbortController();
+    savingRef.current[v] = controller;
+
+    const trimmed = name.trim();
+    setCustomNames((prev) => {
+      const next = { ...prev };
+      if (!trimmed || trimmed === DEFAULT_NAMES[v]) {
+        delete next[v];
+      } else {
+        next[v] = trimmed;
+      }
+      return next;
+    });
+
+    fetch("/api/neko-names", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ variant: v, name: trimmed }),
+      signal: controller.signal,
+    }).catch(() => {});
+  }, []);
+
   return (
     <div className={styles.content}>
       <div className={`${styles.paper} texture-paper`}>
@@ -118,24 +147,48 @@ export function SettingsCardContent() {
         </div>
 
         <div className={styles.section}>
-          <p className={styles.sectionLabel}>choose ur aminal</p>
+          <p className={styles.sectionLabel}>
+            choose &amp; name your animal friends
+          </p>
           <div className={styles.variants}>
-            {VARIANTS.map((v) => (
-              <button
-                key={v.id}
-                className={`${styles.variantBtn}${variant === v.id ? ` ${styles.selected}` : ""}`}
-                onClick={() => changeVariant(v.id)}
-                aria-label={`Select ${v.label}`}
+            {NEKO_VARIANTS.map((id) => (
+              <div
+                key={id}
+                role="button"
+                tabIndex={0}
+                className={`${styles.variantBtn}${variant === id ? ` ${styles.selected}` : ""}`}
+                onClick={() => changeVariant(id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") changeVariant(id);
+                }}
+                aria-label={`Select ${customNames[id] || DEFAULT_NAMES[id]}`}
               >
                 <div
                   className={styles.variantSprite}
                   style={{
-                    backgroundImage: `url(/oneko/oneko-${v.id}.gif)`,
+                    backgroundImage: `url(/oneko/oneko-${id}.gif)`,
                     filter: kuro ? "invert(100%)" : undefined,
                   }}
                 />
-                <span className={styles.variantName}>{v.label}</span>
-              </button>
+                <input
+                  type="text"
+                  className={styles.variantNameInput}
+                  value={customNames[id] ?? ""}
+                  placeholder={DEFAULT_NAMES[id]}
+                  maxLength={30}
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setCustomNames((prev) => ({ ...prev, [id]: val }));
+                  }}
+                  onBlur={(e) => saveName(id, e.target.value)}
+                  aria-label={`Name for ${DEFAULT_NAMES[id]}`}
+                />
+              </div>
             ))}
           </div>
         </div>

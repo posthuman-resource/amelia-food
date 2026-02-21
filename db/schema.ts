@@ -14,6 +14,11 @@ export const rateLimits = sqliteTable("rate_limits", {
   windowStart: text("window_start").notNull(),
 });
 
+export const nekoNames = sqliteTable("neko_names", {
+  variant: text().primaryKey(), // "classic" | "dog" | "tora" | "maia"
+  name: text().notNull(),
+});
+
 export const words = sqliteTable("words", {
   id: text().primaryKey(),
   word: text().notNull(),

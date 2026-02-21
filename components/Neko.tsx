@@ -3,10 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import styles from "./Neko.module.css";
-
-// --- Types & constants ---
-
-type NekoVariant = "classic" | "dog" | "tora" | "maia" | "vaporwave";
+import type { NekoVariant } from "@/lib/neko";
 
 // Sprite frame coordinates [col, row] into the 32x32 grid sprite sheet.
 // All variants share the same 256x128 layout (8 cols x 4 rows).
