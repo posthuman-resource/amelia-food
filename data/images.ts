@@ -18,6 +18,6 @@ export const images: ImageCardData[] = [
     emoji: "〰️",
     src: wowStillListening,
     alt: "wow, still listening",
-    table: { x: 50, y: 15, rotation: 1.5 },
+    table: { x: 28, y: 18, rotation: 1.5 },
   },
 ];

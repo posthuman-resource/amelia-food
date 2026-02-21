@@ -73,6 +73,11 @@
   max-height: calc(100vh - var(--space-xl));
 }
 
+/* Signal wide variant — needs space for canvas + controls */
+.signalWide {
+  max-width: 780px;
+}
+
 /* Image flush variant — edge-to-edge image, no padding */
 .imageFlush {
   max-width: 900px;

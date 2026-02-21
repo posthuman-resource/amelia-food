@@ -314,6 +314,20 @@
 }
 
 /* ========================================
+   Variant: Signal — Dark oscilloscope card
+   ======================================== */
+.signal {
+  background-color: #2a2420;
+  min-width: 100px;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(196, 162, 101, 0.15);
+  box-shadow:
+    0 2px 6px rgba(44, 40, 37, 0.1),
+    0 6px 20px rgba(44, 40, 37, 0.06),
+    0 0 12px rgba(196, 162, 101, 0.06);
+}
+
+/* ========================================
    Dark theme overrides
    ======================================== */
 
@@ -343,6 +357,15 @@
 [data-theme="dark"] .image {
   background-color: #3a3430;
   border-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .signal {
+  background-color: #1a1612;
+  border-color: rgba(196, 162, 101, 0.2);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    0 0 16px rgba(196, 162, 101, 0.08);
 }
 
 [data-theme="dark"] .label {
@@ -401,6 +424,11 @@
     width: auto;
     max-width: none;
     box-shadow: none;
+  }
+
+  .signal {
+    min-width: 200px;
+    max-width: 260px;
   }
 
   .dropShadow .card {

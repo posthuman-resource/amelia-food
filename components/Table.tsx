@@ -25,6 +25,8 @@ import type { VennEntry } from "@/lib/venn";
 import AuthLock from "./AuthLock";
 import Neko from "./Neko";
 import { SettingsCardFace, SettingsCardContent } from "./SettingsCard";
+import { SignalCardFace, SignalContent } from "./Signal";
+import type { Signal } from "@/data/signals";
 import { useTabTitle } from "../hooks/useTabTitle";
 import { useMounted } from "../hooks/useMounted";
 
@@ -37,7 +39,11 @@ interface TableObjectData {
   variant?: TableObjectVariant;
 }
 
-function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
+function buildObjects(
+  poems: Poem[],
+  pages: Page[],
+  signals: Signal[],
+): TableObjectData[] {
   const poemObjects = poems.map((p) => ({
     id: `poem-${p.id}`,
     x: p.table.x,
@@ -62,6 +68,19 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     label: img.title,
     variant: "image" as const,
   }));
+  const signalObject =
+    signals.length > 0
+      ? [
+          {
+            id: "signal",
+            x: 50,
+            y: 15,
+            rotation: -1,
+            label: "signal",
+            variant: "signal" as const,
+          },
+        ]
+      : [];
   return [
     {
       id: "emoji-game",
@@ -82,6 +101,7 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     ...poemObjects,
     ...pageObjects,
     ...imageObjects,
+    ...signalObject,
     {
       id: "valentine",
       x: 72,
@@ -129,13 +149,20 @@ interface ObjectContentProps {
   words: WordDefinition[];
   poems: Poem[];
   pages: Page[];
+  signals: Signal[];
 }
 
 interface ModalContentProps extends ObjectContentProps {
   vennEntries: VennEntry[];
 }
 
-function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
+function ObjectContent({
+  id,
+  words,
+  poems,
+  pages,
+  signals,
+}: ObjectContentProps) {
   if (id === "emoji-game") {
     return (
       <div className={styles.emojiCard}>
@@ -186,6 +213,9 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
   if (id === "settings") {
     return <SettingsCardFace />;
   }
+  if (id === "signal") {
+    return <SignalCardFace />;
+  }
   return null;
 }
 
@@ -194,6 +224,7 @@ function ModalContent({
   words,
   poems,
   pages,
+  signals,
   vennEntries,
 }: ModalContentProps) {
   if (id === "emoji-game") {
@@ -210,6 +241,9 @@ function ModalContent({
   }
   if (id === "settings") {
     return <SettingsCardContent />;
+  }
+  if (id === "signal") {
+    return <SignalContent signals={signals} />;
   }
   const wordMatch =
     id.startsWith("word-") && words.find((w) => `word-${w.id}` === id);
@@ -239,6 +273,7 @@ interface TableProps {
   poems?: Poem[];
   pages?: Page[];
   vennEntries?: VennEntry[];
+  signals?: Signal[];
 }
 
 const CREATE_SENTINEL: WordDefinition = {
@@ -256,6 +291,7 @@ export default function Table({
   poems,
   pages,
   vennEntries: initialVennEntries,
+  signals: initialSignals,
 }: TableProps) {
   const [activeObject, setActiveObject] = useState<string | null>(null);
   const [stackFanned, setStackFanned] = useState(false);
@@ -267,10 +303,11 @@ export default function Table({
   const unlocked = !!(words && poems);
   const [newWords, setNewWords] = useState<WordDefinition[]>([]);
   const allVennEntries = initialVennEntries ?? [];
+  const allSignals = initialSignals ?? [];
   const allWords = [...(words ?? []), ...newWords];
 
   const [creatingWord, setCreatingWord] = useState(false);
-  const objects = buildObjects(poems ?? [], pages ?? []);
+  const objects = buildObjects(poems ?? [], pages ?? [], allSignals);
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -318,6 +355,7 @@ export default function Table({
                   words={allWords}
                   poems={poems ?? []}
                   pages={pages ?? []}
+                  signals={allSignals}
                 />
               </TableObject>
             ))}
@@ -367,13 +405,15 @@ export default function Table({
             className={
               activeObject === "venn-diagram"
                 ? modalStyles.vennWide
-                : activeObject?.startsWith("poem-")
-                  ? modalStyles.wide
-                  : activeObject?.startsWith("page-")
-                    ? modalStyles.fullscreen
-                    : activeObject?.startsWith("image-")
-                      ? modalStyles.imageFlush
-                      : undefined
+                : activeObject === "signal"
+                  ? modalStyles.signalWide
+                  : activeObject?.startsWith("poem-")
+                    ? modalStyles.wide
+                    : activeObject?.startsWith("page-")
+                      ? modalStyles.fullscreen
+                      : activeObject?.startsWith("image-")
+                        ? modalStyles.imageFlush
+                        : undefined
             }
           >
             {activeObject && (
@@ -382,6 +422,7 @@ export default function Table({
                 words={allWords}
                 poems={poems ?? []}
                 pages={pages ?? []}
+                signals={allSignals}
                 vennEntries={allVennEntries}
               />
             )}

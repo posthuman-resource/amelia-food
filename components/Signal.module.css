@@ -1,0 +1,480 @@
+/* Signal — Oscilloscope frequency matcher */
+
+/* ========================================
+   Card Face (table object)
+   ======================================== */
+
+.face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.faceSvg {
+  width: 64px;
+  height: 32px;
+  display: block;
+}
+
+.faceWave {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.7;
+  stroke-dasharray: 200;
+  animation: waveScroll 3s linear infinite;
+}
+
+.faceScanline {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(196, 162, 101, 0.04) 45%,
+    rgba(196, 162, 101, 0.08) 50%,
+    rgba(196, 162, 101, 0.04) 55%,
+    transparent 100%
+  );
+  animation: scanSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes waveScroll {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+@keyframes scanSweep {
+  0%,
+  100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+}
+
+/* ========================================
+   Modal Content
+   ======================================== */
+
+.content {
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  background: var(--color-paper);
+}
+
+/* ========================================
+   Channel Selector
+   ======================================== */
+
+.channels {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.channelBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.channelDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-text-muted);
+  background: transparent;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.channelBtn.found .channelDot {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.channelBtn.active .channelDot {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 6px rgba(196, 162, 101, 0.4);
+}
+
+.channelBtn.active.found .channelDot {
+  box-shadow: 0 0 8px rgba(196, 162, 101, 0.5);
+}
+
+.channelLabel {
+  font-family: var(--font-hand);
+  font-size: 1.275rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.channelBtn.found .channelLabel,
+.channelBtn.active .channelLabel {
+  opacity: 1;
+}
+
+.channelBtn.active .channelLabel {
+  color: var(--color-gold);
+}
+
+.channelBtn.locked .channelDot {
+  border-color: var(--color-text-muted);
+  opacity: 0.35;
+}
+
+.channelBtn.locked .channelLabel {
+  opacity: 0.35;
+}
+
+.channelBtn.locked.active .channelDot {
+  border-color: var(--color-text-muted);
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.channelBtn.locked.active .channelLabel {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+/* ========================================
+   Canvas
+   ======================================== */
+
+.canvasWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========================================
+   Locked Overlay
+   ======================================== */
+
+.lockedOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-md);
+}
+
+.lockedDate {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+/* ========================================
+   Audio Toggle
+   ======================================== */
+
+.audioBtn {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.audioBtn:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.audioBtnOn {
+  color: var(--color-gold);
+}
+
+.audioBtnOn:hover {
+  color: var(--color-gold);
+}
+
+/* ========================================
+   Controls (sliders)
+   ======================================== */
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sliderLabel {
+  font-family: var(--font-hand);
+  font-size: 2.1rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.keyHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.key {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  opacity: 0.7;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 3px;
+  padding: 2px 7px;
+  line-height: 1.3;
+}
+
+.keyArrow {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  opacity: 0.5;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-surface-warm);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  border: 2px solid var(--color-paper);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  border: 2px solid var(--color-paper);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.slider:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+/* ========================================
+   Proximity Bar
+   ======================================== */
+
+.proximityWrap {
+  height: 2px;
+  background: var(--color-surface-warm);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+}
+
+.proximityFill {
+  height: 100%;
+  background: var(--color-gold);
+  border-radius: 1px;
+  transition: width 100ms linear;
+}
+
+/* ========================================
+   Revealed Content
+   ======================================== */
+
+.revealed {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    opacity 600ms ease-out,
+    max-height 600ms ease-out;
+  pointer-events: none;
+}
+
+.revealed.visible {
+  opacity: 1;
+  max-height: 500px;
+  pointer-events: auto;
+}
+
+.revealedTitle {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  color: var(--color-gold);
+  margin-bottom: var(--space-sm);
+}
+
+.revealedText {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-text);
+  white-space: pre-line;
+}
+
+/* ========================================
+   Received state (already found)
+   ======================================== */
+
+.receivedLabel {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin-bottom: var(--space-md);
+  opacity: 0.7;
+}
+
+/* ========================================
+   Dark Mode
+   ======================================== */
+
+[data-theme="dark"] .content {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .slider {
+  background: var(--color-surface-light);
+}
+
+[data-theme="dark"] .proximityWrap {
+  background: var(--color-surface-light);
+}
+
+[data-theme="dark"] .channelDot {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .faceWave {
+    animation: none;
+  }
+
+  .faceScanline {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 768px) {
+  .content {
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+  }
+
+  .channels {
+    gap: var(--space-sm);
+  }
+
+  .channelLabel {
+    font-size: 1.125rem;
+  }
+
+  .keyHint {
+    display: none;
+  }
+
+  .sliderLabel {
+    font-size: 1.3rem;
+  }
+
+  .controls {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .controls .sliderGroup:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .slider {
+    height: 6px;
+  }
+}

@@ -11,12 +11,14 @@ export type TableObjectVariant =
   | "welcome"
   | "word-stack"
   | "venn"
-  | "lock";
+  | "lock"
+  | "signal";
 
 const noTextureVariants = new Set<TableObjectVariant>([
   "welcome",
   "word-stack",
   "image",
+  "signal",
 ]);
 
 interface TableObjectProps {
