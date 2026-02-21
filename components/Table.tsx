@@ -116,8 +116,8 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
     },
     {
       id: "settings",
-      x: 15,
-      y: 75,
+      x: 12,
+      y: 85,
       rotation: 2,
       label: "flavor",
     },

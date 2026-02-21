@@ -3,14 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import styles from "./SettingsCard.module.css";
 
-type NekoVariant = "classic" | "dog" | "tora" | "maia" | "vaporwave";
+type NekoVariant = "classic" | "dog" | "tora" | "maia";
 
 const VARIANTS: { id: NekoVariant; label: string }[] = [
-  { id: "classic", label: "Classic" },
+  { id: "classic", label: "Neko" },
   { id: "dog", label: "Dog" },
   { id: "tora", label: "Tora" },
   { id: "maia", label: "Maia" },
-  { id: "vaporwave", label: "Vapor" },
 ];
 
 function parseLocalStorage<T>(key: string, fallback: T): T {
@@ -110,6 +109,12 @@ export function SettingsCardContent() {
           >
             dark mode
           </button>
+          <button
+            className={`${styles.toggle}${forceSleep ? ` ${styles.toggleOn}` : ""}`}
+            onClick={toggleSleep}
+          >
+            sleepy
+          </button>
         </div>
 
         <div className={styles.section}>
@@ -133,15 +138,6 @@ export function SettingsCardContent() {
               </button>
             ))}
           </div>
-        </div>
-
-        <div className={styles.toggles}>
-          <button
-            className={`${styles.toggle}${forceSleep ? ` ${styles.toggleOn}` : ""}`}
-            onClick={toggleSleep}
-          >
-            sleepy
-          </button>
         </div>
       </div>
     </div>
