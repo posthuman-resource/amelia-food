@@ -3,8 +3,8 @@
 .game {
   display: flex;
   flex-direction: column;
-  height: 70vh;
-  max-height: 640px;
+  height: 85vh;
+  padding: var(--space-2xl);
 }
 
 /* Constrain the picker within the game layout — let conversation breathe */
@@ -14,15 +14,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-.title {
-  font-family: var(--font-hand);
-  font-size: 1.75rem;
-  color: var(--color-text-dark);
-  margin-bottom: var(--space-md);
-  text-align: center;
-  flex-shrink: 0;
 }
 
 /* ========================================
@@ -123,7 +114,7 @@
    ======================================== */
 
 .explainModal {
-  padding: var(--space-sm) 0;
+  padding: var(--space-2xl);
   min-height: 80px;
 }
 
@@ -171,21 +162,11 @@
 
 @media (max-width: 768px) {
   .game {
-    /* Fill the full-screen modal minus the close button and padding */
-    height: calc(
-      100vh - var(--space-lg) * 2 - env(safe-area-inset-top) -
-        env(safe-area-inset-bottom)
-    );
-    height: calc(
-      100dvh - var(--space-lg) * 2 - env(safe-area-inset-top) -
-        env(safe-area-inset-bottom)
-    );
+    height: 100%;
     max-height: none;
-  }
-
-  .title {
-    font-size: 1.4rem;
-    margin-bottom: var(--space-sm);
+    padding: var(--space-lg);
+    padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
   }
 
   /* Make action buttons thumb-friendly */

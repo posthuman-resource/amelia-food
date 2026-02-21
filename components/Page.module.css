@@ -17,7 +17,7 @@
 .paper {
   padding: var(--space-2xl) var(--space-xl);
   border-radius: var(--radius-md);
-  background-color: #faf6ee;
+  background-color: var(--color-paper);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
   background-size: 300px 300px;
   box-shadow: 0 1px 4px rgba(44, 40, 37, 0.06);
@@ -27,7 +27,7 @@
 
 .markdown h2 {
   font-family: var(--font-hand);
-  font-size: 1.5rem;
+  font-size: 1.85rem;
   color: var(--color-plum);
   margin: 0 0 var(--space-md) 0;
   font-weight: 400;
@@ -44,9 +44,9 @@
 }
 
 .markdown li {
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-family: var(--font-page);
+  font-size: 1.2rem;
+  line-height: 1.75;
   color: var(--color-text);
   padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
   border-left: 2px solid rgba(107, 45, 91, 0.15);
@@ -64,8 +64,8 @@
 }
 
 .markdown p {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
+  font-family: var(--font-page);
+  font-size: 1.25rem;
   line-height: 1.85;
   color: var(--color-text);
   margin: 0 0 var(--space-lg) 0;
@@ -79,22 +79,31 @@
   font-style: italic;
 }
 
+/* Dark theme */
+[data-theme="dark"] .paper {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .markdown li {
+  border-left-color: rgba(160, 72, 136, 0.2);
+}
+
 @media (max-width: 768px) {
   .paper {
     padding: var(--space-xl) var(--space-lg);
   }
 
   .markdown h2 {
-    font-size: 1.35rem;
+    font-size: 1.65rem;
   }
 
   .markdown li {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     padding-left: var(--space-sm);
   }
 
   .markdown p {
-    font-size: 0.95rem;
-    line-height: 1.75;
+    font-size: 1.15rem;
+    line-height: 1.8;
   }
 }

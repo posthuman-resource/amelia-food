@@ -10,7 +10,7 @@
   padding: var(--space-lg);
 
   /* Warm-tinted dim — brown, not cold gray */
-  background: rgba(58, 50, 48, 0.4);
+  background: var(--color-dim);
 
   /* Entry animation */
   animation: overlayIn 300ms ease-out;
@@ -64,7 +64,7 @@
 
 /* Fullscreen variant — for longer-form pages (e.g. booklist) */
 .fullscreen {
-  max-width: 800px;
+  max-width: 920px;
 }
 
 /* Venn wide variant — needs horizontal space for the diagram */
@@ -73,17 +73,9 @@
   max-height: calc(100vh - var(--space-xl));
 }
 
-.vennWide .scroll {
-  padding: var(--space-lg) var(--space-xl);
-}
-
 /* Image flush variant — edge-to-edge image, no padding */
 .imageFlush {
   max-width: 900px;
-}
-
-.imageFlush .scroll {
-  padding: 0;
 }
 
 .imageFlush .close {
@@ -96,7 +88,6 @@
 .scroll {
   overflow-y: auto;
   flex: 1;
-  padding: var(--space-2xl);
 }
 
 .contentClosing {
@@ -133,6 +124,26 @@
 
 .close:active {
   background: rgba(44, 40, 37, 0.1);
+}
+
+/* ========================================
+   Dark theme
+   ======================================== */
+
+[data-theme="dark"] .content {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .close:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+[data-theme="dark"] .close:active {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ========================================
@@ -181,9 +192,8 @@
   }
 
   .scroll {
-    padding: var(--space-lg);
-    padding-top: calc(var(--space-lg) + env(safe-area-inset-top));
-    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .contentClosing {
@@ -197,10 +207,6 @@
     height: 44px;
     font-size: 1.5rem;
     z-index: 1;
-  }
-
-  .imageFlush .scroll {
-    padding: 0;
   }
 }
 

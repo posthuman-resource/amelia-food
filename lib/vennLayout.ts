@@ -35,6 +35,22 @@ const WORD_COLORS = [
   "#b8956a", // gold-muted
 ];
 
+const DARK_WORD_COLORS = [
+  "#c070a8", // plum (brighter for dark bg)
+  "#6aaa90", // green
+  "#e8a870", // terracotta
+  "#d07ab0", // plum-light
+  "#7abaa0", // green-light
+  "#e4c888", // gold
+  "#c06068", // burgundy
+  "#d8b888", // gold-muted
+];
+
+/** Map a light-palette color to its dark-palette equivalent */
+export const DARK_COLOR_MAP: Record<string, string> = Object.fromEntries(
+  WORD_COLORS.map((light, i) => [light, DARK_WORD_COLORS[i]]),
+);
+
 const ROTATION_ANGLES = [0, 0, 0, -18, 18, -30, 30];
 const OVERLAP_RATIO = 0.72;
 const PADDING = 2; // px between words

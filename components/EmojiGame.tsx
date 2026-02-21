@@ -182,8 +182,6 @@ export default function EmojiGame() {
 
   return (
     <div className={styles.game}>
-      <h2 className={styles.title}>Emoji Game</h2>
-
       <Conversation messages={messages} isLoading={isLoading} />
 
       <EmojiComposer

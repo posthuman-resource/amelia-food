@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Lora, Caveat, Courier_Prime } from "next/font/google";
+import { Lora, Caveat, Courier_Prime, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 
 const lora = Lora({
@@ -13,6 +13,13 @@ const caveat = Caveat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-hand",
+  display: "swap",
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-page",
   display: "swap",
 });
 
@@ -49,9 +56,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(JSON.parse(localStorage.getItem('neko-kuro'))){document.documentElement.dataset.theme='dark'}}catch{}`,
+          }}
+        />
+      </head>
       <body
-        className={`${lora.variable} ${caveat.variable} ${courierPrime.variable}`}
+        className={`${lora.variable} ${caveat.variable} ${courierPrime.variable} ${sourceSerif.variable}`}
       >
         {children}
       </body>

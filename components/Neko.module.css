@@ -1,10 +1,17 @@
 .neko {
   position: absolute;
+  left: 0;
+  top: 0;
   width: 32px;
   height: 32px;
   z-index: 2;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: grab;
   image-rendering: pixelated;
-  background-image: url("/oneko.gif");
   background-position: calc(-3 * 32px) calc(-3 * 32px);
+  will-change: transform;
+}
+
+.neko:active {
+  cursor: grabbing;
 }

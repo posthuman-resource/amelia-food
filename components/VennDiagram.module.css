@@ -2,6 +2,7 @@
 
 .container {
   width: 100%;
+  padding: var(--space-lg) var(--space-xl);
 }
 
 /* ========================================
@@ -299,6 +300,29 @@
     opacity: 1;
     color: var(--color-plum);
   }
+}
+
+/* ========================================
+   Dark theme
+   ======================================== */
+
+[data-theme="dark"] .addButton {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .hiddenList {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .hiddenItem {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ========================================

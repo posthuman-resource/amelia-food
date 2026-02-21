@@ -12,6 +12,11 @@
   margin-bottom: var(--space-xs);
 }
 
+/* Dark theme — tone down the icon bg */
+[data-theme="dark"] .icon {
+  background-color: rgba(58, 52, 48, 0.6);
+}
+
 /* Image modal content */
 .content {
   line-height: 0;

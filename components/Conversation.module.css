@@ -9,6 +9,8 @@
   flex: 1;
   min-height: 0;
   -webkit-overflow-scrolling: touch;
+  background: rgba(44, 40, 37, 0.03);
+  border-radius: var(--radius-md);
 
   /* Subtle inset to feel like looking down at a surface */
   scrollbar-width: thin;
@@ -87,6 +89,11 @@
 .assistant .tile {
   background: var(--color-surface-light);
   border-bottom-left-radius: var(--radius-sm);
+}
+
+/* Dark theme — user tile */
+[data-theme="dark"] .user .tile {
+  background: #3e3630;
 }
 
 /* ========================================

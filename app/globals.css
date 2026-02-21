@@ -33,6 +33,12 @@
   --font-serif: "Lora", Georgia, serif;
   --font-hand: "Caveat", cursive;
   --font-body: "Lora", Georgia, serif;
+  --font-page: "Source Serif 4", "Lora", Georgia, serif;
+
+  /* Component surface colors */
+  --color-paper: #faf6ee;
+  --color-card-bg: rgba(237, 232, 223, 0.82);
+  --color-dim: rgba(58, 50, 48, 0.4);
 
   /* Shadows — soft and subtle */
   --shadow-soft: 0 2px 8px rgba(44, 40, 37, 0.08);
@@ -57,6 +63,69 @@
   --transition-base: 250ms ease-out;
   --transition-slow: 400ms ease-out;
   --bezier-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ========================================
+   Dark Theme — Candlelit warmth
+   ======================================== */
+
+[data-theme="dark"] {
+  --color-surface: #2a2420;
+  --color-surface-warm: #332e28;
+  --color-surface-light: #3a3430;
+
+  --color-plum: #a04888;
+  --color-plum-light: #b85a9a;
+  --color-burgundy: #9a4048;
+
+  --color-green: #4a8a70;
+  --color-green-light: #5a9a80;
+
+  --color-terracotta: #d88850;
+  --color-terracotta-dark: #c87848;
+
+  --color-gold: #d4b275;
+  --color-gold-muted: #c8a57a;
+
+  --color-text: #e0d8d0;
+  --color-text-dark: #ebe5de;
+  --color-text-muted: #a09488;
+
+  --color-paper: #352f2a;
+  --color-card-bg: rgba(53, 47, 42, 0.85);
+  --color-dim: rgba(10, 8, 6, 0.55);
+
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-lifted: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark wood surface */
+[data-theme="dark"] .texture-wood {
+  background-color: #3a3430;
+}
+
+/* Reduce heartwood opacity, lighten grain lines on dark */
+[data-theme="dark"] .texture-wood::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* Dark selection */
+[data-theme="dark"] ::selection {
+  background: var(--color-plum);
+  color: var(--color-surface-light);
+}
+
+/* Streamdown code blocks in dark */
+[data-theme="dark"] .sdm-wrapper code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .sdm-wrapper hr {
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Reset & Base Styles */

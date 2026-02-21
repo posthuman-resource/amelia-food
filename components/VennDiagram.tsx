@@ -2,7 +2,12 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import styles from "./VennDiagram.module.css";
-import { layoutWords, computeCircles, type PlacedWord } from "@/lib/vennLayout";
+import {
+  layoutWords,
+  computeCircles,
+  DARK_COLOR_MAP,
+  type PlacedWord,
+} from "@/lib/vennLayout";
 import type { VennEntry, VennSection } from "@/lib/venn";
 
 interface VennDiagramProps {
@@ -19,6 +24,17 @@ export default function VennDiagram({
   const [layout, setLayout] = useState<PlacedWord[]>([]);
   const [hiddenEntries, setHiddenEntries] = useState<VennEntry[]>([]);
   const [showHidden, setShowHidden] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  // Sync dark mode state
+  useEffect(() => {
+    function sync() {
+      setIsDark(document.documentElement.dataset.theme === "dark");
+    }
+    sync();
+    window.addEventListener("neko-settings-changed", sync);
+    return () => window.removeEventListener("neko-settings-changed", sync);
+  }, []);
 
   const diagramRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -178,16 +194,22 @@ export default function VennDiagram({
             cx={circles.cx1}
             cy={circles.cy}
             r={circles.r}
-            fill="rgba(107, 45, 91, 0.06)"
-            stroke="rgba(107, 45, 91, 0.25)"
+            fill={
+              isDark ? "rgba(160, 72, 136, 0.1)" : "rgba(107, 45, 91, 0.06)"
+            }
+            stroke={
+              isDark ? "rgba(160, 72, 136, 0.3)" : "rgba(107, 45, 91, 0.25)"
+            }
             strokeWidth="1.5"
           />
           <circle
             cx={circles.cx2}
             cy={circles.cy}
             r={circles.r}
-            fill="rgba(45, 91, 75, 0.06)"
-            stroke="rgba(45, 91, 75, 0.25)"
+            fill={isDark ? "rgba(74, 138, 112, 0.1)" : "rgba(45, 91, 75, 0.06)"}
+            stroke={
+              isDark ? "rgba(74, 138, 112, 0.3)" : "rgba(45, 91, 75, 0.25)"
+            }
             strokeWidth="1.5"
           />
         </svg>
@@ -211,7 +233,9 @@ export default function VennDiagram({
                   left: `${leftPct}%`,
                   top: `${topPct}%`,
                   fontSize: `${fsPct}cqw`,
-                  color: word.color,
+                  color: isDark
+                    ? (DARK_COLOR_MAP[word.color] ?? word.color)
+                    : word.color,
                   transform: `translate(-50%, -50%) rotate(${word.rotation}deg)`,
                 }}
                 onClick={(e) => {

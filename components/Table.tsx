@@ -24,6 +24,7 @@ import VennDiagram from "./VennDiagram";
 import type { VennEntry } from "@/lib/venn";
 import AuthLock from "./AuthLock";
 import Neko from "./Neko";
+import { SettingsCardFace, SettingsCardContent } from "./SettingsCard";
 import { useTabTitle } from "../hooks/useTabTitle";
 import { useMounted } from "../hooks/useMounted";
 
@@ -113,6 +114,13 @@ function buildObjects(poems: Poem[], pages: Page[]): TableObjectData[] {
       label: "lock",
       variant: "lock" as const,
     },
+    {
+      id: "settings",
+      x: 15,
+      y: 75,
+      rotation: 2,
+      label: "flavor",
+    },
   ];
 }
 
@@ -175,6 +183,9 @@ function ObjectContent({ id, words, poems, pages }: ObjectContentProps) {
   if (id === "word-stack") {
     return <CardStackFace count={words.length} icon="Aa" />;
   }
+  if (id === "settings") {
+    return <SettingsCardFace />;
+  }
   return null;
 }
 
@@ -196,6 +207,9 @@ function ModalContent({
   }
   if (id === "venn-diagram") {
     return <VennDiagram entries={vennEntries} />;
+  }
+  if (id === "settings") {
+    return <SettingsCardContent />;
   }
   const wordMatch =
     id.startsWith("word-") && words.find((w) => `word-${w.id}` === id);
