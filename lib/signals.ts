@@ -22,7 +22,8 @@ export function getAllSignals(): Signal[] {
       title: meta.title,
       text,
       releaseDate: meta.releaseDate,
-      active: meta.releaseDate <= today,
+      active:
+        process.env.UNLOCK_ALL_SIGNALS === "true" || meta.releaseDate <= today,
       targetFreq: meta.targetFreq,
       targetAmp: meta.targetAmp,
       targetHarmonic: meta.targetHarmonic,

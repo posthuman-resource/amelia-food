@@ -1,15 +1,19 @@
-seventy two seconds.
-one word in the margin.
-then years of silence.
+in 1977 a man in ohio
+heard something so clean
+he circled it on the printout
+and wrote one word in the margin
 
-the whole argument
-for paying attention
+seventy two seconds
+then gone
+
+they aimed every dish they had
+at that same patch of sky for years
+nothing, not once, the universe
+does not repeat itself
+this is rude but it is also the point
+
+the whole argument for paying attention
 is that the thing you are waiting for
-does not announce itself twice.
+does not announce itself twice
 
-they pointed every dish they had
-at that same patch of sky.
-nothing.
-
-i would have kept pointing too.
-but i didn't have to.
+i heard you the first time

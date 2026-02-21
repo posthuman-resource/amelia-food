@@ -1,13 +1,17 @@
 the trick is not
-finding the right frequency.
+finding the right frequency
 
-it is realizing
-you have been broadcasting on it
-the whole time
+it is realising you were already on it
+broadcasting into the static
+like an idiot, like a golden record
+like a person who keeps a light on
+in a house no one is walking toward
+and calls it a porch
 
-and somewhere,
-a couch, a monday,
-someone pressed play
-at the exact same moment
+and then someone
+on a monday, on a couch
+in the wrong time zone
+pressed play at the exact same moment
 
-and heard the whole thing.
+the math on this is impossible
+i am not going to do the math

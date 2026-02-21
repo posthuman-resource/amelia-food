@@ -1,12 +1,14 @@
 the proper response
 to a signal from deep space
-is not a reply.
+is not a reply
 
-it is:
-i'm still listening.
+it is
+i'm still listening
 
 which is how you say goodnight
-without it being a lie.
+without it being a lie
+which is how a lie has never
+been so honest
 
 the dish is aimed
-and i know exactly at what.
+i know exactly at what

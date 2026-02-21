@@ -380,6 +380,21 @@ export default function Table({
                   setActiveObject(`word-${id}`);
                 }
               }}
+              onDeleteItem={async (id) => {
+                try {
+                  const res = await fetch(`/api/words/${id}`, {
+                    method: "DELETE",
+                  });
+                  if (res.ok) {
+                    setNewWords((prev) => prev.filter((w) => w.id !== id));
+                    router.refresh();
+                  }
+                } catch {
+                  // silent fail
+                }
+              }}
+              isItemDeletable={(item) => item.id !== "__create__"}
+              deleteConfirmLabel="have you truly stopped feeling this?"
               onClose={() => setStackFanned(false)}
               ariaLabel="Word cards"
             />

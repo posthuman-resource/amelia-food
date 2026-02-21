@@ -1,11 +1,18 @@
 you press a heartbeat into gold
 and throw it past jupiter
-and hope.
+and hope
 
-this is not optimism.
-this is what refusing to be quiet
-looks like from very far away.
+this is the version they teach you
 
-from up close
-it looks like a person
-who would not stop listening.
+a woman who played the tuba out of spite
+is under a quilt in the pacific northwest
+with a cat named ted on her shoulder
+deciding whether to respond
+to a man in pittsburgh
+who has never once been to bed on time
+
+she responded
+that's the whole story
+everything else is just the scaffolding
+i built around it because i didn't know how
+to say it that small

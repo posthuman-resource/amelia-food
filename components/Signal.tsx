@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { Signal } from "@/data/signals";
+import { useAudioEnabled } from "@/hooks/useAudioEnabled";
 import styles from "./Signal.module.css";
 
 const STORAGE_KEY = "signal-found-channels";
@@ -24,6 +25,63 @@ function formatDate(dateStr: string): string {
     "dec",
   ];
   return `${months[m - 1]} ${d}`;
+}
+
+function formatFullDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const months = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  return `${months[m - 1]} ${d}, ${y}`;
+}
+
+function garbleText(
+  text: string,
+  seed: string,
+  tick: number,
+  progress: number = 0,
+): string {
+  const pool = "abcdefghijklmnopqrstuvwxyz ";
+
+  // Garble hash
+  let gh = 0;
+  for (let i = 0; i < seed.length; i++) {
+    gh = ((gh << 5) - gh + seed.charCodeAt(i)) | 0;
+  }
+  gh = ((gh << 5) - gh + tick * 13) | 0;
+
+  // Reveal threshold hash (different seed so reveal order != garble pattern)
+  let th = 0;
+  for (let i = 0; i < seed.length; i++) {
+    th = ((th << 5) - th + seed.charCodeAt(i) * 3 + 7) | 0;
+  }
+
+  return text
+    .split("")
+    .map((ch, i) => {
+      if (ch === "\n") return "\n";
+
+      // Each character has a fixed reveal threshold (0–1)
+      th = ((th << 5) - th + i * 17 + 3) | 0;
+      const threshold = (Math.abs(th) % 1000) / 1000;
+      if (progress >= threshold) return ch;
+
+      // Still garbled — shifts with tick
+      gh = ((gh << 5) - gh + i * 7 + 1) | 0;
+      return pool[Math.abs(gh) % pool.length];
+    })
+    .join("");
 }
 
 function getFoundChannels(): string[] {
@@ -321,7 +379,10 @@ export function SignalContent({ signals }: SignalContentProps) {
   const [userHarmonic, setUserHarmonic] = useState(0.0);
   const [matchFrames, setMatchFrames] = useState(0);
   const [matched, setMatched] = useState(false);
-  const [audioMuted, setAudioMuted] = useState(false);
+  const [audioEnabled, toggleAudioEnabled] = useAudioEnabled();
+  const [garbleTick, setGarbleTick] = useState(0);
+  const [revealProgress, setRevealProgress] = useState(0);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
@@ -333,11 +394,13 @@ export function SignalContent({ signals }: SignalContentProps) {
   const userAmpRef = useRef(userAmp);
   const userHarmonicRef = useRef(userHarmonic);
   const audioEngineRef = useRef<AudioEngine | null>(null);
-  const audioMutedRef = useRef(audioMuted);
+  const audioMutedRef = useRef(!audioEnabled);
+  const garbleTickRef = useRef(0);
+  const revealStartRef = useRef<number | null>(null);
   userFreqRef.current = userFreq;
   userAmpRef.current = userAmp;
   userHarmonicRef.current = userHarmonic;
-  audioMutedRef.current = audioMuted;
+  audioMutedRef.current = !audioEnabled;
 
   const signal = signals[activeChannel];
   const isActive = signal?.active ?? false;
@@ -380,7 +443,7 @@ export function SignalContent({ signals }: SignalContentProps) {
       userFreqRef.current,
       userAmpRef.current,
       userHarmonicRef.current,
-      audioMutedRef.current || !signals[0]?.active,
+      !audioEnabled || !signals[0]?.active,
     );
     return () => {
       destroyAudioEngine(engine);
@@ -392,7 +455,7 @@ export function SignalContent({ signals }: SignalContentProps) {
   // Update audio on slider, mute, or channel changes
   useEffect(() => {
     if (!audioEngineRef.current) return;
-    const shouldMute = audioMuted || !isActive;
+    const shouldMute = !audioEnabled || !isActive;
     updateAudio(
       audioEngineRef.current,
       userFreq,
@@ -400,11 +463,7 @@ export function SignalContent({ signals }: SignalContentProps) {
       userHarmonic,
       shouldMute,
     );
-  }, [userFreq, userAmp, userHarmonic, audioMuted, isActive]);
-
-  const toggleAudio = useCallback(() => {
-    setAudioMuted((m) => !m);
-  }, []);
+  }, [userFreq, userAmp, userHarmonic, audioEnabled, isActive]);
 
   // Keyboard controls: q/e = frequency, a/d = amplitude, w/s = harmonic
   useEffect(() => {
@@ -497,6 +556,21 @@ export function SignalContent({ signals }: SignalContentProps) {
 
       timeRef.current += 0.02;
 
+      // Update garble tick (~3 shifts per second)
+      const newGarbleTick = Math.floor(timeRef.current * 3);
+      if (newGarbleTick !== garbleTickRef.current) {
+        garbleTickRef.current = newGarbleTick;
+        setGarbleTick(newGarbleTick);
+
+        // Update reveal progress (piggyback on garble tick)
+        if (revealStartRef.current !== null) {
+          const elapsed = performance.now() - revealStartRef.current;
+          const p = Math.min(elapsed / 7000, 1);
+          setRevealProgress(p);
+          if (p >= 1) revealStartRef.current = null;
+        }
+      }
+
       // Locked channels: just draw dark background with heavy noise
       if (!channelActive) {
         drawCanvas(ctx, canvas.width, canvas.height, {
@@ -530,6 +604,7 @@ export function SignalContent({ signals }: SignalContentProps) {
           saveFoundChannel(signal.id);
           setFoundChannels(getFoundChannels());
           setMatched(true);
+          revealStartRef.current = performance.now();
         }
       } else if (!isFound) {
         matchFramesRef.current = Math.max(0, matchFramesRef.current - 2);
@@ -601,15 +676,28 @@ export function SignalContent({ signals }: SignalContentProps) {
       setUserAmp(signal.targetAmp);
       setUserHarmonic(signal.targetHarmonic);
       setMatched(true);
+      // Don't clobber an in-progress reveal animation
+      if (revealStartRef.current === null) {
+        setRevealProgress(1);
+      }
     } else {
       setUserFreq(1.0);
       setUserAmp(0.5);
       setUserHarmonic(0.0);
       setMatched(false);
+      setRevealProgress(0);
+      revealStartRef.current = null;
     }
     matchFramesRef.current = 0;
     setMatchFrames(0);
   }, [activeChannel, signal, foundChannels]);
+
+  function resetAllChannels() {
+    localStorage.removeItem(STORAGE_KEY);
+    setFoundChannels([]);
+    setConfirmReset(false);
+    setActiveChannel(0);
+  }
 
   if (!signal) return null;
 
@@ -677,15 +765,15 @@ export function SignalContent({ signals }: SignalContentProps) {
         {/* Audio toggle — only when active */}
         {isActive && (
           <button
-            className={`${styles.audioBtn} ${!audioMuted ? styles.audioBtnOn : ""}`}
-            onClick={toggleAudio}
+            className={`${styles.audioBtn} ${audioEnabled ? styles.audioBtnOn : ""}`}
+            onClick={toggleAudioEnabled}
             type="button"
             aria-label={
-              audioMuted ? "Unmute signal audio" : "Mute signal audio"
+              audioEnabled ? "Mute signal audio" : "Unmute signal audio"
             }
-            title={audioMuted ? "Play audio" : "Mute audio"}
+            title={audioEnabled ? "Mute audio" : "Play audio"}
           >
-            {audioMuted ? (
+            {!audioEnabled ? (
               <svg
                 width="16"
                 height="16"
@@ -721,8 +809,9 @@ export function SignalContent({ signals }: SignalContentProps) {
         {/* Locked overlay */}
         {!isActive && (
           <div className={styles.lockedOverlay}>
-            <p className={styles.lockedDate}>
-              {formatDate(signal.releaseDate)}
+            <p className={styles.lockedMessage}>
+              signal begins broadcasting on {formatFullDate(signal.releaseDate)}{" "}
+              EST
             </p>
           </div>
         )}
@@ -820,11 +909,58 @@ export function SignalContent({ signals }: SignalContentProps) {
         <p className={styles.receivedLabel}>signal received</p>
       )}
 
-      {/* Revealed content */}
+      {/* Poem text */}
       {isActive && (
-        <div className={`${styles.revealed} ${matched ? styles.visible : ""}`}>
-          <h3 className={styles.revealedTitle}>{signal.title}</h3>
-          <p className={styles.revealedText}>{signal.text}</p>
+        <div className={styles.poemArea}>
+          <p
+            className={`${styles.revealedText} ${revealProgress < 1 ? styles.garbled : ""}`}
+            style={
+              revealProgress < 1
+                ? { opacity: 0.35 + revealProgress * 0.65 }
+                : undefined
+            }
+          >
+            {revealProgress >= 1
+              ? signal.text
+              : garbleText(signal.text, signal.id, garbleTick, revealProgress)}
+          </p>
+        </div>
+      )}
+
+      {/* Reset progress */}
+      {foundChannels.length > 0 && (
+        <div className={styles.resetArea}>
+          {!confirmReset ? (
+            <button
+              className={styles.resetBtn}
+              onClick={() => setConfirmReset(true)}
+              type="button"
+            >
+              reset all signals
+            </button>
+          ) : (
+            <div className={styles.resetConfirm}>
+              <p className={styles.resetMessage}>
+                do you really like solving these that much?
+              </p>
+              <div className={styles.resetActions}>
+                <button
+                  className={styles.resetConfirmBtn}
+                  onClick={resetAllChannels}
+                  type="button"
+                >
+                  yes
+                </button>
+                <button
+                  className={styles.resetCancelBtn}
+                  onClick={() => setConfirmReset(false)}
+                  type="button"
+                >
+                  no
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

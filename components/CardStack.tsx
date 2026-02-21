@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./CardStack.module.css";
 import { useMounted } from "../hooks/useMounted";
@@ -42,6 +43,9 @@ interface CardStackOverlayProps<T extends CardStackItem> {
   renderCard: (item: T, index: number) => React.ReactNode;
   onCardClick: (id: string) => void;
   onClose: () => void;
+  onDeleteItem?: (id: string) => void;
+  isItemDeletable?: (item: T) => boolean;
+  deleteConfirmLabel?: string;
   ariaLabel?: string;
 }
 
@@ -50,10 +54,14 @@ export function CardStackOverlay<T extends CardStackItem>({
   renderCard,
   onCardClick,
   onClose,
+  onDeleteItem,
+  isItemDeletable,
+  deleteConfirmLabel = "remove this?",
   ariaLabel,
 }: CardStackOverlayProps<T>) {
   const mounted = useMounted();
   const { closing, handleClose } = useCloseAnimation(onClose);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   useScrollLock(true);
   useEscapeKey(handleClose);
@@ -83,25 +91,91 @@ export function CardStackOverlay<T extends CardStackItem>({
 
       {/* Fan of cards */}
       <div className={styles.fan} data-neko-block="true">
-        {items.map((item, i) => (
-          <button
-            key={item.id}
-            className={styles.fanCard}
-            style={
-              {
-                "--fan-index": i,
-                "--fan-total": items.length,
-                "--fan-delay": `${i * 60}ms`,
-              } as React.CSSProperties
-            }
-            onClick={() => onCardClick(item.id)}
-            type="button"
-          >
-            <div className={`${styles.fanCardInner} texture-paper`}>
-              {renderCard(item, i)}
+        {items.map((item, i) => {
+          const deletable =
+            onDeleteItem && isItemDeletable ? isItemDeletable(item) : false;
+          const isConfirming = confirmingId === item.id;
+
+          return (
+            <div
+              key={item.id}
+              className={styles.fanCard}
+              style={
+                {
+                  "--fan-index": i,
+                  "--fan-total": items.length,
+                  "--fan-delay": `${i * 60}ms`,
+                } as React.CSSProperties
+              }
+            >
+              {deletable && !isConfirming && (
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => setConfirmingId(item.id)}
+                  type="button"
+                  aria-label="Delete"
+                >
+                  ×
+                </button>
+              )}
+              <button
+                className={styles.fanCardButton}
+                onClick={() => {
+                  if (!isConfirming) onCardClick(item.id);
+                }}
+                type="button"
+              >
+                <div className={`${styles.fanCardInner} texture-paper`}>
+                  {isConfirming ? (
+                    <div className={styles.confirmFace}>
+                      <p className={styles.confirmText}>{deleteConfirmLabel}</p>
+                      <div className={styles.confirmActions}>
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          className={styles.confirmYes}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteItem?.(item.id);
+                            setConfirmingId(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.stopPropagation();
+                              onDeleteItem?.(item.id);
+                              setConfirmingId(null);
+                            }
+                          }}
+                        >
+                          yes
+                        </span>
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          className={styles.confirmNo}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmingId(null);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.stopPropagation();
+                              setConfirmingId(null);
+                            }
+                          }}
+                        >
+                          no
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    renderCard(item, i)
+                  )}
+                </div>
+              </button>
             </div>
-          </button>
-        ))}
+          );
+        })}
       </div>
     </div>,
     document.body,
