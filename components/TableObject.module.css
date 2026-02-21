@@ -67,8 +67,7 @@
 .label {
   font-family: var(--font-hand);
   font-size: 1.6rem;
-  font-weight: 700;
-  color: rgba(175, 88, 48, 0.65);
+  color: rgba(175, 88, 48, 0.75);
   text-align: center;
   margin: var(--space-xs) 0 0;
   pointer-events: none;
@@ -369,7 +368,7 @@
 }
 
 [data-theme="dark"] .label {
-  color: rgba(200, 165, 122, 0.65);
+  color: rgba(200, 165, 122, 0.75);
   text-shadow:
     -1px -1px 1px rgba(0, 0, 0, 0.5),
     1px 1px 1px rgba(100, 90, 80, 0.2),
