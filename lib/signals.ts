@@ -32,6 +32,9 @@ export function getAllSignals(): Signal[] {
       ampTolerance: meta.ampTolerance,
       harmonicTolerance: meta.harmonicTolerance,
       shapeTolerance: meta.shapeTolerance,
+      mode: meta.mode,
+      wave1: meta.wave1,
+      wave2: meta.wave2,
     };
   });
 }

@@ -307,6 +307,41 @@
 }
 
 /* ========================================
+   Phase Indicator (combination mode)
+   ======================================== */
+
+.phaseIndicator {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.phaseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-text-muted);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.phaseActive {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 4px rgba(196, 162, 101, 0.3);
+}
+
+.phaseLocked {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.phasePending {
+  opacity: 0.3;
+}
+
+/* ========================================
    Proximity Bar
    ======================================== */
 

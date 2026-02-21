@@ -1,12 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import type { Signal } from "@/data/signals";
+import type { Signal, WaveTarget } from "@/data/signals";
 import { useAudioEnabled } from "@/hooks/useAudioEnabled";
 import styles from "./Signal.module.css";
 
 const STORAGE_KEY = "signal-found-channels";
 const MATCH_FRAMES_REQUIRED = 60;
+
+function isCombination(
+  s: Signal,
+): s is Signal & { mode: "combination"; wave1: WaveTarget; wave2: WaveTarget } {
+  return s.mode === "combination" && !!s.wave1 && !!s.wave2;
+}
 
 function clamp(v: number, min: number, max: number) {
   return Math.max(min, Math.min(max, v));
@@ -741,6 +747,15 @@ interface DrawParams {
   proximity: number;
   time: number;
   isDark: boolean;
+  comboPhase?: 1 | 2;
+  wave1Target?: WaveTarget;
+  wave2Target?: WaveTarget;
+  lockedWave1?: {
+    freq: number;
+    amp: number;
+    harmonic: number;
+    shape: number;
+  } | null;
 }
 
 function waveY(
@@ -763,6 +778,37 @@ function waveY(
   const wave2 = sin2 * (1 - shape) + tri2 * shape;
   const blended = wave1 * (1 - harmonic * 0.4) + wave2 * harmonic * 0.6;
   return midY + blended * amp * ampScale;
+}
+
+function combinedWaveY(
+  x: number,
+  w1: { freq: number; amp: number; harmonic: number; shape: number },
+  w2: { freq: number; amp: number; harmonic: number; shape: number },
+  midY: number,
+  ampScale: number,
+  time: number,
+) {
+  const y1 = waveY(
+    x,
+    w1.freq,
+    w1.amp,
+    w1.harmonic,
+    w1.shape,
+    midY,
+    ampScale,
+    time,
+  );
+  const y2 = waveY(
+    x,
+    w2.freq,
+    w2.amp,
+    w2.harmonic,
+    w2.shape,
+    midY,
+    ampScale,
+    time,
+  );
+  return y1 + (y2 - midY); // sum offsets from center
 }
 
 function drawCanvas(
@@ -826,7 +872,7 @@ function drawCanvas(
   const midY = height / 2;
   const ampScale = height * 0.35;
 
-  // Draw wave helper
+  // Draw single wave helper
   function drawWave(
     freq: number,
     amp: number,
@@ -835,11 +881,13 @@ function drawCanvas(
     color: string,
     alpha: number,
     glowStrength: number,
+    dashed?: boolean,
   ) {
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
+    if (dashed) ctx.setLineDash([6, 4]);
 
     if (glowStrength > 0) {
       ctx.shadowColor = color;
@@ -857,31 +905,148 @@ function drawCanvas(
     ctx.restore();
   }
 
-  // Target wave (gold)
-  const goldColor = isDark ? "#d4b878" : "#c4a265";
-  const targetAlpha = 0.15 + proximity * 0.85;
-  const targetGlow = isDark ? proximity * 1.3 : proximity;
-  drawWave(
-    targetFreq,
-    targetAmp,
-    targetHarmonic,
-    targetShape,
-    goldColor,
-    targetAlpha,
-    targetGlow,
-  );
+  // Draw combined (two-wave sum) helper
+  function drawCombinedWave(
+    w1: { freq: number; amp: number; harmonic: number; shape: number },
+    w2: { freq: number; amp: number; harmonic: number; shape: number },
+    color: string,
+    alpha: number,
+    glowStrength: number,
+  ) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
 
-  // User wave (green)
+    if (glowStrength > 0) {
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 8 * glowStrength;
+    }
+
+    ctx.beginPath();
+    for (let px = 0; px < width; px++) {
+      const x = px / width;
+      const y = combinedWaveY(x, w1, w2, midY, ampScale, time);
+      if (px === 0) ctx.moveTo(px, y);
+      else ctx.lineTo(px, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  const goldColor = isDark ? "#d4b878" : "#c4a265";
   const greenColor = isDark ? "#4a8b6b" : "#3a6b5b";
-  drawWave(
-    userFreq,
-    userAmp,
-    userHarmonic,
-    userShape,
-    greenColor,
-    0.9,
-    isDark ? 0.6 : 0.3,
-  );
+  const { comboPhase, wave1Target, wave2Target, lockedWave1 } = params;
+  const isCombo = comboPhase && wave1Target && wave2Target;
+
+  if (isCombo && comboPhase === 1) {
+    // Phase 1: gold = wave1 target, green = user wave
+    const targetAlpha = 0.15 + proximity * 0.85;
+    const targetGlow = isDark ? proximity * 1.3 : proximity;
+    drawWave(
+      wave1Target.targetFreq,
+      wave1Target.targetAmp,
+      wave1Target.targetHarmonic,
+      wave1Target.targetShape,
+      goldColor,
+      targetAlpha,
+      targetGlow,
+    );
+    // User wave: use userHarmonic/userShape when tunable, else fixed from config
+    drawWave(
+      userFreq,
+      userAmp,
+      wave1Target.harmonicTolerance !== undefined
+        ? userHarmonic
+        : wave1Target.targetHarmonic,
+      wave1Target.shapeTolerance !== undefined
+        ? userShape
+        : wave1Target.targetShape,
+      greenColor,
+      0.9,
+      isDark ? 0.6 : 0.3,
+    );
+  } else if (isCombo && comboPhase === 2 && lockedWave1) {
+    // Phase 2: gold = combined target (wave1+wave2), green = locked A + user B combined
+    const targetAlpha = 0.15 + proximity * 0.85;
+    const targetGlow = isDark ? proximity * 1.3 : proximity;
+    drawCombinedWave(
+      {
+        freq: wave1Target.targetFreq,
+        amp: wave1Target.targetAmp,
+        harmonic: wave1Target.targetHarmonic,
+        shape: wave1Target.targetShape,
+      },
+      {
+        freq: wave2Target.targetFreq,
+        amp: wave2Target.targetAmp,
+        harmonic: wave2Target.targetHarmonic,
+        shape: wave2Target.targetShape,
+      },
+      goldColor,
+      targetAlpha,
+      targetGlow,
+    );
+
+    // Faint dashed reference: locked wave1 alone
+    drawWave(
+      lockedWave1.freq,
+      lockedWave1.amp,
+      lockedWave1.harmonic,
+      lockedWave1.shape,
+      goldColor,
+      0.15,
+      0,
+      true,
+    );
+
+    // Green = locked A + user B combined
+    drawCombinedWave(
+      {
+        freq: lockedWave1.freq,
+        amp: lockedWave1.amp,
+        harmonic: lockedWave1.harmonic,
+        shape: lockedWave1.shape,
+      },
+      {
+        freq: userFreq,
+        amp: userAmp,
+        harmonic:
+          wave2Target.harmonicTolerance !== undefined
+            ? userHarmonic
+            : wave2Target.targetHarmonic,
+        shape:
+          wave2Target.shapeTolerance !== undefined
+            ? userShape
+            : wave2Target.targetShape,
+      },
+      greenColor,
+      0.9,
+      isDark ? 0.6 : 0.3,
+    );
+  } else {
+    // Single mode (default)
+    const targetAlpha = 0.15 + proximity * 0.85;
+    const targetGlow = isDark ? proximity * 1.3 : proximity;
+    drawWave(
+      targetFreq,
+      targetAmp,
+      targetHarmonic,
+      targetShape,
+      goldColor,
+      targetAlpha,
+      targetGlow,
+    );
+    drawWave(
+      userFreq,
+      userAmp,
+      userHarmonic,
+      userShape,
+      greenColor,
+      0.9,
+      isDark ? 0.6 : 0.3,
+    );
+  }
 
   // Noise
   const noiseAlpha = (1 - proximity) * 0.6;
@@ -1014,6 +1179,13 @@ export function SignalContent({ signals }: SignalContentProps) {
   const [revealProgress, setRevealProgress] = useState(0);
   const [confirmReset, setConfirmReset] = useState(false);
   const [voiceState, setVoiceState] = useState<VoiceState>("idle");
+  const [comboPhase, setComboPhase] = useState<1 | 2>(1);
+  const [lockedWave1, setLockedWave1] = useState<{
+    freq: number;
+    amp: number;
+    harmonic: number;
+    shape: number;
+  } | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
@@ -1031,6 +1203,15 @@ export function SignalContent({ signals }: SignalContentProps) {
   const revealStartRef = useRef<number | null>(null);
   const voiceLoadedRef = useRef<string | null>(null);
   const voiceStateRef = useRef<VoiceState>("idle");
+  const comboPhaseRef = useRef<1 | 2>(1);
+  const lockedWave1Ref = useRef<{
+    freq: number;
+    amp: number;
+    harmonic: number;
+    shape: number;
+  } | null>(null);
+  comboPhaseRef.current = comboPhase;
+  lockedWave1Ref.current = lockedWave1;
   userFreqRef.current = userFreq;
   userAmpRef.current = userAmp;
   userHarmonicRef.current = userHarmonic;
@@ -1128,15 +1309,32 @@ export function SignalContent({ signals }: SignalContentProps) {
   useEffect(() => {
     if (!audioEngineRef.current) return;
     const shouldMute = !audioEnabled || !isActive;
+    let audioHarmonic = userHarmonic;
+    let audioShape = userShape;
+    if (signal && isCombination(signal)) {
+      const w = comboPhase === 1 ? signal.wave1 : signal.wave2;
+      audioHarmonic =
+        w.harmonicTolerance !== undefined ? userHarmonic : w.targetHarmonic;
+      audioShape = w.shapeTolerance !== undefined ? userShape : w.targetShape;
+    }
     updateAudio(
       audioEngineRef.current,
       userFreq,
       userAmp,
-      userHarmonic,
-      userShape,
+      audioHarmonic,
+      audioShape,
       shouldMute,
     );
-  }, [userFreq, userAmp, userHarmonic, userShape, audioEnabled, isActive]);
+  }, [
+    userFreq,
+    userAmp,
+    userHarmonic,
+    userShape,
+    audioEnabled,
+    isActive,
+    signal,
+    comboPhase,
+  ]);
 
   // Sync voice/noise/clean gain with audioEnabled toggle
   useEffect(() => {
@@ -1189,10 +1387,18 @@ export function SignalContent({ signals }: SignalContentProps) {
     }
   }, [isFound, matched, voiceState]);
 
-  // Keyboard controls: q/w = frequency, e/r = amplitude, t/y = harmonic
+  // Keyboard controls: q/w = frequency, e/r = amplitude, t/y = harmonic, u/i = shape
   useEffect(() => {
     if (matched || !isActive) return;
 
+    const comboWave =
+      signal && isCombination(signal)
+        ? comboPhase === 1
+          ? signal.wave1
+          : signal.wave2
+        : null;
+    const harmEnabled = !comboWave || comboWave.harmonicTolerance !== undefined;
+    const shapeEnabled = !comboWave || comboWave.shapeTolerance !== undefined;
     const FREQ_STEP = 0.03;
     const AMP_STEP = 0.02;
     const HARM_STEP = 0.02;
@@ -1220,15 +1426,19 @@ export function SignalContent({ signals }: SignalContentProps) {
           setUserAmp((v) => Math.min(1.0, v + AMP_STEP));
           break;
         case "t":
+          if (!harmEnabled) return;
           setUserHarmonic((v) => Math.max(0.0, v - HARM_STEP));
           break;
         case "y":
+          if (!harmEnabled) return;
           setUserHarmonic((v) => Math.min(1.0, v + HARM_STEP));
           break;
         case "u":
+          if (!shapeEnabled) return;
           setUserShape((v) => Math.max(0.0, v - SHAPE_STEP));
           break;
         case "i":
+          if (!shapeEnabled) return;
           setUserShape((v) => Math.min(1.0, v + SHAPE_STEP));
           break;
         default:
@@ -1239,11 +1449,25 @@ export function SignalContent({ signals }: SignalContentProps) {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [matched, isActive]);
+  }, [matched, isActive, signal, comboPhase]);
 
   // Compute proximity
   const computeProximity = useCallback(() => {
     if (!signal) return 0;
+    if (isCombination(signal)) {
+      const w = comboPhase === 1 ? signal.wave1 : signal.wave2;
+      const dists = [
+        Math.abs(userFreq - w.targetFreq) / w.freqTolerance,
+        Math.abs(userAmp - w.targetAmp) / w.ampTolerance,
+      ];
+      if (w.harmonicTolerance !== undefined)
+        dists.push(
+          Math.abs(userHarmonic - w.targetHarmonic) / w.harmonicTolerance,
+        );
+      if (w.shapeTolerance !== undefined)
+        dists.push(Math.abs(userShape - w.targetShape) / w.shapeTolerance);
+      return Math.max(0, 1 - Math.max(...dists) * 0.5);
+    }
     const freqDist =
       Math.abs(userFreq - signal.targetFreq) / signal.freqTolerance;
     const ampDist = Math.abs(userAmp - signal.targetAmp) / signal.ampTolerance;
@@ -1253,7 +1477,7 @@ export function SignalContent({ signals }: SignalContentProps) {
       Math.abs(userShape - signal.targetShape) / signal.shapeTolerance;
     const combinedDist = Math.max(freqDist, ampDist, harmDist, shapeDist);
     return Math.max(0, 1 - combinedDist * 0.5);
-  }, [signal, userFreq, userAmp, userHarmonic, userShape]);
+  }, [signal, userFreq, userAmp, userHarmonic, userShape, comboPhase]);
 
   const proximity = computeProximity();
 
@@ -1336,31 +1560,48 @@ export function SignalContent({ signals }: SignalContentProps) {
       const engine = audioEngineRef.current;
       if (engine) ensureContextRunning(engine.ctx);
 
+      const combo = isCombination(signal);
+
       // Update voice effects + schedule fragments each frame
       if (engine && voiceStateRef.current === "tuning") {
+        let voiceProx: number;
+        if (combo) {
+          const w = comboPhaseRef.current === 1 ? signal.wave1 : signal.wave2;
+          const vDists = [
+            Math.abs(freq - w.targetFreq) / w.freqTolerance,
+            Math.abs(amp - w.targetAmp) / w.ampTolerance,
+          ];
+          if (w.harmonicTolerance !== undefined)
+            vDists.push(
+              Math.abs(harm - w.targetHarmonic) / w.harmonicTolerance,
+            );
+          if (w.shapeTolerance !== undefined)
+            vDists.push(Math.abs(shape - w.targetShape) / w.shapeTolerance);
+          voiceProx = Math.max(0, 1 - Math.max(...vDists) * 0.5);
+        } else {
+          const voiceFreqDist =
+            Math.abs(freq - targetFreq) / signal.freqTolerance;
+          const voiceAmpDist = Math.abs(amp - targetAmp) / signal.ampTolerance;
+          const voiceHarmDist =
+            Math.abs(harm - targetHarmonic) / signal.harmonicTolerance;
+          const voiceShapeDist =
+            Math.abs(shape - targetShape) / signal.shapeTolerance;
+          voiceProx = Math.max(
+            0,
+            1 -
+              Math.max(
+                voiceFreqDist,
+                voiceAmpDist,
+                voiceHarmDist,
+                voiceShapeDist,
+              ) *
+                0.5,
+          );
+        }
+
         const freqOff = Math.abs(freq - targetFreq) / 3.7;
         const ampOff = Math.abs(amp - targetAmp) / 0.9;
         const harmOff = Math.abs(harm - targetHarmonic) / 1.0;
-
-        // Compute proximity for voice effects
-        const voiceFreqDist =
-          Math.abs(freq - targetFreq) / signal.freqTolerance;
-        const voiceAmpDist = Math.abs(amp - targetAmp) / signal.ampTolerance;
-        const voiceHarmDist =
-          Math.abs(harm - targetHarmonic) / signal.harmonicTolerance;
-        const voiceShapeDist =
-          Math.abs(shape - targetShape) / signal.shapeTolerance;
-        const voiceProx = Math.max(
-          0,
-          1 -
-            Math.max(
-              voiceFreqDist,
-              voiceAmpDist,
-              voiceHarmDist,
-              voiceShapeDist,
-            ) *
-              0.5,
-        );
 
         updateVoiceEffects(
           engine,
@@ -1373,32 +1614,92 @@ export function SignalContent({ signals }: SignalContentProps) {
         scheduleFragments(engine, voiceProx);
       }
 
-      // Match detection — all four must be within tolerance
-      const withinTol =
-        Math.abs(freq - signal.targetFreq) <= signal.freqTolerance &&
-        Math.abs(amp - signal.targetAmp) <= signal.ampTolerance &&
-        Math.abs(harm - signal.targetHarmonic) <= signal.harmonicTolerance &&
-        Math.abs(shape - signal.targetShape) <= signal.shapeTolerance;
+      // Match detection
+      if (combo) {
+        // Combination mode — two-phase matching
+        const phase = comboPhaseRef.current;
+        const w = phase === 1 ? signal.wave1 : signal.wave2;
+        let withinTol =
+          Math.abs(freq - w.targetFreq) <= w.freqTolerance &&
+          Math.abs(amp - w.targetAmp) <= w.ampTolerance;
+        if (w.harmonicTolerance !== undefined)
+          withinTol =
+            withinTol &&
+            Math.abs(harm - w.targetHarmonic) <= w.harmonicTolerance;
+        if (w.shapeTolerance !== undefined)
+          withinTol =
+            withinTol && Math.abs(shape - w.targetShape) <= w.shapeTolerance;
 
-      if (withinTol && !isFound) {
-        matchFramesRef.current++;
-        if (matchFramesRef.current >= MATCH_FRAMES_REQUIRED) {
-          saveFoundChannel(signal.id);
-          setFoundChannels(getFoundChannels());
-          setMatched(true);
-          revealStartRef.current = performance.now();
-
-          // Voice: transition from fragments/noise to clean one-shot
-          if (engine) {
-            transitionToCleanPlayback(engine, () => {
-              setVoiceState("revealed");
-            });
-            setVoiceState("matched");
+        if (withinTol && !isFound) {
+          matchFramesRef.current++;
+          if (matchFramesRef.current >= MATCH_FRAMES_REQUIRED) {
+            if (phase === 1) {
+              // Lock wave 1, transition to phase 2
+              const w1 = signal.wave1;
+              const locked = {
+                freq,
+                amp,
+                harmonic:
+                  w1.harmonicTolerance !== undefined ? harm : w1.targetHarmonic,
+                shape: w1.shapeTolerance !== undefined ? shape : w1.targetShape,
+              };
+              lockedWave1Ref.current = locked;
+              comboPhaseRef.current = 2;
+              setLockedWave1(locked);
+              setComboPhase(2);
+              setUserFreq(1.0);
+              setUserAmp(0.5);
+              setUserHarmonic(0.0);
+              setUserShape(0.0);
+              userFreqRef.current = 1.0;
+              userAmpRef.current = 0.5;
+              userHarmonicRef.current = 0.0;
+              userShapeRef.current = 0.0;
+              matchFramesRef.current = 0;
+            } else {
+              // Phase 2 complete — full match
+              saveFoundChannel(signal.id);
+              setFoundChannels(getFoundChannels());
+              setMatched(true);
+              revealStartRef.current = performance.now();
+              if (engine) {
+                transitionToCleanPlayback(engine, () => {
+                  setVoiceState("revealed");
+                });
+                setVoiceState("matched");
+              }
+            }
           }
+        } else if (!isFound) {
+          matchFramesRef.current = Math.max(0, matchFramesRef.current - 2);
         }
-      } else if (!isFound) {
-        matchFramesRef.current = Math.max(0, matchFramesRef.current - 2);
+      } else {
+        // Single mode — all four must be within tolerance
+        const withinTol =
+          Math.abs(freq - signal.targetFreq) <= signal.freqTolerance &&
+          Math.abs(amp - signal.targetAmp) <= signal.ampTolerance &&
+          Math.abs(harm - signal.targetHarmonic) <= signal.harmonicTolerance &&
+          Math.abs(shape - signal.targetShape) <= signal.shapeTolerance;
+
+        if (withinTol && !isFound) {
+          matchFramesRef.current++;
+          if (matchFramesRef.current >= MATCH_FRAMES_REQUIRED) {
+            saveFoundChannel(signal.id);
+            setFoundChannels(getFoundChannels());
+            setMatched(true);
+            revealStartRef.current = performance.now();
+            if (engine) {
+              transitionToCleanPlayback(engine, () => {
+                setVoiceState("revealed");
+              });
+              setVoiceState("matched");
+            }
+          }
+        } else if (!isFound) {
+          matchFramesRef.current = Math.max(0, matchFramesRef.current - 2);
+        }
       }
+
       if (
         matchFramesRef.current % 10 === 0 ||
         matchFramesRef.current >= MATCH_FRAMES_REQUIRED
@@ -1407,15 +1708,31 @@ export function SignalContent({ signals }: SignalContentProps) {
       }
 
       // Compute proximity for draw
-      const freqDist =
-        Math.abs(freq - signal.targetFreq) / signal.freqTolerance;
-      const ampDist = Math.abs(amp - signal.targetAmp) / signal.ampTolerance;
-      const harmDist =
-        Math.abs(harm - signal.targetHarmonic) / signal.harmonicTolerance;
-      const shapeDist =
-        Math.abs(shape - signal.targetShape) / signal.shapeTolerance;
-      const combinedDist = Math.max(freqDist, ampDist, harmDist, shapeDist);
-      const prox = Math.max(0, 1 - combinedDist * 0.5);
+      let prox: number;
+      if (combo) {
+        const w = comboPhaseRef.current === 1 ? signal.wave1 : signal.wave2;
+        const pDists = [
+          Math.abs(freq - w.targetFreq) / w.freqTolerance,
+          Math.abs(amp - w.targetAmp) / w.ampTolerance,
+        ];
+        if (w.harmonicTolerance !== undefined)
+          pDists.push(Math.abs(harm - w.targetHarmonic) / w.harmonicTolerance);
+        if (w.shapeTolerance !== undefined)
+          pDists.push(Math.abs(shape - w.targetShape) / w.shapeTolerance);
+        prox = Math.max(0, 1 - Math.max(...pDists) * 0.5);
+      } else {
+        const freqDist =
+          Math.abs(freq - signal.targetFreq) / signal.freqTolerance;
+        const ampDist = Math.abs(amp - signal.targetAmp) / signal.ampTolerance;
+        const harmDist =
+          Math.abs(harm - signal.targetHarmonic) / signal.harmonicTolerance;
+        const shapeDist =
+          Math.abs(shape - signal.targetShape) / signal.shapeTolerance;
+        prox = Math.max(
+          0,
+          1 - Math.max(freqDist, ampDist, harmDist, shapeDist) * 0.5,
+        );
+      }
 
       drawCanvas(ctx, canvas.width, canvas.height, {
         targetFreq: signal.targetFreq,
@@ -1429,6 +1746,10 @@ export function SignalContent({ signals }: SignalContentProps) {
         proximity: isFound ? 1 : prox,
         time: timeRef.current,
         isDark: isDarkRef.current,
+        comboPhase: combo ? comboPhaseRef.current : undefined,
+        wave1Target: combo ? signal.wave1 : undefined,
+        wave2Target: combo ? signal.wave2 : undefined,
+        lockedWave1: combo ? lockedWave1Ref.current : undefined,
       });
 
       animRef.current = requestAnimationFrame(tick);
@@ -1450,6 +1771,7 @@ export function SignalContent({ signals }: SignalContentProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const combo = isCombination(signal);
     drawCanvas(ctx, canvas.width, canvas.height, {
       targetFreq: signal.targetFreq,
       targetAmp: signal.targetAmp,
@@ -1462,16 +1784,53 @@ export function SignalContent({ signals }: SignalContentProps) {
       proximity: isFound ? 1 : proximity,
       time: 0,
       isDark: isDarkRef.current,
+      comboPhase: combo ? comboPhase : undefined,
+      wave1Target: combo ? signal.wave1 : undefined,
+      wave2Target: combo ? signal.wave2 : undefined,
+      lockedWave1: combo ? lockedWave1 : undefined,
     });
-  }, [signal, userFreq, userAmp, userHarmonic, userShape, isFound, proximity]);
+  }, [
+    signal,
+    userFreq,
+    userAmp,
+    userHarmonic,
+    userShape,
+    isFound,
+    proximity,
+    comboPhase,
+    lockedWave1,
+  ]);
 
   // Reset user params when switching channels
   useEffect(() => {
     if (signal && foundChannels.includes(signal.id)) {
-      setUserFreq(signal.targetFreq);
-      setUserAmp(signal.targetAmp);
-      setUserHarmonic(signal.targetHarmonic);
-      setUserShape(signal.targetShape);
+      if (isCombination(signal)) {
+        // Found combo: show combined resolved state
+        setLockedWave1({
+          freq: signal.wave1.targetFreq,
+          amp: signal.wave1.targetAmp,
+          harmonic: signal.wave1.targetHarmonic,
+          shape: signal.wave1.targetShape,
+        });
+        setComboPhase(2);
+        setUserFreq(signal.wave2.targetFreq);
+        setUserAmp(signal.wave2.targetAmp);
+        setUserHarmonic(
+          signal.wave2.harmonicTolerance !== undefined
+            ? signal.wave2.targetHarmonic
+            : 0,
+        );
+        setUserShape(
+          signal.wave2.shapeTolerance !== undefined
+            ? signal.wave2.targetShape
+            : 0,
+        );
+      } else {
+        setUserFreq(signal.targetFreq);
+        setUserAmp(signal.targetAmp);
+        setUserHarmonic(signal.targetHarmonic);
+        setUserShape(signal.targetShape);
+      }
       setMatched(true);
       // Don't clobber an in-progress reveal animation
       if (revealStartRef.current === null) {
@@ -1485,6 +1844,8 @@ export function SignalContent({ signals }: SignalContentProps) {
       setMatched(false);
       setRevealProgress(0);
       revealStartRef.current = null;
+      setComboPhase(1);
+      setLockedWave1(null);
     }
     matchFramesRef.current = 0;
     setMatchFrames(0);
@@ -1516,6 +1877,8 @@ export function SignalContent({ signals }: SignalContentProps) {
     setConfirmReset(false);
     setActiveChannel(0);
     setVoiceState("idle");
+    setComboPhase(1);
+    setLockedWave1(null);
   }
 
   if (!signal) return null;
@@ -1665,27 +2028,56 @@ export function SignalContent({ signals }: SignalContentProps) {
               onChange={setUserAmp}
               keys={["e", "r"]}
             />
-            <Dial
-              id="signal-harm"
-              label="harmonic"
-              value={userHarmonic}
-              min={0.0}
-              max={1.0}
-              step={0.01}
-              onChange={setUserHarmonic}
-              keys={["t", "y"]}
-            />
-            <Dial
-              id="signal-shape"
-              label="shape"
-              value={userShape}
-              min={0.0}
-              max={1.0}
-              step={0.01}
-              onChange={setUserShape}
-              keys={["u", "i"]}
-            />
+            {(() => {
+              const cw = isCombination(signal)
+                ? comboPhase === 1
+                  ? signal.wave1
+                  : signal.wave2
+                : null;
+              const showHarm = !cw || cw.harmonicTolerance !== undefined;
+              const showShape = !cw || cw.shapeTolerance !== undefined;
+              return (
+                <>
+                  {showHarm && (
+                    <Dial
+                      id="signal-harm"
+                      label="harmonic"
+                      value={userHarmonic}
+                      min={0.0}
+                      max={1.0}
+                      step={0.01}
+                      onChange={setUserHarmonic}
+                      keys={["t", "y"]}
+                    />
+                  )}
+                  {showShape && (
+                    <Dial
+                      id="signal-shape"
+                      label="shape"
+                      value={userShape}
+                      min={0.0}
+                      max={1.0}
+                      step={0.01}
+                      onChange={setUserShape}
+                      keys={["u", "i"]}
+                    />
+                  )}
+                </>
+              );
+            })()}
           </div>
+
+          {/* Phase indicator for combination mode */}
+          {isCombination(signal) && (
+            <div className={styles.phaseIndicator}>
+              <span
+                className={`${styles.phaseDot} ${lockedWave1 ? styles.phaseLocked : styles.phaseActive}`}
+              />
+              <span
+                className={`${styles.phaseDot} ${comboPhase === 2 ? styles.phaseActive : styles.phasePending}`}
+              />
+            </div>
+          )}
 
           {/* Proximity bar */}
           <div className={styles.proximityWrap}>
