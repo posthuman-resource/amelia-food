@@ -9,9 +9,11 @@ export interface Signal {
   targetFreq: number;
   targetAmp: number;
   targetHarmonic: number;
+  targetShape: number; // 0 = sine, 1 = triangle
   freqTolerance: number;
   ampTolerance: number;
   harmonicTolerance: number;
+  shapeTolerance: number;
 }
 
 export interface SignalMeta {
@@ -21,9 +23,11 @@ export interface SignalMeta {
   targetFreq: number;
   targetAmp: number;
   targetHarmonic: number;
+  targetShape: number; // 0 = sine, 1 = triangle
   freqTolerance: number;
   ampTolerance: number;
   harmonicTolerance: number;
+  shapeTolerance: number;
 }
 
 export const signalMeta: SignalMeta[] = [
@@ -34,9 +38,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 2.5,
     targetAmp: 0.4,
     targetHarmonic: 0.6,
+    targetShape: 0.3,
     freqTolerance: 0.2,
     ampTolerance: 0.12,
     harmonicTolerance: 0.12,
+    shapeTolerance: 0.15,
   },
   {
     id: "contact",
@@ -45,9 +51,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 1.9,
     targetAmp: 0.55,
     targetHarmonic: 0.5,
+    targetShape: 0.7,
     freqTolerance: 0.16,
     ampTolerance: 0.1,
     harmonicTolerance: 0.1,
+    shapeTolerance: 0.12,
   },
   {
     id: "frequency",
@@ -56,9 +64,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 0.8,
     targetAmp: 0.85,
     targetHarmonic: 0.35,
+    targetShape: 0.15,
     freqTolerance: 0.15,
     ampTolerance: 0.1,
     harmonicTolerance: 0.12,
+    shapeTolerance: 0.12,
   },
   {
     id: "decode",
@@ -67,9 +77,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 3.1,
     targetAmp: 0.35,
     targetHarmonic: 0.75,
+    targetShape: 0.85,
     freqTolerance: 0.2,
     ampTolerance: 0.1,
     harmonicTolerance: 0.12,
+    shapeTolerance: 0.15,
   },
   {
     id: "carrier-wave",
@@ -78,9 +90,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 1.5,
     targetAmp: 0.65,
     targetHarmonic: 0.45,
+    targetShape: 0.5,
     freqTolerance: 0.14,
     ampTolerance: 0.1,
     harmonicTolerance: 0.1,
+    shapeTolerance: 0.12,
   },
   {
     id: "transmission",
@@ -89,9 +103,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 1.2,
     targetAmp: 0.7,
     targetHarmonic: 0.15,
+    targetShape: 0.25,
     freqTolerance: 0.18,
     ampTolerance: 0.12,
     harmonicTolerance: 0.12,
+    shapeTolerance: 0.12,
   },
   {
     id: "still-listening",
@@ -100,9 +116,11 @@ export const signalMeta: SignalMeta[] = [
     targetFreq: 0.6,
     targetAmp: 0.9,
     targetHarmonic: 0.2,
+    targetShape: 0.6,
     freqTolerance: 0.12,
     ampTolerance: 0.1,
     harmonicTolerance: 0.1,
+    shapeTolerance: 0.1,
   },
 ];
 

@@ -5,7 +5,7 @@ and hope
 this is the version they teach you
 
 a woman who played the tuba out of spite
-is under a quilt in the pacific northwest
+is under a quilt in pullman
 with a cat named ted on her shoulder
 deciding whether to respond
 to a man in pittsburgh

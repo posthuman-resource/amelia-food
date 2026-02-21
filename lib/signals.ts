@@ -27,9 +27,11 @@ export function getAllSignals(): Signal[] {
       targetFreq: meta.targetFreq,
       targetAmp: meta.targetAmp,
       targetHarmonic: meta.targetHarmonic,
+      targetShape: meta.targetShape,
       freqTolerance: meta.freqTolerance,
       ampTolerance: meta.ampTolerance,
       harmonicTolerance: meta.harmonicTolerance,
+      shapeTolerance: meta.shapeTolerance,
     };
   });
 }
