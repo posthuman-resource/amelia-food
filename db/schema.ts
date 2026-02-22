@@ -19,6 +19,12 @@ export const nekoNames = sqliteTable("neko_names", {
   name: text().notNull(),
 });
 
+export const kvStore = sqliteTable("kv_store", {
+  key: text().primaryKey(),
+  value: text().notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const words = sqliteTable("words", {
   id: text().primaryKey(),
   word: text().notNull(),

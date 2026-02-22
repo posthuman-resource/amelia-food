@@ -1,9 +1,9 @@
 /**
  * Shared system prompt fragments for all LLM-powered routes.
- * Update user context and personality here — it flows everywhere.
+ * Update Amy's context and personality here — it flows everywhere.
  */
 
-/** The user. The only user. */
+/** Amy. */
 export const USER_NAME = "Amy";
 
 /** Shared personality and context preamble, prepended to every system prompt. */
@@ -118,7 +118,7 @@ For each word, provide:
 
 Generate exactly 4 words. Each should approach the feeling from a different angle — different metaphors, different emphasis, different German roots. Don't just rephrase the same idea four ways.`;
 
-/** Build the user prompt for word generation */
+/** Build the prompt for Amy's feeling description */
 export function wordGenerationPrompt(feeling: string, excludeWords?: string[]) {
   let prompt = `Here's the feeling:\n\n${feeling}`;
   if (excludeWords && excludeWords.length > 0) {

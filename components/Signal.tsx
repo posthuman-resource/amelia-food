@@ -111,6 +111,14 @@ function saveFoundChannel(id: string) {
   }
 }
 
+function reportSignalSolved(id: string) {
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "signal_solved", signal: id }),
+  }).catch(() => {});
+}
+
 /* ========================================
    Card Face — animated waveform on table
    ======================================== */
@@ -940,7 +948,7 @@ function drawCanvas(
   const isCombo = comboPhase && wave1Target && wave2Target;
 
   if (isCombo && comboPhase === 1) {
-    // Phase 1: gold = wave1 target, green = user wave
+    // Phase 1: gold = wave1 target, green = Amy's wave
     const targetAlpha = 0.15 + proximity * 0.85;
     const targetGlow = isDark ? proximity * 1.3 : proximity;
     drawWave(
@@ -967,7 +975,7 @@ function drawCanvas(
       isDark ? 0.6 : 0.3,
     );
   } else if (isCombo && comboPhase === 2 && lockedWave1) {
-    // Phase 2: gold = combined target (wave1+wave2), green = locked A + user B combined
+    // Phase 2: gold = combined target (wave1+wave2), green = locked A + Amy's B combined
     const targetAlpha = 0.15 + proximity * 0.85;
     const targetGlow = isDark ? proximity * 1.3 : proximity;
     drawCombinedWave(
@@ -1000,7 +1008,7 @@ function drawCanvas(
       true,
     );
 
-    // Green = locked A + user B combined
+    // Green = locked A + Amy's B combined
     drawCombinedWave(
       {
         freq: lockedWave1.freq,
@@ -1287,7 +1295,7 @@ export function SignalContent({ signals }: SignalContentProps) {
 
     loadVoiceBuffer(engine.ctx, signalId).then((buf) => {
       if (cancelled) return;
-      // Guard against stale loads (user switched channels during fetch)
+      // Guard against stale loads (Amy switched channels during fetch)
       if (!audioEngineRef.current || audioEngineRef.current !== engine) return;
 
       engine.voice.buffer = buf;
@@ -1659,6 +1667,7 @@ export function SignalContent({ signals }: SignalContentProps) {
             } else {
               // Phase 2 complete — full match
               saveFoundChannel(signal.id);
+              reportSignalSolved(signal.id);
               setFoundChannels(getFoundChannels());
               setMatched(true);
               revealStartRef.current = performance.now();
@@ -1685,6 +1694,7 @@ export function SignalContent({ signals }: SignalContentProps) {
           matchFramesRef.current++;
           if (matchFramesRef.current >= MATCH_FRAMES_REQUIRED) {
             saveFoundChannel(signal.id);
+            reportSignalSolved(signal.id);
             setFoundChannels(getFoundChannels());
             setMatched(true);
             revealStartRef.current = performance.now();
@@ -1801,7 +1811,7 @@ export function SignalContent({ signals }: SignalContentProps) {
     lockedWave1,
   ]);
 
-  // Reset user params when switching channels
+  // Reset Amy's params when switching channels
   useEffect(() => {
     if (signal && foundChannels.includes(signal.id)) {
       if (isCombination(signal)) {

@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     return Response.json({ results: [] });
   }
 
-  // Embed the user's query with the same model + dimensions
+  // Embed Amy's query with the same model + dimensions
   const { embedding: queryEmbedding } = await embed({
     model: openai.embedding(MODEL_ID),
     value: query,

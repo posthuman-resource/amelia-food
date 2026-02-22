@@ -26,7 +26,7 @@ export default function Conversation({
     });
   }, [messages, isLoading]);
 
-  // Filter out the initial system-trigger message from the user
+  // Filter out the initial system-trigger message from Amy
   const visibleMessages = messages.filter((m) => {
     if (
       m.role === "user" &&

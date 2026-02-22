@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Table.module.css";
 import TableObject from "./TableObject";
@@ -311,6 +311,24 @@ export default function Table({
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
+
+  // Sync solved signals to server analytics on unlock
+  useEffect(() => {
+    if (!unlocked) return;
+    try {
+      const raw = localStorage.getItem("signal-found-channels");
+      const solved: string[] = raw ? JSON.parse(raw) : [];
+      if (solved.length > 0) {
+        fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "sync", signals: solved }),
+        }).catch(() => {});
+      }
+    } catch {
+      // analytics never breaks the site
+    }
+  }, [unlocked]);
 
   return (
     <div

@@ -7,8 +7,8 @@ export interface WaveTarget {
   targetShape: number;
   freqTolerance: number;
   ampTolerance: number;
-  harmonicTolerance?: number; // if present, user tunes harmonic
-  shapeTolerance?: number; // if present, user tunes shape
+  harmonicTolerance?: number; // if present, Amy tunes harmonic
+  shapeTolerance?: number; // if present, Amy tunes shape
 }
 
 export interface Signal {
