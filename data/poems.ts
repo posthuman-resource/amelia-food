@@ -17,6 +17,26 @@ export interface PoemMeta {
   table: TablePosition;
 }
 
+export interface PoemPairMeta {
+  id: string;
+  poemIds: [string, string];
+  labels: [string, string];
+  emoji: string;
+  title: string;
+  table: TablePosition;
+}
+
+export const poemPairs: PoemPairMeta[] = [
+  {
+    id: "probe-reply",
+    poemIds: ["probe", "reply"],
+    labels: ["probe", "reply"],
+    emoji: "📡",
+    title: "interstellar personals",
+    table: { x: 38, y: 72, rotation: -1.5 },
+  },
+];
+
 export const poemMeta: PoemMeta[] = [
   {
     id: "dendrites",

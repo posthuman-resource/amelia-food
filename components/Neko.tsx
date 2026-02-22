@@ -483,7 +483,6 @@ export default function Neko({ tableRef }: NekoProps) {
       className={styles.neko}
       style={{
         backgroundImage: `url(${spriteUrl(variant)})`,
-        filter: kuroNeko ? "invert(100%)" : undefined,
       }}
       aria-hidden="true"
     />

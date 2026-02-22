@@ -78,6 +78,11 @@
   max-width: 780px;
 }
 
+/* Poem pair wide variant — side-by-side poems */
+.poemPairWide {
+  max-width: 960px;
+}
+
 /* Image flush variant — edge-to-edge image, no padding */
 .imageFlush {
   max-width: 900px;

@@ -1,6 +1,6 @@
 import Table from "@/components/Table";
 import { getAllWords } from "@/lib/words";
-import { getAllPoems } from "@/lib/poems";
+import { getAllPoems, getAllPoemPairs } from "@/lib/poems";
 import { getAllPages } from "@/lib/pages";
 import { getAllVennEntries } from "@/lib/venn";
 import { getAllSignals } from "@/lib/signals";
@@ -15,6 +15,7 @@ export default async function Home() {
 
   const words = getAllWords();
   const poems = getAllPoems();
+  const poemPairs = getAllPoemPairs();
   const pages = getAllPages();
   const vennEntries = getAllVennEntries();
   const signals = getAllSignals();
@@ -22,6 +23,7 @@ export default async function Home() {
     <Table
       words={words}
       poems={poems}
+      poemPairs={poemPairs}
       pages={pages}
       vennEntries={vennEntries}
       signals={signals}

@@ -42,7 +42,6 @@ export function SettingsCardFace() {
         className={styles.sprite}
         style={{
           backgroundImage: `url(/oneko/oneko-${variant}.gif)`,
-          filter: kuro ? "invert(100%)" : undefined,
         }}
       />
     </div>
@@ -165,7 +164,6 @@ export function SettingsCardContent() {
                   className={styles.variantSprite}
                   style={{
                     backgroundImage: `url(/oneko/oneko-${id}.gif)`,
-                    filter: kuro ? "invert(100%)" : undefined,
                   }}
                 />
                 <input

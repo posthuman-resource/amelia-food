@@ -14,6 +14,8 @@ import { WordCardFace, WordCardContent, CreateWordCardFace } from "./WordCard";
 import type { WordDefinition } from "@/data/words";
 import type { Poem } from "@/data/poems";
 import { PoemCard, PoemContent } from "./Poem";
+import { PoemPairCard, PoemPairContent } from "./PoemPair";
+import type { PoemPair } from "@/lib/poems";
 import type { Page } from "@/data/pages";
 import { PageCard, PageContent } from "./Page";
 import { images } from "@/data/images";
@@ -43,6 +45,7 @@ function buildObjects(
   poems: Poem[],
   pages: Page[],
   signals: Signal[],
+  poemPairs: PoemPair[],
 ): TableObjectData[] {
   const poemObjects = poems.map((p) => ({
     id: `poem-${p.id}`,
@@ -67,6 +70,14 @@ function buildObjects(
     rotation: img.table.rotation,
     label: img.title,
     variant: "image" as const,
+  }));
+  const poemPairObjects = poemPairs.map((pp) => ({
+    id: `poem-pair-${pp.id}`,
+    x: pp.table.x,
+    y: pp.table.y,
+    rotation: pp.table.rotation,
+    label: pp.title,
+    variant: "poem" as const,
   }));
   const signalObject =
     signals.length > 0
@@ -99,6 +110,7 @@ function buildObjects(
       variant: "welcome" as const,
     },
     ...poemObjects,
+    ...poemPairObjects,
     ...pageObjects,
     ...imageObjects,
     ...signalObject,
@@ -150,6 +162,7 @@ interface ObjectContentProps {
   poems: Poem[];
   pages: Page[];
   signals: Signal[];
+  poemPairs: PoemPair[];
 }
 
 interface ModalContentProps extends ObjectContentProps {
@@ -162,6 +175,7 @@ function ObjectContent({
   poems,
   pages,
   signals,
+  poemPairs,
 }: ObjectContentProps) {
   if (id === "emoji-game") {
     return (
@@ -174,6 +188,12 @@ function ObjectContent({
   }
   if (id === "welcome") {
     return <WelcomeEnvelope />;
+  }
+  const poemPairMatch =
+    id.startsWith("poem-pair-") &&
+    poemPairs.find((pp) => `poem-pair-${pp.id}` === id);
+  if (poemPairMatch) {
+    return <PoemPairCard pair={poemPairMatch} />;
   }
   const poemMatch =
     id.startsWith("poem-") && poems.find((p) => `poem-${p.id}` === id);
@@ -225,6 +245,7 @@ function ModalContent({
   poems,
   pages,
   signals,
+  poemPairs,
   vennEntries,
 }: ModalContentProps) {
   if (id === "emoji-game") {
@@ -250,6 +271,12 @@ function ModalContent({
   if (wordMatch) {
     return <WordCardContent word={wordMatch} />;
   }
+  const modalPoemPairMatch =
+    id.startsWith("poem-pair-") &&
+    poemPairs.find((pp) => `poem-pair-${pp.id}` === id);
+  if (modalPoemPairMatch) {
+    return <PoemPairContent pair={modalPoemPairMatch} />;
+  }
   const modalPoemMatch =
     id.startsWith("poem-") && poems.find((p) => `poem-${p.id}` === id);
   if (modalPoemMatch) {
@@ -272,6 +299,7 @@ interface TableProps {
   words?: WordDefinition[];
   poems?: Poem[];
   pages?: Page[];
+  poemPairs?: PoemPair[];
   vennEntries?: VennEntry[];
   signals?: Signal[];
 }
@@ -290,6 +318,7 @@ export default function Table({
   words,
   poems,
   pages,
+  poemPairs: initialPoemPairs,
   vennEntries: initialVennEntries,
   signals: initialSignals,
 }: TableProps) {
@@ -302,12 +331,18 @@ export default function Table({
   const objectsContainerRef = useRef<HTMLDivElement>(null);
   const unlocked = !!(words && poems);
   const [newWords, setNewWords] = useState<WordDefinition[]>([]);
+  const allPoemPairs = initialPoemPairs ?? [];
   const allVennEntries = initialVennEntries ?? [];
   const allSignals = initialSignals ?? [];
   const allWords = [...(words ?? []), ...newWords];
 
   const [creatingWord, setCreatingWord] = useState(false);
-  const objects = buildObjects(poems ?? [], pages ?? [], allSignals);
+  const objects = buildObjects(
+    poems ?? [],
+    pages ?? [],
+    allSignals,
+    allPoemPairs,
+  );
   const activeData = objects.find((o) => o.id === activeObject);
 
   const tabTitle = useTabTitle(unlocked);
@@ -336,6 +371,45 @@ export default function Table({
       className={`${styles.table} texture-wood texture-noise`}
     >
       <title>{tabTitle}</title>
+      {/* SVG filters for carved text effect on labels */}
+      <svg
+        aria-hidden="true"
+        style={{ position: "absolute", width: 0, height: 0 }}
+      >
+        <defs>
+          <filter id="carved-text" x="-20%" y="-20%" width="140%" height="140%">
+            {/* Blur alpha to create heightmap for lighting */}
+            <feGaussianBlur
+              in="SourceAlpha"
+              stdDeviation="1"
+              result="heightmap"
+            />
+
+            {/* 3D lighting: negative surfaceScale = inset/carved */}
+            <feDiffuseLighting
+              in="heightmap"
+              surfaceScale="-3"
+              diffuseConstant="0.75"
+              lightingColor="#E8E0D4"
+              result="lighting"
+            >
+              <feDistantLight azimuth="135" elevation="40" />
+            </feDiffuseLighting>
+
+            {/* Clip lighting to text shape */}
+            <feComposite
+              in="lighting"
+              in2="SourceAlpha"
+              operator="in"
+              result="litSurface"
+            />
+
+            {/* Blend carved shading onto original text */}
+            <feBlend in="SourceGraphic" in2="litSurface" mode="overlay" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Subtle "Amy" inscription — always visible */}
       <div className={styles.inscription}>Amy</div>
 
@@ -374,6 +448,7 @@ export default function Table({
                   poems={poems ?? []}
                   pages={pages ?? []}
                   signals={allSignals}
+                  poemPairs={allPoemPairs}
                 />
               </TableObject>
             ))}
@@ -440,13 +515,15 @@ export default function Table({
                 ? modalStyles.vennWide
                 : activeObject === "signal"
                   ? modalStyles.signalWide
-                  : activeObject?.startsWith("poem-")
-                    ? modalStyles.wide
-                    : activeObject?.startsWith("page-")
-                      ? modalStyles.fullscreen
-                      : activeObject?.startsWith("image-")
-                        ? modalStyles.imageFlush
-                        : undefined
+                  : activeObject?.startsWith("poem-pair-")
+                    ? modalStyles.poemPairWide
+                    : activeObject?.startsWith("poem-")
+                      ? modalStyles.wide
+                      : activeObject?.startsWith("page-")
+                        ? modalStyles.fullscreen
+                        : activeObject?.startsWith("image-")
+                          ? modalStyles.imageFlush
+                          : undefined
             }
           >
             {activeObject && (
@@ -456,6 +533,7 @@ export default function Table({
                 poems={poems ?? []}
                 pages={pages ?? []}
                 signals={allSignals}
+                poemPairs={allPoemPairs}
                 vennEntries={allVennEntries}
               />
             )}
