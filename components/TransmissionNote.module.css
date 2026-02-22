@@ -1,0 +1,253 @@
+/* TransmissionNote — Folded note with demo + narrative + messages */
+
+.container {
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* ========================================
+   Face — Small radio icon on table card
+   ======================================== */
+.face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 50px;
+}
+
+.faceQuestion {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* ========================================
+   Demo canvas — Oscilloscope animation
+   ======================================== */
+.demoSection {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+}
+
+/* ========================================
+   Narrative — Mike's handwritten text
+   ======================================== */
+.narrative {
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.narrative p {
+  margin: 0 0 var(--space-sm);
+}
+
+.narrative p:last-child {
+  margin-bottom: 0;
+}
+
+.signature {
+  margin-top: var(--space-md);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* ========================================
+   Divider
+   ======================================== */
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(107, 94, 88, 0.15) 20%,
+    rgba(107, 94, 88, 0.2) 50%,
+    rgba(107, 94, 88, 0.15) 80%,
+    transparent 100%
+  );
+  margin: 0;
+}
+
+/* ========================================
+   Message thread
+   ======================================== */
+.messagesSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.messagesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.messageItem {
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(107, 94, 88, 0.08);
+}
+
+.messageText {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.messageTime {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  opacity: 0.7;
+}
+
+/* ========================================
+   Input area
+   ======================================== */
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--space-md);
+  border: 1.5px solid rgba(107, 94, 88, 0.15);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.textarea::placeholder {
+  color: rgba(107, 94, 88, 0.4);
+  font-style: italic;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-plum);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sendButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-plum);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+  min-width: 100px;
+  justify-content: center;
+}
+
+.sendButton:hover {
+  background: var(--color-plum-light);
+}
+
+.sendButton:active {
+  transform: scale(0.97);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Transmitted confirmation state */
+.sendButton.transmitted {
+  background: var(--color-green);
+  pointer-events: none;
+}
+
+/* ========================================
+   Dark theme
+   ======================================== */
+[data-theme="dark"] .messageItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .textarea {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .textarea::placeholder {
+  color: rgba(200, 180, 160, 0.35);
+}
+
+[data-theme="dark"] .textarea:focus {
+  border-color: var(--color-plum);
+}
+
+[data-theme="dark"] .divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent 100%
+  );
+}
+
+/* ========================================
+   Mobile
+   ======================================== */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+  }
+
+  .canvas {
+    height: 140px;
+  }
+
+  .narrative {
+    font-size: 1.15rem;
+  }
+
+  .messagesList {
+    max-height: 160px;
+  }
+}

@@ -161,10 +161,17 @@ const { messages, sendMessage } = useChat({
 - **SSH**: `ssh srv-d66ir00gjchc7395c830@ssh.oregon.render.com`
 - **SSH key**: Stored in 1Password as **"render.com personal SSH key"** (Ed25519). This key works for any machine on the personal Render account.
 - **Retrieving the key for SSH access**:
-  1. Open 1Password, find "render.com personal SSH key"
-  2. Save the private key to `~/.ssh/render_ed25519`
-  3. `chmod 600 ~/.ssh/render_ed25519`
-  4. `ssh -i ~/.ssh/render_ed25519 srv-d66ir00gjchc7395c830@ssh.oregon.render.com`
+  1. `op.exe item get "render.com personal SSH key" --fields "private key" | sed 's/\r//' > ~/.ssh/render_ed25519`
+  2. `chmod 600 ~/.ssh/render_ed25519`
+  3. `ssh -i ~/.ssh/render_ed25519 srv-d66ir00gjchc7395c830@ssh.oregon.render.com`
+- **Production database path**: `/var/data/amelia.db` (Render persistent disk, NOT the repo's `./data/` directory)
+- **Querying prod DB via SSH**:
+  ```bash
+  ssh -i ~/.ssh/render_ed25519 -o StrictHostKeyChecking=no -o UpdateHostKeys=no \
+    srv-d66ir00gjchc7395c830@ssh.oregon.render.com \
+    'sqlite3 /var/data/amelia.db "SELECT * FROM kv_store;"'
+  ```
+  Note: Use single quotes around the remote command and escape inner quotes as needed.
 
 ## Testing
 

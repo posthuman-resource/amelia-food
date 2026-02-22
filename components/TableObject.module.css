@@ -327,6 +327,35 @@
 }
 
 /* ========================================
+   Variant: Transmission — Folded note with crease
+   ======================================== */
+.transmission {
+  min-width: 80px;
+  max-width: 100px;
+  background-color: rgba(235, 228, 215, 0.88);
+  padding: 1rem;
+}
+
+/* Fold crease across the middle */
+.transmission::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 48%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(44, 40, 37, 0.1) 20%,
+    rgba(44, 40, 37, 0.14) 50%,
+    rgba(44, 40, 37, 0.1) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ========================================
    Dark theme overrides
    ======================================== */
 
@@ -356,6 +385,10 @@
 [data-theme="dark"] .image {
   background-color: #3a3430;
   border-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .transmission {
+  background-color: rgba(48, 42, 36, 0.9);
 }
 
 [data-theme="dark"] .signal {
@@ -424,6 +457,11 @@
   .signal {
     min-width: 200px;
     max-width: 260px;
+  }
+
+  .transmission {
+    min-width: 180px;
+    max-width: 220px;
   }
 
   .dropShadow .card {

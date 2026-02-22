@@ -28,6 +28,10 @@ import AuthLock from "./AuthLock";
 import Neko from "./Neko";
 import { SettingsCardFace, SettingsCardContent } from "./SettingsCard";
 import { SignalCardFace, SignalContent } from "./Signal";
+import {
+  TransmissionNoteFace,
+  TransmissionNoteContent,
+} from "./TransmissionNote";
 import type { Signal } from "@/data/signals";
 import { useTabTitle } from "../hooks/useTabTitle";
 import { useMounted } from "../hooks/useMounted";
@@ -139,6 +143,14 @@ function buildObjects(
       variant: "venn" as const,
     },
     {
+      id: "transmission",
+      x: 50,
+      y: 28,
+      rotation: 1.5,
+      label: "transmission",
+      variant: "transmission" as const,
+    },
+    {
       id: "lock",
       x: 88,
       y: 85,
@@ -236,6 +248,9 @@ function ObjectContent({
   if (id === "signal") {
     return <SignalCardFace />;
   }
+  if (id === "transmission") {
+    return <TransmissionNoteFace />;
+  }
   return null;
 }
 
@@ -265,6 +280,9 @@ function ModalContent({
   }
   if (id === "signal") {
     return <SignalContent signals={signals} />;
+  }
+  if (id === "transmission") {
+    return <TransmissionNoteContent />;
   }
   const wordMatch =
     id.startsWith("word-") && words.find((w) => `word-${w.id}` === id);

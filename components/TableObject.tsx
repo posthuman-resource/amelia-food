@@ -12,7 +12,8 @@ export type TableObjectVariant =
   | "word-stack"
   | "venn"
   | "lock"
-  | "signal";
+  | "signal"
+  | "transmission";
 
 const noTextureVariants = new Set<TableObjectVariant>([
   "welcome",

@@ -25,6 +25,12 @@ export const kvStore = sqliteTable("kv_store", {
   updatedAt: text("updated_at").notNull(),
 });
 
+export const transmissions = sqliteTable("transmissions", {
+  id: text().primaryKey(),
+  text: text().notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
 export const words = sqliteTable("words", {
   id: text().primaryKey(),
   word: text().notNull(),
